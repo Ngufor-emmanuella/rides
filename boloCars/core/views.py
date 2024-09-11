@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from core.models import Product, Category,  CartOrder, CartOrderItems, ProductImages, ProductReview, Wishlist, Address, ElvisSection
+from core.models import Product, Category,  CartOrder, CartOrderItems, ProductImages, ProductReview, Wishlist, Address, ElvisSection, CarsType
 from .forms import *
 # from django.urls import reverse
 
@@ -62,6 +62,18 @@ def product_detail_view(request, pid):
   }
   return render(request, "core/product-detail.html", context)
 
+#functionality to calculate total sum of fields
+def display_total_sums(request):
+  field_names = ['rental_rate_amount', 'expenses', 'management_fee_accruals', 'driver_income']
+  total_sums = CarsType.get_total_sums(field_names)
+  print(total_sums)
+
+  elvissection = CarsType.objects.all()
+  context = {
+    'elvissection' : elvissection,
+    'total_sums' : total_sums,
+  }
+  return render(request, "core/prado-1-elvis.html", context)
 
 def prado1_elvis_view(request):
   elvissection = ElvisSection.objects.all()

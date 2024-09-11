@@ -29,8 +29,8 @@ urlpatterns = [
   path("add_levinussection_view", views.add_levinussection_view, name="add_levinussection_view"),
 
   # link for edit button
-  path("edit_elvissection/(?P<pk>\d+)", views.edit_elvissection, name="edit_elvissection"),
-  path("edit_levinussection/(?P<pk>\d+)", views.edit_levinussection, name="edit_levinussection")
+  path("edit_elvissection", views.edit_elvissection, name="edit_elvissection"),
+  path("edit_levinussection", views.edit_levinussection, name="edit_levinussection")
 
  
 ]

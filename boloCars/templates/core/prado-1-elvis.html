@@ -46,15 +46,25 @@
           <td> {{ elvissec.management_fee_accruals }} </td>
           <td> {{ elvissec.driver_income }} </td>
           <td> {{ elvissec.net_income }} </td>
+        
           <td> {{ elvissec.transaction }} </td>
           <td> {{ elvissec.comments  }} </td>
           
         <td>
-            <a href="{% url 'core:edit_elvissection' pk=item.pk %}" class="btn btn-warning btn-sm" role="button"> Edit </a>
-          </td>
+            <a href="#" class="btn btn-warning btn-sm" role="button"> Edit </a>
+        </td>
         </tr>
-
       {% endfor %}
+
+      <!-- total sum row  -->
+     
+      <tr>
+        <td colspan="3"> <strong>Total : </strong> </td>
+        <td>{{ total_sums.rental_rate_amount}}</td>
+        <td>{{ total_sums.expenses }}</td>
+        <td>{{ total_sums.management_fee_accruals }}</td>
+        <td>{{ total_sums.driver_income }}</td>
+      </tr>
       </tbody> 
     </table>
 

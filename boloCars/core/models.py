@@ -1,4 +1,6 @@
+from decimal import Decimal
 from django.db import models
+from django.db.models import Sum
 from shortuuid.django_fields import ShortUUIDField 
 from django.utils.html import mark_safe
 from authuser.models import User
@@ -227,6 +229,31 @@ class CarsType(models.Model):
   transaction = models.CharField(max_length=100, blank=False)
   comments = models.CharField(max_length=100, blank=False, default="leave message")
 
+  #functionality to sum  total amount on each fields 
+  @classmethod
+  def get_total_sums(cls, field_names):
+    total_sums = {}
+    for field_name in field_names:
+      total_sum = cls.objects.aggregate(**{f"{field_name}_sum": Sum(field_name)})[f"{field_name}_sum"]
+      total_sums[field_name] = total_sum or Decimal('0.00')
+    return total_sums
+
+  def save(self, *args, **kwargs):
+    if self.rental_rate_amount is not None:
+      if isinstance(self.rental_rate_amount, Decimal):
+        #calculate 10% of rental_rate_amount
+        self.management_fee_accruals = self.rental_rate_amount * Decimal('0.10')
+      else:
+        #handles the case where rental_rate is not a decimal eg converts to decimal
+        self.management_fee_accruals = Decimal(str(self.rental_rate_amount)) * Decimal('0.10')
+    
+    # to perform substraction operation from fields
+    if self.rental_rate_amount is not None and self.expenses is not None and self.management_fee_accruals is not None and self.driver_income:
+      result = self.rental_rate_amount - self.expenses - self.management_fee_accruals - self.driver_income
+      self.net_income = Decimal(result)
+
+    super(CarsType, self).save(*args, **kwargs)
+
   class Meta:
     abstract = True
     verbose_name = "Cars Type"
@@ -234,6 +261,8 @@ class CarsType(models.Model):
     
   def __str__(self):
     return f"{self.destination } - {self.date_time}"
+  
+
   
 class ElvisSection(CarsType):
 
