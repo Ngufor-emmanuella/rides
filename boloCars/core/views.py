@@ -102,8 +102,6 @@ def prado1_elvis_history_view(request):
       'elvis_history': elvis_history, # Pass the history data to the template
       'header' : 'prado1_elvis_history'
     }
-
-
     return render(request, 'core/history-prado1.html', context)
 
 def prado2_levinus_view(request):
@@ -119,10 +117,27 @@ def prado2_levinus_view(request):
     'levinussection' : levinussection,
     'header' : 'Prado2-Levinus',
     'total_sums': total_sums
-
   }
-
   return render(request, "core/prado-2-levinus.html", context)
+
+def prado2_levinus_history_view(request):
+    # Fetch history for each ElvisSection instancea
+    levinussection = LevinusSection.objects.all()
+
+    levinus_history = []
+    for levinus in levinussection:
+        history = levinus.history.all()  # Get all historical records for this instance
+        levinus_history.append({
+            'current': levinus,
+            'history': history,
+        })
+
+    context = {
+      'levinus_history':  levinus_history, # Pass the history data to the template
+      'header' : 'prado2_levinus_history'
+    }
+    return render(request, 'core/history-prado2.html', context)
+
  
 # function to add cars details to the sheet for each column
 def add_rentedcars_view(request, cls):
@@ -154,7 +169,7 @@ def edit_rentedcars(request, pk, model, cls):
   if request.method == "POST":
     item.save()
     form = cls(request.POST, instance=item)
-    
+
     if form.is_valid():
       form.save()
       return render(request, "core/index.html" ) 

@@ -11,13 +11,13 @@
     <br>
     <div class="button-group">
         <h5> Add Car Rental Amount</h5>
-        <a href="{% url 'core:add_elvissection_view' %}" class="btn btn-primary btn-md" role="button"> + </a>
+        <a href="{% url 'core:add_levinussection_view' %}" class="btn btn-primary btn-md" role="button"> + </a>
         
       </div>
       <br>
       <br>
 
-     {% for record in elvis_history %}
+     {% for record in  levinus_history  %}
     <h5>Current Record ID: {{ record.current.pk }}</h5>
     <table class="table table-hover">
         <thead>

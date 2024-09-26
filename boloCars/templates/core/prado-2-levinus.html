@@ -12,6 +12,7 @@
     <div class="button-group">
       <h5> Add Car Rental Amount</h5>
       <a href="{% url 'core:add_levinussection_view' %}" class="btn btn-primary btn-md" role="button"> + </a>
+      <a href="{% url 'core:prado2_levinus_history_view' %}" class="btn btn-primary btn-md" role="button"> View History </a>
       
     </div>
     <br>
@@ -50,7 +51,7 @@
           <td> {{ levisec.comments  }} </td>  
 
           <td>
-            <a href="#" class="btn btn-warning btn-sm" role="button">Edit</a>
+            <a href="{% url 'core:edit_levinussection' levisec.pk %}" class="btn btn-warning btn-sm" role="button">Edit</a>
           </td>
 
         </tr>
