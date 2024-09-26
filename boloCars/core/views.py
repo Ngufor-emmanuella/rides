@@ -76,21 +76,11 @@ def prado1_elvis_view(request):
     total_sum = elvissection.aggregate(**{f"{field_name}_sum": Sum(field_name)})[f"{field_name}_sum"]
     total_sums[field_name] = total_sum or Decimal('0.00')
   print(total_sums)
-  
-   # Fetch history for each ElvisSection instance
-  elvis_history = []
-  for elvis in elvissection:
-     history = elvis.history.all() 
-     elvis_history.append({
-        'current': elvis,
-        'history': history,
-      })
 
   context = {
     'elvissection' : elvissection,
     'header' : 'Prado1-Elvis',
     'total_sums': total_sums,
-    'elvis_history': elvis_history, 
 
   }
   return render(request, "core/prado-1-elvis.html", context)
@@ -109,8 +99,10 @@ def prado1_elvis_history_view(request):
         })
 
     context = {
-        'elvis_history': elvis_history  # Pass the history data to the template
+      'elvis_history': elvis_history, # Pass the history data to the template
+      'header' : 'prado1_elvis_history'
     }
+
 
     return render(request, 'core/history-prado1.html', context)
 
@@ -132,9 +124,6 @@ def prado2_levinus_view(request):
 
   return render(request, "core/prado-2-levinus.html", context)
  
-  
-
-
 # function to add cars details to the sheet for each column
 def add_rentedcars_view(request, cls):
   if request.method == "POST":
@@ -163,7 +152,9 @@ def edit_rentedcars(request, pk, model, cls):
   item = get_object_or_404(model, pk=pk)
 
   if request.method == "POST":
+    item.save()
     form = cls(request.POST, instance=item)
+    
     if form.is_valid():
       form.save()
       return render(request, "core/index.html" ) 
