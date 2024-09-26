@@ -1,0 +1,68 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+
+  <main>
+    <br>
+    <br>
+
+    <h4>Current Data and History {{elvis_history}} </h4>
+
+    <br>
+    <div class="button-group">
+        <h5> Add Car Rental Amount</h5>
+        <a href="{% url 'core:add_elvissection_view' %}" class="btn btn-primary btn-md" role="button"> + </a>
+        
+      </div>
+      <br>
+      <br>
+
+      {% for record in elvis_history %}
+      <table>
+          <tr>
+              <th>Rental Rate Amount</th>
+              <td>{{ record.current.rental_rate_amount }}</td>
+          </tr>
+          <tr>
+              <th>Expenses</th>
+              <td>{{ record.current.expenses }}</td>
+          </tr>
+          <tr>
+              <th>Net Income</th>
+              <td>{{ record.current.net_income }}</td>
+          </tr>
+      </table>
+  
+      <h5>History:</h5>
+      <table>
+          <thead>
+              <tr>
+                  <th>Date</th>
+                  <th>Rental Rate</th>
+                  <th>Expenses</th>
+                  <th>Net Income</th>
+                  <th>Changed By</th>
+              </tr>
+          </thead>
+          <tbody>
+              {% for history in record.history %}
+              <tr>
+                  <td>{{ history.history_date }}</td>
+                  <td>{{ history.rental_rate_amount }}</td>
+                  <td>{{ history.expenses }}</td>
+                  <td>{{ history.net_income }}</td>
+                  <td>{{ history.history_user }}</td>
+              </tr>
+              {% endfor %}
+          </tbody>
+      </table>
+      {% endfor %}
+      
+
+
+      
+  
+    </main>
+  
+
+{% endblock content %}

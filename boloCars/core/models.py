@@ -5,6 +5,7 @@ from shortuuid.django_fields import ShortUUIDField
 from django.utils.html import mark_safe
 from authuser.models import User
 from django.utils import timezone
+from simple_history.models import HistoricalRecords 
 
 # Create your models here.
 
@@ -226,7 +227,7 @@ class CarsType(models.Model):
   management_fee_accruals = models.DecimalField(blank=True, null=True, max_digits=10,  decimal_places=2, default=0.00)
   driver_income = models.DecimalField(blank=True, null=True, max_digits=10,  decimal_places=2, default=0.00)
   net_income = models.DecimalField(blank=True, null=True, max_digits=10,  decimal_places=2, default=0.00)
-  transaction = models.CharField(max_length=100, blank=False)
+  transaction = models.DecimalField(blank=True, null=True, max_digits=10,  decimal_places=2, default=0.00)
   comments = models.CharField(max_length=100, blank=False, default="leave message")
 
   #functionality to sum  total amount on each fields 
@@ -262,21 +263,28 @@ class CarsType(models.Model):
   def __str__(self):
     return f"{self.destination } - {self.date_time}"
   
+# Inherit from CarsType and add history tracking
 
   
 class ElvisSection(CarsType):
+
+  history = HistoricalRecords()
 
   class Meta:
     verbose_name = "Elvis Section"
     verbose_name_plural = "Elvis Sections"
 
 class LevinusSection(CarsType):
+
+  history = HistoricalRecords()
   
   class Meta:
     verbose_name = "Levinus Section"
     verbose_name_plural = "Levinus Sections"
 
 class SergeSection(CarsType):
+
+  history = HistoricalRecords() 
   
   class Meta:
     verbose_name = "Serge Section"

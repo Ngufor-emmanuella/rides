@@ -12,6 +12,8 @@
     <div class="button-group">
       <h5> Add Car Rental Amount</h5>
       <a href="{% url 'core:add_elvissection_view' %}" class="btn btn-primary btn-md" role="button"> + </a>
+      <a href="{% url 'core:prado1_elvis_history_view' %}" class="btn btn-primary btn-md" role="button"> View History </a>
+
       
     </div>
     <br>
@@ -46,12 +48,11 @@
           <td> {{ elvissec.management_fee_accruals }} </td>
           <td> {{ elvissec.driver_income }} </td>
           <td> {{ elvissec.net_income }} </td>
-        
           <td> {{ elvissec.transaction }} </td>
           <td> {{ elvissec.comments  }} </td>
           
         <td>
-            <a href="#" class="btn btn-warning btn-sm" role="button"> Edit </a>
+            <a href="{% url 'core:edit_elvissection' elvissec.pk %}" class="btn btn-warning btn-sm" role="button"> Edit </a>
         </td>
         </tr>
       {% endfor %}
@@ -60,10 +61,12 @@
      
       <tr>
         <td colspan="3"> <strong>Total : </strong> </td>
-        <td>{{ total_sums.rental_rate_amount}}</td>
-        <td>{{ total_sums.expenses }}</td>
-        <td>{{ total_sums.management_fee_accruals }}</td>
-        <td>{{ total_sums.driver_income }}</td>
+        <td><strong> {{ total_sums.rental_rate_amount}}</strong></td>
+        <td> <strong> {{ total_sums.expenses }}</strong></td>
+        <td> <strong> {{ total_sums.management_fee_accruals }}</strong></td>
+        <td> <strong> {{ total_sums.driver_income }}</strong></td>
+        <td> <strong> {{ total_sums.net_income }}</strong></td>
+        <td> <strong> {{ total_sums.transaction }}</strong></td>
       </tr>
       </tbody> 
     </table>

@@ -29,8 +29,12 @@ urlpatterns = [
   path("add_levinussection_view", views.add_levinussection_view, name="add_levinussection_view"),
 
   # link for edit button
-  path("edit_elvissection", views.edit_elvissection, name="edit_elvissection"),
-  path("edit_levinussection", views.edit_levinussection, name="edit_levinussection")
+  path("edit_elvissection/<int:pk>/", views.edit_elvissection, name="edit_elvissection"),
+  path("edit_levinussection", views.edit_levinussection, name="edit_levinussection"),
+
+  #add history view of sheets
+  path("prado1_elvis_history_view", views.prado1_elvis_history_view, name='prado1_elvis_history_view')
+
 
  
 ]

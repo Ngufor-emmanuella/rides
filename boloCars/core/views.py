@@ -63,33 +63,71 @@ def product_detail_view(request, pid):
   return render(request, "core/product-detail.html", context)
 
 #functionality to calculate total sum of fields
-def display_total_sums(request):
-  field_names = ['rental_rate_amount', 'expenses', 'management_fee_accruals', 'driver_income']
-  total_sums = CarsType.get_total_sums(field_names)
-  print(total_sums)
-
-  elvissection = CarsType.objects.all()
-  context = {
-    'elvissection' : elvissection,
-    'total_sums' : total_sums,
-  }
-  return render(request, "core/prado-1-elvis.html", context)
 
 def prado1_elvis_view(request):
   elvissection = ElvisSection.objects.all()
 
+  field_names = ['rental_rate_amount', 'expenses', 'management_fee_accruals', 'driver_income', 'net_income', 'transaction' ]
+
+ # Calculate total sums for each field listed above
+
+  total_sums = {}
+  for field_name in field_names:
+    total_sum = elvissection.aggregate(**{f"{field_name}_sum": Sum(field_name)})[f"{field_name}_sum"]
+    total_sums[field_name] = total_sum or Decimal('0.00')
+  print(total_sums)
+  
+   # Fetch history for each ElvisSection instance
+  elvis_history = []
+  for elvis in elvissection:
+     history = elvis.history.all() 
+     elvis_history.append({
+        'current': elvis,
+        'history': history,
+      })
+
   context = {
     'elvissection' : elvissection,
-    'header' : 'Prado1-Elvis'
+    'header' : 'Prado1-Elvis',
+    'total_sums': total_sums,
+    'elvis_history': elvis_history, 
+
   }
   return render(request, "core/prado-1-elvis.html", context)
 
+
+def prado1_elvis_history_view(request):
+    # Fetch history for each ElvisSection instance
+    elvissection = ElvisSection.objects.all()
+
+    elvis_history = []
+    for elvis in elvissection:
+        history = elvis.history.all()  # Get all historical records for this instance
+        elvis_history.append({
+            'current': elvis,
+            'history': history,
+        })
+
+    context = {
+        'elvis_history': elvis_history  # Pass the history data to the template
+    }
+
+    return render(request, 'core/history-prado1.html', context)
+
 def prado2_levinus_view(request):
   levinussection = LevinusSection.objects.all()
+  field_names = ['rental_rate_amount', 'expenses', 'management_fee_accruals', 'driver_income', 'net_income', 'transaction' ]
+  total_sums = {}
+  for field_name in field_names:
+    total_sum = levinussection.aggregate(**{f"{field_name}_sum": Sum(field_name)})[f"{field_name}_sum"]
+    total_sums[field_name] = total_sum or Decimal('0.00')
+  print(total_sums)
 
   context = {
     'levinussection' : levinussection,
-    'header' : 'Prado2-Levinus'
+    'header' : 'Prado2-Levinus',
+    'total_sums': total_sums
+
   }
 
   return render(request, "core/prado-2-levinus.html", context)
