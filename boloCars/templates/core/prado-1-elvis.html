@@ -1,0 +1,75 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+
+  <main>
+    <br>
+    <br>
+
+    <h4>Currently Viewing {{ header}} </h4>
+    <br>
+
+    <div class="button-group">
+      <h5> Add Car Rental Amount</h5>
+      <a href="{% url 'core:add_elvissection_view' %}" class="btn btn-primary btn-md" role="button"> + </a>
+      
+    </div>
+    <br>
+    <br>
+
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>id </th>
+          <th>Date </th>
+          <th>Destination</th>
+          <th>Rental Rate Amount</th>
+          <th>Expenses </th>
+          <th>Tag </th>
+          <th>Management Fee Accruals</th>
+          <th>Driver's Income</th>
+          <th>Net Income</th>
+          <th>Transactions </th>
+          <th>Comments </th>
+        </tr>
+      </thead> 
+      
+      <tbody>
+        {% for elvissec in elvissection %}
+        <tr>
+          <td> {{ elvissec.pk }} </td>
+          <td> {{ elvissec.date_time }} </td>
+          <td> {{ elvissec.destination }} </td>
+          <td> {{ elvissec.rental_rate_amount}} </td>
+          <td> {{ elvissec.expenses }} </td>
+          <td> {{ elvissec.expense_tag }} </td>
+          <td> {{ elvissec.management_fee_accruals }} </td>
+          <td> {{ elvissec.driver_income }} </td>
+          <td> {{ elvissec.net_income }} </td>
+        
+          <td> {{ elvissec.transaction }} </td>
+          <td> {{ elvissec.comments  }} </td>
+          
+        <td>
+            <a href="#" class="btn btn-warning btn-sm" role="button"> Edit </a>
+        </td>
+        </tr>
+      {% endfor %}
+
+      <!-- total sum row  -->
+     
+      <tr>
+        <td colspan="3"> <strong>Total : </strong> </td>
+        <td>{{ total_sums.rental_rate_amount}}</td>
+        <td>{{ total_sums.expenses }}</td>
+        <td>{{ total_sums.management_fee_accruals }}</td>
+        <td>{{ total_sums.driver_income }}</td>
+      </tr>
+      </tbody> 
+    </table>
+
+  </main>
+
+{% endblock content %}
+
+  
