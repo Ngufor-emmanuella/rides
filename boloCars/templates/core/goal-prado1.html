@@ -1,0 +1,39 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+
+  <main>
+    <br>
+    <br>
+
+    <h2>Yearly Goals for {{ year }}</h2>
+    <br>
+    <a href="{% url 'core:prado-1-elvis' %}" class="btn btn-primary btn-md" role="button"> <Table>Rental Transactions</Table> </a>
+    <a href="{% url 'core:prado1_elvis_history_view' %}" class="btn btn-primary btn-md" role="button"> View History </a>
+
+    <div class="button-group">
+        <h5> Add Car Rental Amount</h5>
+        <!-- <a href="{% url 'core:add_elvissection_view' %}" class="btn btn-primary btn-md" role="button"> + </a> -->
+        
+      </div>
+      <br> <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Month</th>
+                <th>Total Rental Rate</th>
+                <th>Percentage of Goal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for goal in elvis_yearly_goal %}
+                <tr>
+                    <td>{{ goal.month }}</td>
+                    <td>{{ goal.total_rental_rate }}</td>
+                    <td>{{ goal.percentage_of_goal }}%</td> <!-- Add percentage sign -->
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+      <br>
+{% endblock content %}

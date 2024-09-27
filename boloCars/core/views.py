@@ -185,3 +185,47 @@ def edit_elvissection(request, pk):
 def edit_levinussection(request, pk):
   return edit_rentedcars(request, pk, LevinusSection, LevinusSectionForm)
 
+
+# views for monthly and yearly goals
+def yearly_goal_view(request, year):
+  monthly_data = []
+
+  for month in range(1, 13):
+    result = CarsType.monthly_goal_percentage(year=year, month=month)
+
+    monthly_data.append({
+      'month' : month,
+      'total_rental_rate' : result['total_rental_rate'],
+      'percentage_of_goal' : result['percentage_of_goal'],
+    })
+
+    context = {
+      'year' : year,
+      'monthly_data' : monthly_data,
+    } 
+    return render(request, 'core/goal-prado2.html', context)
+
+def prado1_elvis_yearly_goal_view(request, year):
+  elvis_yearly_goal = []
+
+  for month in range(1, 13):
+    result = ElvisSection.monthly_goal_percentage(year=year, month=month)
+
+    elvis_yearly_goal.append({
+      'month' : month,
+      'total_rental_rate' : result['total_rental_rate'],
+      'percentage_of_goal' : result['percentage_of_goal'],
+    })
+
+  context = {
+    'year' : year,
+    'elvis_yearly_goal' : elvis_yearly_goal,
+    }
+  
+  return render(request, 'core/goal-prado1.html', context)
+
+  
+
+
+      
+

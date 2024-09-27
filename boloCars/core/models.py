@@ -249,11 +249,32 @@ class CarsType(models.Model):
         self.management_fee_accruals = Decimal(str(self.rental_rate_amount)) * Decimal('0.10')
     
     # to perform substraction operation from fields
-    if self.rental_rate_amount is not None and self.expenses is not None and self.management_fee_accruals is not None and self.driver_income:
-      result = self.rental_rate_amount - self.expenses - self.management_fee_accruals - self.driver_income
+    if self.rental_rate_amount is not None and self.management_fee_accruals is not None and self.driver_income:
+      result = self.rental_rate_amount - self.management_fee_accruals - self.driver_income
       self.net_income = Decimal(result)
+    
+    # calculation for transaction
+    if self.rental_rate_amount is not None and self.expenses is not None:
+      result = self.rental_rate_amount - self.expenses
+      self.transaction = Decimal(result)
+      
+      super(CarsType, self).save(*args, **kwargs)
 
-    super(CarsType, self).save(*args, **kwargs)
+  # method calculates sum of rental rate for each month and percentage achieved
+  @classmethod
+  def monthly_goal_percentage(cls, year, month, goal=1000000):
+    total_rental_rate = cls.objects.filter(
+      date_time__year = year,
+      date_time__month = month
+    ).aggregate(total=Sum('rental_rate_amount'))['total'] or Decimal('0.00')
+
+    percentage = (total_rental_rate / Decimal(goal)) * Decimal('100')
+
+    return {
+      'total_rental_rate': total_rental_rate,
+      'percentage_of_goal': percentage
+    }
+
 
   class Meta:
     abstract = True
