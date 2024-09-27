@@ -18,7 +18,7 @@ urlpatterns = [
   # vendors
   # path("vendors/", vendor_list_view, name="vendor-list"),
 
-  #car category page
+  #car category page to view tabular car transcations 
   path("prado-1-elvis", prado1_elvis_view, name="prado-1-elvis"),
 
   path("prado-2-levinus", prado2_levinus_view, name="prado-2-levinus"),
@@ -29,8 +29,14 @@ urlpatterns = [
   path("add_levinussection_view", views.add_levinussection_view, name="add_levinussection_view"),
 
   # link for edit button
-  path("edit_elvissection", views.edit_elvissection, name="edit_elvissection"),
-  path("edit_levinussection", views.edit_levinussection, name="edit_levinussection")
+  path("edit_elvissection/<int:pk>/", views.edit_elvissection, name="edit_elvissection"),
+  path("edit_levinussection/<int:pk>/", views.edit_levinussection, name="edit_levinussection"),
 
+  #add history view of sheets
+  path("prado1_elvis_history_view", views.prado1_elvis_history_view, name='prado1_elvis_history_view'),
+  path("prado2_levinus_history_view", views.prado2_levinus_history_view, name='prado2_levinus_history_view'),
+
+  #link for monthly and yearly goals achieved
+  path("prado1_elvis_yearly_goal_view/<int:year>/", views.prado1_elvis_yearly_goal_view, name='prado1_elvis_yearly_goal_view')
  
 ]
