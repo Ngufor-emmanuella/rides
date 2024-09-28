@@ -20,23 +20,30 @@ urlpatterns = [
 
   #car category page to view tabular car transcations 
   path("prado-1-elvis", prado1_elvis_view, name="prado-1-elvis"),
-
   path("prado-2-levinus", prado2_levinus_view, name="prado-2-levinus"),
+  path("rav4-serge-view", rav4_serge_view, name="rav4-serge-view"),
 
-  # link for add car details for each table
+  # link to add car details for each table
   path("add_elvissection_view", views.add_elvissection_view, name="add_elvissection_view"),
-    
   path("add_levinussection_view", views.add_levinussection_view, name="add_levinussection_view"),
+  path("add_sergesection_view", views.add_sergesection_view, name="add_sergesection_view"),
+
 
   # link for edit button
   path("edit_elvissection/<int:pk>/", views.edit_elvissection, name="edit_elvissection"),
   path("edit_levinussection/<int:pk>/", views.edit_levinussection, name="edit_levinussection"),
+  path("edit_sergesection/<int:pk>/", views.edit_sergesection, name="edit_sergesection"),
 
+ 
   #add history view of sheets
   path("prado1_elvis_history_view", views.prado1_elvis_history_view, name='prado1_elvis_history_view'),
   path("prado2_levinus_history_view", views.prado2_levinus_history_view, name='prado2_levinus_history_view'),
+  path("rav4_serge_history_view", views.rav4_serge_history_view, name='rav4_serge_history_view'),
+
 
   #link for monthly and yearly goals achieved
-  path("prado1_elvis_yearly_goal_view/<int:year>/", views.prado1_elvis_yearly_goal_view, name='prado1_elvis_yearly_goal_view')
- 
+  path("prado1_elvis_yearly_goal_view/<int:year>/", views.prado1_elvis_yearly_goal_view, name='prado1_elvis_yearly_goal_view'),
+  path("prado2_levinus_yearly_goal_view/<int:year>/", views.prado2_levinus_yearly_goal_view, name='prado2_levinus_yearly_goal_view'),
+  path("rav4_serge_yearly_goal_view/<int:year>/", views.rav4_serge_yearly_goal_view, name='rav4_serge_yearly_goal_view')
+
 ]

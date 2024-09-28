@@ -11,8 +11,10 @@
 
     <div class="button-group">
       <h5> Add Car Rental Amount</h5>
-      <a href="{% url 'core:add_levinussection_view' %}" class="btn btn-primary btn-md" role="button"> + </a>
-      
+      <a href="{% url 'core:add_sergesection_view' %}" class="btn btn-primary btn-md" role="button"> + </a>
+      <a href="{% url 'core:rav4_serge_history_view' %}" class="btn btn-primary btn-md" role="button"> View History </a>
+
+    
     </div>
     <br>
     <br>
@@ -35,22 +37,22 @@
       </thead> 
       
       <tbody>
-        {% for levisec in levinussection %}
+        {% for sergesec in sergesection %}
         <tr>
-          <td> {{ levisec.pk }} </td>
-          <td> {{ levisec.date_time }} </td>
-          <td> {{ levisec.destination }} </td>
-          <td> {{ levisec.rental_rate_amount}} </td>
-          <td> {{ levisec.expenses }} </td>
-          <td> {{ levisec.expense_tag }} </td>
-          <td> {{ levisec.management_fee_accruals }} </td>
-          <td> {{ levisec.driver_income }} </td>
-          <td> {{ levisec.net_income }} </td>
-          <td> {{ levisec.transaction }} </td>
-          <td> {{ levisec.comments  }} </td>  
+          <td> {{ sergesec.pk }} </td>
+          <td> {{ sergesec.date_time }} </td>
+          <td> {{ sergesec.destination }} </td>
+          <td> {{ sergesec.rental_rate_amount}} </td>
+          <td> {{ sergesec.expenses }} </td>
+          <td> {{ sergesec.expense_tag }} </td>
+          <td> {{ sergesec.management_fee_accruals }} </td>
+          <td> {{ sergesec.driver_income }} </td>
+          <td> {{ sergesec.net_income }} </td>
+          <td> {{ sergesec.transaction }} </td>
+          <td> {{ sergesec.comments  }} </td>  edit_sergesection
 
           <td>
-            <a href="#" class="btn btn-warning btn-sm" role="button">Edit</a>
+            <a href="{% url 'core:edit_sergesection' sergesec.pk %}" class="btn btn-warning btn-sm" role="button"> Edit </a>
           </td>
 
         </tr>
