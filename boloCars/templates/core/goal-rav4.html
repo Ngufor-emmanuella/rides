@@ -6,10 +6,10 @@
     <br>
     <br>
 
-    <h3>Elvis - Prado-1 Yearly Goals for {{ year }}</h3>
+    <h3>Serge - Rav-4 Yearly Goals for {{ year }}</h3>
     <br>
-    <a href="{% url 'core:prado-1-elvis' %}" class="btn btn-primary btn-md" role="button"> <Table>Rental Transactions</Table> </a>
-    <a href="{% url 'core:prado1_elvis_history_view' %}" class="btn btn-primary btn-md" role="button"> View History </a>
+    <a href="{% url 'core:rav4-serge-view' %}" class="btn btn-primary btn-md" role="button"> <Table>Rental Transactions</Table> </a>
+    <a href="{% url 'core:rav4_serge_history_view' %}" class="btn btn-primary btn-md" role="button"> View History </a>
 
     <div class="button-group">
         <h5> Add Car Rental Amount</h5>
@@ -25,7 +25,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for goal in elvis_yearly_goal %}
+            {% for goal in serge_yearly_goal %}
                 <tr>
                     <td>{{ goal.month }}</td>
                     <td>{{ goal.total_rental_rate }}</td>

@@ -138,6 +138,40 @@ def prado2_levinus_history_view(request):
     }
     return render(request, 'core/history-prado2.html', context)
 
+def rav4_serge_view(request):
+  sergesection = SergeSection.objects.all()
+  field_names = ['rental_rate_amount', 'expenses', 'management_fee_accruals', 'driver_income', 'net_income', 'transaction' ]
+  total_sums = {}
+  for field_name in field_names:
+    total_sum = sergesection.aggregate(**{f"{field_name}_sum": Sum(field_name)})[f"{field_name}_sum"]
+    total_sums[field_name] = total_sum or Decimal('0.00')
+  print(total_sums)
+
+  context = {
+    'sergesection' : sergesection,
+    'header' : 'Rav-4 Serge',
+    'total_sums': total_sums
+  }
+  return render(request, "core/rav-4-serge.html", context)
+
+def rav4_serge_history_view(request):
+    # Fetch history for each ElvisSection instancea
+    sergesection = SergeSection.objects.all()
+
+    serge_history = []
+    for serge in sergesection:
+        history = serge.history.all()  # Get all historical records for this instance
+        serge_history.append({
+            'current': serge,
+            'history': history,
+        })
+
+    context = {
+      'serge_history':  serge_history, # Pass the history data to the template
+      'header' : 'Rav4_serge_history'
+    }
+    return render(request, 'core/history-rav4.html', context)
+
  
 # function to add cars details to the sheet for each column
 def add_rentedcars_view(request, cls):
@@ -152,7 +186,7 @@ def add_rentedcars_view(request, cls):
     form = cls()
     return render(request, "core/add_new.html", {'form' : form } )
   
-# function inheritance from above
+# function inheritance from above , view to add car data on each table
 def add_elvissection_view(request):
   return add_rentedcars_view(request, ElvisSectionForm)
   
@@ -185,25 +219,11 @@ def edit_elvissection(request, pk):
 def edit_levinussection(request, pk):
   return edit_rentedcars(request, pk, LevinusSection, LevinusSectionForm)
 
+def edit_sergesection(request, pk):
+  return edit_rentedcars(request, pk, SergeSection, SergeSectionForm)
+
 
 # views for monthly and yearly goals
-def yearly_goal_view(request, year):
-  monthly_data = []
-
-  for month in range(1, 13):
-    result = CarsType.monthly_goal_percentage(year=year, month=month)
-
-    monthly_data.append({
-      'month' : month,
-      'total_rental_rate' : result['total_rental_rate'],
-      'percentage_of_goal' : result['percentage_of_goal'],
-    })
-
-    context = {
-      'year' : year,
-      'monthly_data' : monthly_data,
-    } 
-    return render(request, 'core/goal-prado2.html', context)
 
 def prado1_elvis_yearly_goal_view(request, year):
   elvis_yearly_goal = []
@@ -223,6 +243,43 @@ def prado1_elvis_yearly_goal_view(request, year):
     }
   
   return render(request, 'core/goal-prado1.html', context)
+
+
+def prado2_levinus_yearly_goal_view(request, year):
+  levinus_yearly_goal = []
+
+  for month in range(1, 13):
+    result = LevinusSection.monthly_goal_percentage(year=year, month=month)
+    levinus_yearly_goal.append({
+      'month' : month,
+      'total_rental_rate' : result['total_rental_rate'],
+      'percentage_of_goal' : result['percentage_of_goal'],
+    })
+
+  context = {
+    'year' : year,
+    'levinus_yearly_goal' : levinus_yearly_goal,
+    }
+  return render(request, 'core/goal-prado2.html', context)
+
+def rav4_serge_yearly_goal_view(request, year):
+  serge_yearly_goal = []
+
+  for month in range(1, 13):
+    result = SergeSection.monthly_goal_percentage(year=year, month=month)
+    serge_yearly_goal.append({
+      'month' : month,
+      'total_rental_rate' : result['total_rental_rate'],
+      'percentage_of_goal' : result['percentage_of_goal'],
+    })
+  context = {
+    'year' : year,
+    'serge_yearly_goal' : serge_yearly_goal,
+  }
+  return render(request, 'core/goal-rav4.html', context)
+
+
+
 
   
 
