@@ -18,6 +18,7 @@
     <link rel="stylesheet" href="{% static 'assets/css/plugins/slider-range.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" hred="{% static 'assets/css/auth.css' %}" />
 
 </head>
 
@@ -215,14 +216,12 @@
                                     <li>
                                         <a href="#">Pages <i class="fi-rs-angle-down"></i></a>
                                         <ul class="sub-menu">
-                                            <li><a href="page-about.html">About Us</a></li>
-                                            <li><a href="page-contact.html">Contact</a></li>
-                                            <li><a href="page-account.html">My Account</a></li>
-                                            <li><a href="page-login.html">Login</a></li>
-                                            <li><a href="page-register.html">Register</a></li>
+                                            <li><a href="{% url 'core:login' %}">Login</a></li>
+                                            <li><a href="{% url 'core:register' %}">Register</a></li>
                                             <li><a href="page-forgot-password.html">Forgot password</a></li>
                                             <li><a href="page-reset-password.html">Reset password</a></li>
-                                            <li><a href="page-purchase-guide.html">Purchase Guide</a></li>
+                                            <li><a href="page-account.html">My Account</a></li>
+
                                         </ul>
                                     </li>
                                     <li>

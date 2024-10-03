@@ -44,6 +44,10 @@ urlpatterns = [
   #link for monthly and yearly goals achieved
   path("prado1_elvis_yearly_goal_view/<int:year>/", views.prado1_elvis_yearly_goal_view, name='prado1_elvis_yearly_goal_view'),
   path("prado2_levinus_yearly_goal_view/<int:year>/", views.prado2_levinus_yearly_goal_view, name='prado2_levinus_yearly_goal_view'),
-  path("rav4_serge_yearly_goal_view/<int:year>/", views.rav4_serge_yearly_goal_view, name='rav4_serge_yearly_goal_view')
+  path("rav4_serge_yearly_goal_view/<int:year>/", views.rav4_serge_yearly_goal_view, name='rav4_serge_yearly_goal_view'),
+
+  #path to login and register auth
+  path('login/', views.loginview, name='login' ),
+  path('register', views.registerview, name='register')
 
 ]

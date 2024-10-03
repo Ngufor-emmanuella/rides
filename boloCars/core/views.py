@@ -2,7 +2,15 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from core.models import Product, Category,  CartOrder, CartOrderItems, ProductImages, ProductReview, Wishlist, Address, ElvisSection, CarsType
 from .forms import *
-# from django.urls import reverse
+from django.contrib import messages
+# importing for creating accounts
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.conf import settings
+from django.core.mail import EmailMessage
+from django.urls import reverse
 
 # Create your views here.
 def index(request):
@@ -15,6 +23,14 @@ def index(request):
 
   return render(request, 'core/index.html', context)
 
+#code below to create acccount and user authentication
+def loginview(request):
+  return render(request, 'core/login.html')
+
+def registerview(request):
+  return render(request, 'core/register.html')
+
+#code to list different pages
 def product_list_view(request):
   products = Product.objects.filter(product_status="published")
 
@@ -180,6 +196,7 @@ def add_rentedcars_view(request, cls):
 
     if form.is_valid():
       form.save()
+      messages.success(request, 'Car details submitted successfully')
       return render(request, "core/index.html" ) 
 
   else:
