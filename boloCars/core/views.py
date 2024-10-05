@@ -87,6 +87,7 @@ def logoutview(request):
   logout(request)
   return redirect('login')
 
+
 def forgotpasswordview(request):
   if request.method == "POST":
     email = request.POST.get('email')
@@ -119,7 +120,8 @@ def forgotpasswordview(request):
     
   return render(request, 'core/forgot_password.html')
 
-def passwordresentsent(request, reset_id):
+# forgot and reset password code
+def passwordresetsentview(request, reset_id):
   if PasswordReset.objects.filter(reset_id=reset_id).exists():
     return render(request, 'core/password_reset_sent.html')
   
@@ -127,9 +129,6 @@ def passwordresentsent(request, reset_id):
     messages.error(request, 'Invalid reset Id')
     return redirect('core:forgot_password')
 
-
-def passwordresetsentview(request, reset_id):
-  return render(request, 'core/password_reset_sent.html')
 
 def resetpassword(request, reset_id):
   try:
@@ -145,38 +144,34 @@ def resetpassword(request, reset_id):
         passwords_have_error = True
         messages.error(request, 'Passwords do not match')
 
-        if len(password) < 5:
-          passwords_have_error = True
-          messages.error(request, 'Password must be at leat 5 characters long')
+      if len(password) < 5:
+        passwords_have_error = True
+        messages.error(request, 'Password must be at leat 5 characters long')
+        
+      expiration_time = password_reset_id.created_when + timezone.timedelta(minutes=10)
 
-          expiration_time = password_reset_id.created_when + timezone.timedelta(minutes=10)
+      if timezone.now() > expiration_time:
+        passwords_have_error = True
+        messages.error(request, 'Reset link has expired')
+        reset_id.delete()
 
-          if timezone.now() > expiration_time:
-            passwords_have_error = True
-            messages.error(request, 'Reset link has expired')
+      if not passwords_have_error:
+        user = password_reset_id.user
+        user.set_password(password)
+        user.save()
 
-            reset_id.delete()
+        reset_id.delete()
 
-            if not passwords_have_error:
-              user = password_reset_id.user
-              user.set_password(password)
-              user.save()
-
-              reset_id.delete()
-
-              messages.success(request, 'password reset. Proceed to login')
-              return redirect('login')
+        messages.success(request, 'password reset. Proceed to login')
+        return redirect('core:login')
             
-            else:
-              return redirect('reset-password', reset_id=reset_id)
-            
-            
- 
+      else:
+        return redirect('core:reset-password', reset_id=reset_id)
+      
   except PasswordReset.DoesNotExist:
-
     messages.error(request, 'Invalid reset Id')
     return redirect('core:forgot_passward')
-  
+
   return render(request, 'core/reset_password.html')
 
 
