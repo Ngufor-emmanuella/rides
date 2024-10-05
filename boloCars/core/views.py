@@ -40,28 +40,29 @@ def registerview(request):
       user_data_has_error = True
       messages.error(request, "Username already exists")
       
-      if User.get_by_email(email=email):
-        user_data_has_error = True
-        messages.error(request, "Email already exists")
-        
-        if len(password) < 5:
-          user_data_has_error = True
-          messages.error(request, "Password must be at least 5 characters")
-          
-          if user_data_has_error:
-            return redirect('register')
-          else:
-            new_user = User.objects.create_user(
-              name=username,
-              email=email,
-              password=password
-              )
-            new_user.first_name = first_name
-            new_user.last_name = last_name
-            new_user.save()
-            messages.success(request, "Account created successfully. Login Now")
-            return redirect('login')  # Redirect to login page after successful registration
-          
+    if User.get_by_email(email=email):
+      user_data_has_error = True
+      messages.error(request, "Email already exists")
+      
+    if len(password) < 5:
+      user_data_has_error = True
+      messages.error(request, "Password must be at least 5 characters")
+      
+    if user_data_has_error:
+      return redirect('core:register')
+      
+    else:
+      new_user = User.objects.create_user(
+        name=username,
+        email=email,
+        password=password
+      )
+      new_user.first_name = first_name
+      new_user.last_name = last_name
+      new_user.save()
+      messages.success(request, "Account created successfully. Login Now")
+      return redirect('core:login')  # Redirect to login page after successful registration
+    
   return render(request, 'core/register.html')
 
 def loginview(request):
@@ -77,7 +78,7 @@ def loginview(request):
     
     else:
       messages.error(request, 'Invalid login credentials')
-      return redirect('login')
+      return redirect('core:login')
     
   return render(request, 'core/login.html')
 
