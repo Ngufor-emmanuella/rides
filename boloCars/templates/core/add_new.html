@@ -23,12 +23,18 @@
         {% endfor %}
         
         <button type="submit" class="btn btn-primary" name="button"> Add +</button>
-
+      
       </form>
+      
+      {% if messages %}
+      {% for message in messages %}
+      <div class="alert alert-success" role="alert">
+         {{ message }}
+      </div>
+      {% endfor %}
+      {% endif %}
+
     </div>
-
-
   </main>
-  
 
 {% endblock %}

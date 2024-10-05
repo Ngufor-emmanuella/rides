@@ -2,6 +2,7 @@ from django.urls import path
 from core.views import category_list_view, category_product_list__view, index, product_list_view, product_detail_view, prado1_elvis_view
 from .views import *
 from . import views
+# from django.contrib.auth.views import LoginView
 
 
 app_name ='core'
@@ -44,6 +45,19 @@ urlpatterns = [
   #link for monthly and yearly goals achieved
   path("prado1_elvis_yearly_goal_view/<int:year>/", views.prado1_elvis_yearly_goal_view, name='prado1_elvis_yearly_goal_view'),
   path("prado2_levinus_yearly_goal_view/<int:year>/", views.prado2_levinus_yearly_goal_view, name='prado2_levinus_yearly_goal_view'),
-  path("rav4_serge_yearly_goal_view/<int:year>/", views.rav4_serge_yearly_goal_view, name='rav4_serge_yearly_goal_view')
+  path("rav4_serge_yearly_goal_view/<int:year>/", views.rav4_serge_yearly_goal_view, name='rav4_serge_yearly_goal_view'),
+
+  #path to login and register auth
+  path('login/', views.loginview, name='login' ),
+  path('register', views.registerview, name='register'),
+  path('logout/', views.logoutview, name='logout'),
+
+  #path to reset and forgot password
+  path('forgot_password/', views.forgotpasswordview, name='forgot_password'),
+  path('password-reset-sentview/<str:reset_id>/', views.passwordresetsentview, name='password-reset-sentview'),
+  path('reset-password/<str:reset_id>/', views.resetpassword, name='reset-password'),
+
+  #restrict views only to those who have logged in 
+  # path('login/', LoginView.as_view(), name='login'),
 
 ]
