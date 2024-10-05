@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'simple_history',
 
     # installed app
-
     'core.apps.CoreConfig',
     'authuser'
 ]
@@ -145,3 +144,12 @@ JAZZMIN_SETTINGS = {
   'site_logo': "assets/imgs/theme/bolo-logo.png",
   'copyright': "Bolo-rides.com",
 }
+
+LOGIN_URL = 'login'
+
+# code down to send email to users
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 465
+EMAIL_USE_SSL = True
+EMAIL_HOST_USER="emmanuellangufor@gmail.com"
+EMAIL_HOST_PASSWORD = "pfol wymw jbqk azf"

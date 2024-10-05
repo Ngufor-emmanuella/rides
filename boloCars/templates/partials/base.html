@@ -18,7 +18,6 @@
     <link rel="stylesheet" href="{% static 'assets/css/plugins/slider-range.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" />
-    <link rel="stylesheet" hred="{% static 'assets/css/auth.css' %}" />
 
 </head>
 
@@ -138,47 +137,7 @@
                         <a href="index.html"><img src="{% static 'assets/imgs/theme/logo.svg' %}" alt="logo" /></a>
                     </div>
                     <div class="header-nav d-none d-lg-flex">
-                        <!-- <div class="main-categori-wrap d-none d-lg-block">
-                            <a class="categories-button-active" href="#">
-                                <span class="fi-rs-apps"></span> <span class="et">Browse</span> All Categories
-                                <i class="fi-rs-angle-down"></i>
-                            </a>
-                            <div class="categories-dropdown-wrap categories-dropdown-active-large font-heading">
-                                <div class="d-flex categori-dropdown-inner">
-                                    <ul>
-                                        {% for c in categories %}
-                                        <li>
-                                            <a href="{% url 'core:category-product-list' c.cid %}"> <img src="{{ c.image.url }}" alt="" /> {{ c.title }}</a>
-                                        </li>
-                                        {% endfor %}
-                                    </ul>
-                                   
-                                </div> 
-                                
-                                <div class="more_slide_open" style="display: none">
-                                    <div class="d-flex categori-dropdown-inner">
-                                        <ul>
-                                            <li>
-                                                <a href="shop-grid-right.html"> <img src="{% static 'assets/imgs/theme/icons/icon-1.svg' %}" alt="" />Milks and Dairies</a>
-                                            </li>
-                                            <li>
-                                                <a href="shop-grid-right.html"> <img src="{% static 'assets/imgs/theme/icons/icon-2.svg' %}" alt="" />Clothing & beauty</a>
-                                            </li>
-                                        </ul>
-                                        <ul class="end">
-                                            <li>
-                                                <a href="shop-grid-right.html"> <img src="{% static 'assets/imgs/theme/icons/icon-3.svg' %}" alt="" />Wines & Drinks</a>
-                                            </li>
-                                            <li>
-                                                <a href="shop-grid-right.html"> <img src="{% static 'assets/imgs/theme/icons/icon-4.svg' %}" alt="" />Fresh Seafood</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                
-                                <div class="more_categories"><span class="icon"></span> <span class="heading-sm-1">Show more...</span></div>
-                            </div>
-                        </div> -->
+                     
                         <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block font-heading">
                             <nav>
                                 <ul>
@@ -218,9 +177,10 @@
                                         <ul class="sub-menu">
                                             <li><a href="{% url 'core:login' %}">Login</a></li>
                                             <li><a href="{% url 'core:register' %}">Register</a></li>
-                                            <li><a href="page-forgot-password.html">Forgot password</a></li>
-                                            <li><a href="page-reset-password.html">Reset password</a></li>
-                                            <li><a href="page-account.html">My Account</a></li>
+                                            <li><a href="{% url 'core:forgot_password' %}">Forgot password</a></li>
+                                            <li><a href="#">Reset password</a></li>
+                                            <!-- <li><a href="page-account.html">My Account</a></li> -->
+                                            <li><a href="{% url 'core:logout' %}">LogOut</a></li>
 
                                         </ul>
                                     </li>
@@ -431,9 +391,6 @@
                       <h4 class="widget-title">Account</h4>
                       <ul class="footer-list mb-sm-5 mb-md-0">
                           <li><a href="#">Sign In</a></li>
-                          <li><a href="#">View Cart</a></li>
-                          <li><a href="#">My Wishlist</a></li>
-                          <li><a href="#">Track My Order</a></li>
                       </ul>
                   </div>
 

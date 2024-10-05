@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
 from django.utils import timezone
+import uuid 
 
 class CustomUserManager(UserManager):
     def _create_user(self, email, password, **extra_fields):
@@ -57,6 +58,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     def get_short_name(self):
         return self.name or self.email.split('@')[0]
+    
+    @classmethod
+    def get_by_name(cls, name):
+        return cls.objects.filter(name=name).first()
+    
+    @classmethod
+    def get_by_email(cls, email):
+        return cls.objects.filter(email=email).first()
 
 
 class CustomGroup(models.Model):
@@ -65,4 +74,12 @@ class CustomGroup(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
-    # Additional fields...
+    # functionality for reseting password
+
+class PasswordReset(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    reset_id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+    created_when = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return ("password reset for (self.user.username) at (self.created_when)")
