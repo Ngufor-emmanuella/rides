@@ -7442,7 +7442,7 @@ h6.post-title {
 }
 
 .header-action-right {
-    display: none;
+    display: block;
 }
 
 .header-action-right .search-location {
