@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="{% static 'assets/css/plugins/slider-range.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/css/main.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/bootstrap/css/bootstrap.min.css' %}" />
-
+    
 </head>
 
 <body>
@@ -99,15 +99,10 @@
                                 <input type="text" placeholder="Search for items..." />
                             </form>
                         </div>
+
                         <div class="header-action-right">
                             <div class="header-action-2">
                                
-                                <div class="header-action-icon-2">
-                                    <a class="mini-cart-icon" href="shop-cart.html">
-                                        <!-- <img alt="Nest" src="{% static 'assets/imgs/theme/icons/cart1.png' %}" /> -->
-                                    </a>
-                                   
-                                </div>
                                 <div class="header-action-icon-2">
                                     <a href="page-account.html">
                                         <img class="svgInject" alt="Nest" src="{% static 'assets/imgs/theme/icons/cart2.jpeg' %}" />
@@ -116,25 +111,28 @@
                                     <div class="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
                                         <ul>
                                             <li><a href="page-account.html"><i class="fi fi-rs-user mr-10"></i>My Account</a></li>
-                                            <li><a href="page-account.html"><i class="fi fi-rs-location-alt mr-10"></i>Order Tracking</a></li>
-                                            <li><a href="page-account.html"><i class="fi fi-rs-label mr-10"></i>My Voucher</a></li>
-                                            <li><a href="shop-wishlist.html"><i class="fi fi-rs-heart mr-10"></i>My Wishlist</a></li>
-                                            <li><a href="page-account.html"><i class="fi fi-rs-settings-sliders mr-10"></i>Setting</a></li>
-                                            <li><a href="page-login.html"><i class="fi fi-rs-sign-out mr-10"></i>Sign out</a></li>
+                                              <li><a href="{% url 'core:login' %}">Login</a></li>
+                                            <li><a href="{% url 'core:register' %}">Register</a></li>
+                                            <!-- <li><a href="{% url 'core:forgot_password' %}">Forgot password</a></li> -->
+                                            <!-- <li><a href="page-account.html">My Account</a></li> -->
+                                            <li><a href="{% url 'core:logout' %}">  <i class="fi fi-rs-sign-out mr-10"></i> LogOut</a></li>
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
         </div>
+
+        <!-- mobile -->
         <div class="header-bottom header-bottom-bg-color sticky-bar">
             <div class="container">
                 <div class="header-wrap header-space-between position-relative">
                     <div class="logo logo-width-1 d-block d-lg-none">
-                        <a href="index.html"><img src="{% static 'assets/imgs/theme/logo.svg' %}" alt="logo" /></a>
+                        <a href="index.html"><img src="{% static 'assets/imgs/theme/bolo-logo1.jpeg' %}" alt="logo" /></a>
                     </div>
                     <div class="header-nav d-none d-lg-flex">
                      
@@ -172,17 +170,7 @@
                                             <li><a href="{% url 'core:rav4-serge-view' %}"> Rav 4 - Serge</a></li>
                                         </ul>
                                     </li>
-                                    <li>
-                                        <a href="#">Pages <i class="fi-rs-angle-down"></i></a>
-                                        <ul class="sub-menu">
-                                            <li><a href="{% url 'core:login' %}">Login</a></li>
-                                            <li><a href="{% url 'core:register' %}">Register</a></li>
-                                            <!-- <li><a href="{% url 'core:forgot_password' %}">Forgot password</a></li> -->
-                                            <!-- <li><a href="page-account.html">My Account</a></li> -->
-                                            <li><a href="{% url 'core:logout' %}">LogOut</a></li>
-
-                                        </ul>
-                                    </li>
+                                   
                                     <li>
                                         <a href="page-contact.html">Contact</a>
                                     </li>
@@ -202,51 +190,29 @@
                         </div>
                     </div>
                     <div class="header-action-right d-block d-lg-none">
-                        <div class="header-action-2">
-                            <div class="header-action-icon-2">
-                                <a href="shop-wishlist.html">
-                                    <img alt="Nest" src="{% static 'assets/imgs/theme/icons/icon-heart.svg' %}" />
-                                    <span class="pro-count white">4</span>
-                                </a>
-                            </div>
-                            <div class="header-action-icon-2">
-                                <a class="mini-cart-icon" href="shop-cart.html">
-                                    <img alt="Nest" src="{% static 'assets/imgs/theme/icons/icon-cart.svg' %}" />
-                                    <span class="pro-count white">2</span>
-                                </a>
-                                <div class="cart-dropdown-wrap cart-dropdown-hm2">
-                                    <ul>
-                                        <li>
-                                            <div class="shopping-cart-img">
-                                                <a href="shop-product-right.html"><img alt="Nest" src="{% static 'assets/imgs/shop/thumbnail-3.jpg' %}" /></a>
-                                            </div>
-                                           
-                                            <div class="shopping-cart-delete">
-                                                <a href="#"><i class="fi-rs-cross-small"></i></a>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div class="shopping-cart-img">
-                                                <a href="shop-product-right.html"><img alt="Nest" src="{% static 'assets/imgs/shop/thumbnail-4.jpg' %}" /></a>
-                                            </div>
-                                           
-                                            <div class="shopping-cart-delete">
-                                                <a href="#"><i class="fi-rs-cross-small"></i></a>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                    <div class="shopping-cart-footer">
-                                        <div class="shopping-cart-total">
-                                            <h4>Total <span>$383.00</span></h4>
-                                        </div>
-                                        <div class="shopping-cart-button">
-                                            <a href="shop-cart.html">View cart</a>
-                                            <a href="shop-checkout.html">Checkout</a>
-                                        </div>
+                        
+                        <div class="header-action-right">
+                            <div class="header-action-2">
+                               
+                                <div class="header-action-icon-2">
+                                    <a href="#">
+                                        <img class="svgInject" alt="Nest" src="{% static 'assets/imgs/theme/icons/cart2.jpeg' %}" />
+                                    </a>
+                                    <a href="#"><span class="lable ml-0">Account</span></a>
+                                    <div class="cart-dropdown-wrap cart-dropdown-hm2 account-dropdown">
+                                        <ul>
+                                            <li><a href="page-account.html"><i class="fi fi-rs-user mr-10"></i>My Account</a></li>
+                                              <li><a href="{% url 'core:login' %}">Login</a></li>
+                                            <li><a href="{% url 'core:register' %}">Register</a></li>
+                                            <!-- <li><a href="{% url 'core:forgot_password' %}">Forgot password</a></li> -->
+                                            <!-- <li><a href="page-account.html">My Account</a></li> -->
+                                            <li><a href="{% url 'core:logout' %}">  <i class="fi fi-rs-sign-out mr-10"></i> LogOut</a></li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>
