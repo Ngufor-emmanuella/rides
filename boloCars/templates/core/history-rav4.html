@@ -6,14 +6,13 @@
     <br>
     <br>
 
-    <h4> History sheet for... {{ header }}  </h4>
+    <h4 class="page-history"> History sheet for... {{ header }}  </h4>
 
     <br>
     <div class="button-group">
-        <h5> Add Car Rental Amount</h5>
-        <a href="{% url 'core:add_sergesection_view' %}" class="btn btn-primary btn-md" role="button"> + </a>
-        <a href="{% url 'core:rav4-serge-view' %}" class="btn btn-primary btn-md" role="button"> <Table>Rental Transactions</Table> </a>
-        <a href="{% url 'core:rav4_serge_yearly_goal_view' year=2023 %}" class="btn btn-primary btn-md" role="button"> Monthly / Yearly % Goals </a>
+        <a href="{% url 'core:add_sergesection_view' %}" class="btn btn-sucess btn-md" role="button"> + Add Car Rental Details </a>
+        <a href="{% url 'core:rav4-serge-view' %}" class="btn btn-sucess btn-md" role="button"> Rental Transaction Page </a>
+        <a href="{% url 'core:rav4_serge_yearly_goal_view' year=2023 %}" class="btn btn-sucess btn-md" role="button"> Monthly / Yearly % Goals </a>
 
         
       </div>
@@ -21,7 +20,10 @@
       <br>
 
      {% for record in serge_history %}
-    <h5>Current Record ID: {{ record.current.pk }}</h5>
+
+    <h5 class="header-history">Current Record ID: {{ record.current.pk }}</h5>
+    
+    <div class="table-responsive">
     <table class="table table-hover">
         <thead>
             <tr>
@@ -75,6 +77,9 @@
             {% endwith %}
         </tbody>
     </table>
+    <br>
+</div>
+</main>
 
 {% endfor %}
 {% endblock content %}

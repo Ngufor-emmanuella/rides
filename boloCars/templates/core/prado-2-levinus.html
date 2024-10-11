@@ -4,22 +4,22 @@
 
   <main>
     <br>
-    <br>
 
-    <h4 class="page-heading">Currently Viewing {{ header}} </h4>
+    <h4 class="page-heading"> Viewing {{ header}} </h4>
+    <hr>
+
+    <br>
     <br>
 
     <div class="button-group">
-      <h5> Add Car Rental Amount</h5>
-      <a href="{% url 'core:add_levinussection_view' %}" class="btn btn-primary btn-md" role="button"> + </a>
-      <a href="{% url 'core:prado2_levinus_history_view' %}" class="btn btn-primary btn-md" role="button"> View History </a>
-      <a href="{% url 'core:prado2_levinus_yearly_goal_view' year=2023 %}" class="btn btn-primary btn-md" role="button"> Monthly / Yearly % Goals </a>
-
-      
+      <a href="{% url 'core:add_levinussection_view' %}" class="btn btn-sucess btn-md" role="button">  + Add Car Rental Details</a>
+      <a href="{% url 'core:prado2_levinus_history_view' %}" class="btn btn-sucess btn-md" role="button"> View History </a>
+      <a href="{% url 'core:prado2_levinus_yearly_goal_view' year=2023 %}" class="btn btn-sucess btn-md" role="button"> Monthly / Yearly % Goals </a>  
     </div>
     <br>
     <br>
 
+    <div class="table-responsive">
     <table class="table table-hover">
       <thead>
         <tr>
@@ -53,7 +53,7 @@
           <td> {{ levisec.comments  }} </td>  
 
           <td>
-            <a href="{% url 'core:edit_levinussection' levisec.pk %}" class="btn btn-warning btn-sm" role="button">Edit</a>
+            <a href="{% url 'core:edit_levinussection' levisec.pk %}" class="btn btn-sucess btn-sm" role="button">Edit</a>
           </td>
 
         </tr>
@@ -66,6 +66,7 @@
         <td colspan="3"> <strong>Total : </strong> </td>
         <td><strong> {{ total_sums.rental_rate_amount}}</strong></td>
         <td> <strong> {{ total_sums.expenses }}</strong></td>
+        <td> <strong> {{ total_sums.expense_tag }} </strong> </td>
         <td> <strong> {{ total_sums.management_fee_accruals }}</strong></td>
         <td> <strong> {{ total_sums.driver_income }}</strong></td>
         <td> <strong> {{ total_sums.net_income }}</strong></td>
@@ -73,6 +74,9 @@
       </tr>
       </tbody> 
     </table>
+    </div>
+    <br>
+    <br>
   </main>
 
 {% endblock content %}
