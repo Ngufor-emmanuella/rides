@@ -6,15 +6,16 @@
     <br>
     <br>
 
-    <h3>Levinus - Prado-2 Yearly Goals for {{ year }}</h3>
+    <h3 class="page-history">Levinus - Prado-2 Yearly Goals for {{ year }}</h3>
     <br>
-    <a href="{% url 'core:prado-2-levinus' %}" class="btn btn-primary btn-md" role="button"> <Table>Rental Transactions</Table> </a>
-    <a href="{% url 'core:prado2_levinus_history_view' %}" class="btn btn-primary btn-md" role="button"> View History </a>
+    <div class="button-group">
+    <a href="{% url 'core:prado-2-levinus' %}" class="btn btn-sucess btn-md" role="button"> Rental Transactions </a>
+    <a href="{% url 'core:prado2_levinus_history_view' %}" class="btn btn-sucess btn-md" role="button"> View History Details</a>
+    </div>
 
     <div class="button-group">
-        <h5> Add Car Rental Amount</h5>
-        <!-- <a href="{% url 'core:add_elvissection_view' %}" class="btn btn-primary btn-md" role="button"> + </a> -->
         
+        <!-- <a href="{% url 'core:add_elvissection_view' %}" class="btn btn-primary btn-md" role="button"> + </a> -->
       </div>
       <br> <table class="table table-hover">
         <thead>

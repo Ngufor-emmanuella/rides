@@ -4,65 +4,67 @@
 
   <main>
     <br>
+    <h4 class="page-heading"> Viewing {{ header}} </h4>
+    <hr>
     <br>
-
-    <h4>Currently Viewing {{ header}} </h4>
     <br>
 
     <div class="button-group">
-      <h5> Add Car Rental Amount</h5>
-      <a href="{% url 'core:add_elvissection_view' %}" class="btn btn-primary btn-md" role="button"> + </a>
-      <a href="{% url 'core:prado1_elvis_history_view' %}" class="btn btn-primary btn-md" role="button"> View History </a>
-      <a href="{% url 'core:prado1_elvis_yearly_goal_view' year=2023 %}" class="btn btn-primary btn-md" role="button"> Monthly / Yearly % Goals </a>
+      <a href="{% url 'core:add_elvissection_view' %}" class="btn btn-sucess btn-md" role="button"> + Add Car Rental Details</a>
+      <a href="{% url 'core:prado1_elvis_history_view' %}" class="btn btn-sucess btn-md" role="button"> View History </a>
+      <a href="{% url 'core:prado1_elvis_yearly_goal_view' year=2023 %}" class="btn btn-sucess btn-md" role="button"> Monthly / Yearly % Goals </a>
   
     </div>
     <br>
     <br>
 
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th>id </th>
-          <th>Date </th>
-          <th>Destination</th>
-          <th>Rental Rate Amount</th>
-          <th>Expenses </th>
-          <th>Tag </th>
-          <th>Management Fee Accruals</th>
-          <th>Driver's Income</th>
-          <th>Net Income</th>
-          <th>Transactions </th>
-          <th>Comments </th>
-        </tr>
-      </thead> 
-      
-      <tbody>
-        {% for elvissec in elvissection %}
-        <tr>
-          <td> {{ elvissec.pk }} </td>
-          <td> {{ elvissec.date_time }} </td>
-          <td> {{ elvissec.destination }} </td>
-          <td> {{ elvissec.rental_rate_amount}} </td>
-          <td> {{ elvissec.expenses }} </td>
-          <td> {{ elvissec.expense_tag }} </td>
-          <td> {{ elvissec.management_fee_accruals }} </td>
-          <td> {{ elvissec.driver_income }} </td>
-          <td> {{ elvissec.net_income }} </td>
-          <td> {{ elvissec.transaction }} </td>
-          <td> {{ elvissec.comments  }} </td>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>id </th>
+            <th>Date </th>
+            <th>Destination</th>
+            <th>Rental Rate Amount</th>
+            <th>Expenses </th>
+            <th>Tag </th>
+            <th>Management Fee Accruals</th>
+            <th>Driver's Income</th>
+            <th>Net Income</th>
+            <th>Transactions </th>
+            <th>Comments </th>
+          </tr>
+        </thead>
+        
+        <tbody>
+          {% for elvissec in elvissection %}
+          <tr>
+            <td> {{ elvissec.pk }} </td>
+            <td> {{ elvissec.date_time }} </td>
+            <td> {{ elvissec.destination }} </td>
+            <td> {{ elvissec.rental_rate_amount}} </td>
+            <td> {{ elvissec.expenses }} </td>
+            <td> {{ elvissec.expense_tag }} </td>
+            <td> {{ elvissec.management_fee_accruals }} </td>
+            <td> {{ elvissec.driver_income }} </td>
+            <td> {{ elvissec.net_income }} </td>
+            <td> {{ elvissec.transaction }} </td>
+            <td> {{ elvissec.comments  }} </td>
+            
+            <td>
+              <a href="{% url 'core:edit_elvissection' elvissec.pk %}" class="btn btn-sucess btn-sm" role="button"> Edit </a>
+            </td>
+          </tr>
           
-        <td>
-            <a href="{% url 'core:edit_elvissection' elvissec.pk %}" class="btn btn-warning btn-sm" role="button"> Edit </a>
-        </td>
-        </tr>
-      {% endfor %}
+          {% endfor %}
 
       <!-- total sum row  -->
      
-      <tr>
+      <tr class="total-table">
         <td colspan="3"> <strong>Total : </strong> </td>
         <td><strong> {{ total_sums.rental_rate_amount}}</strong></td>
         <td> <strong> {{ total_sums.expenses }}</strong></td>
+        <td> <strong> {{ total_sums.expense_tag }} </strong> </td>
         <td> <strong> {{ total_sums.management_fee_accruals }}</strong></td>
         <td> <strong> {{ total_sums.driver_income }}</strong></td>
         <td> <strong> {{ total_sums.net_income }}</strong></td>
@@ -70,7 +72,10 @@
       </tr>
       </tbody> 
     </table>
-
+  </div>
+    <br>
+    <br>
+    
   </main>
 
 {% endblock content %}

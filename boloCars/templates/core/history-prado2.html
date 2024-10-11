@@ -6,22 +6,20 @@
     <br>
     <br>
 
-    <h4> History sheet for... {{ header }}  </h4>
+    <h4 class="page-history"> History sheet for... {{ header }}  </h4>
 
     <br>
     <div class="button-group">
-        <h5> Add Car Rental Amount</h5>
-        <a href="{% url 'core:add_levinussection_view' %}" class="btn btn-primary btn-md" role="button"> + </a>
-        <a href="{% url 'core:prado-2-levinus' %}" class="btn btn-primary btn-md" role="button"> <Table>Rental Transactions</Table> </a>
-        <a href="{% url 'core:prado2_levinus_yearly_goal_view' year=2023 %}" class="btn btn-primary btn-md" role="button"> Monthly / Yearly % Goals </a>
-
-        
+      
+        <a href="{% url 'core:add_levinussection_view' %}" class="btn btn-sucess btn-md" role="button"> + Add Car Rental Details </a>
+        <a href="{% url 'core:prado-2-levinus' %}" class="btn btn-sucess btn-md" role="button">Rental Transaction Page </a>
+        <a href="{% url 'core:prado2_levinus_yearly_goal_view' year=2023 %}" class="btn btn-sucess btn-md" role="button"> Monthly / Yearly % Goals </a>   
       </div>
       <br>
       <br>
 
      {% for record in  levinus_history  %}
-    <h5>Current Record ID: {{ record.current.pk }}</h5>
+    <h5 class="header-history">Current Record ID: {{ record.current.pk }}</h5>
     <table class="table table-hover">
         <thead>
             <tr>

@@ -82,4 +82,7 @@ class PasswordReset(models.Model):
     created_when = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return ("password reset for (self.user.username) at (self.created_when)")
+        return f"Password reset for {self.user.email} at {self.created_when}"
+
+
+    

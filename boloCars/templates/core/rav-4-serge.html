@@ -4,23 +4,20 @@
 
   <main>
     <br>
+    <h4 class="page-heading">Currently Viewing {{ header}} </h4>
+    <hr class="page-line">
     <br>
-
-    <h4>Currently Viewing {{ header}} </h4>
     <br>
 
     <div class="button-group">
-      <h5> Add Car Rental Amount</h5>
-      <a href="{% url 'core:add_sergesection_view' %}" class="btn btn-primary btn-md" role="button"> + </a>
-      <a href="{% url 'core:rav4_serge_history_view' %}" class="btn btn-primary btn-md" role="button"> View History </a>
-      <a href="{% url 'core:rav4_serge_yearly_goal_view' year=2023 %}" class="btn btn-primary btn-md" role="button"> Monthly / Yearly % Goals </a>
-
-
-    
+      <a href="{% url 'core:add_sergesection_view' %}" class="btn btn-sucess btn-md" role="button"> + Add Car Rental Details </a>
+      <a href="{% url 'core:rav4_serge_history_view' %}" class="btn btn-sucess btn-md" role="button"> View History </a>
+      <a href="{% url 'core:rav4_serge_yearly_goal_view' year=2023 %}" class="btn btn-sucess btn-md" role="button"> Monthly / Yearly % Goals </a>
     </div>
     <br>
     <br>
 
+    <div class="table-responsive"> 
     <table class="table table-hover">
       <thead>
         <tr>
@@ -51,10 +48,10 @@
           <td> {{ sergesec.driver_income }} </td>
           <td> {{ sergesec.net_income }} </td>
           <td> {{ sergesec.transaction }} </td>
-          <td> {{ sergesec.comments  }} </td>  edit_sergesection
+          <td> {{ sergesec.comments  }} </td> 
 
           <td>
-            <a href="{% url 'core:edit_sergesection' sergesec.pk %}" class="btn btn-warning btn-sm" role="button"> Edit </a>
+            <a href="{% url 'core:edit_sergesection' sergesec.pk %}" class="btn btn-sucess btn-sm" role="button"> Edit </a>
           </td>
 
         </tr>
@@ -63,10 +60,11 @@
 
          <!-- total sum row  -->
      
-      <tr>
+      <tr class="total-table">
         <td colspan="3"> <strong>Total : </strong> </td>
         <td><strong> {{ total_sums.rental_rate_amount}}</strong></td>
         <td> <strong> {{ total_sums.expenses }}</strong></td>
+        <td> <strong>  {{ total_sums.expense_tag }}</strong> </td>
         <td> <strong> {{ total_sums.management_fee_accruals }}</strong></td>
         <td> <strong> {{ total_sums.driver_income }}</strong></td>
         <td> <strong> {{ total_sums.net_income }}</strong></td>
@@ -74,6 +72,9 @@
       </tr>
       </tbody> 
     </table>
+  </div>
+  <br>
+  <br>
   </main>
 
 {% endblock content %}
