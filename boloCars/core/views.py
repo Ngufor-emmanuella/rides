@@ -25,6 +25,14 @@ def index(request):
 
   return render(request, 'core/index.html', context)
 
+def about(request):
+
+  context = {
+    "header" : "About-Us"
+  }
+
+  return render(request, 'core/about.html', context)
+
 #code below to create acccount and user authentication
 
 def registerview(request):
