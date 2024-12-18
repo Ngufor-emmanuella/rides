@@ -268,7 +268,9 @@ class CarsType(models.Model):
       date_time__month = month
     ).aggregate(total=Sum('rental_rate_amount'))['total'] or Decimal('0.00')
 
-    percentage = (total_rental_rate / Decimal(goal)) * Decimal('100')
+    percentage = (total_rental_rate / Decimal(goal)) * Decimal('100') if total_rental_rate > 0 else Decimal('0.00')
+
+
 
     return {
       'total_rental_rate': total_rental_rate,

@@ -183,6 +183,42 @@ body {
     padding-bottom: 1%;
 }
 
+
+/* contact styles */
+
+.flex-row {
+    width: 100%;
+    height: auto;
+}
+
+.contact-first {
+    width: 50%;
+}
+
+.contact-second {
+    width: 50%;
+    display: flex;
+    position: relative;
+}
+
+.brown-circle {
+    width: 62%;
+    top: 15%;
+    height: 30vh;
+    position: relative;
+    z-index: 5;
+    left: 23%;
+    border-radius: 77%;
+}
+
+.show-car {
+    width: 90%;
+    height: 51vh;
+    position: absolute;
+    z-index: 1;
+    left: 12%;
+}
+
 .about-container h4 {
     color: #6f0808;
     margin: 0 auto;
@@ -11848,6 +11884,12 @@ footer .hotline img {
     .custom-modal .modal-dialog {
         max-width: 720px !important;
     }
+
+
+    /* contact design  */
+    .align-images {
+        background-color: red;
+    }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 992px) {
@@ -12255,6 +12297,8 @@ footer .hotline img {
     .header-style-1.header-style-5 .header-bottom-bg-color {
         background-color: #fff !important;
     }
+
+   
 }
 
 /*small phone*/

@@ -1,0 +1,79 @@
+{% extends 'partials/base.html' %}
+{% load static %}
+{% block content %}
+
+<main class="main">
+
+    <div class="d-flex flex-row" >
+
+        <div class="p-2 contact-first">
+
+            <h3> The Royal Essence of Journey :
+                <br> Best and Affordable Ride Ever!</h3>
+    
+            <p> You can rent a car for any purpose. We make car renting easy, whether you need a sports
+                 coupe for a weekend ride with a date or a roadster for a road trip in Cameroon for a few days. 
+                 We ensure our rides fit your specific needs."
+            </p>
+        
+            <h4> Book Your Ride Today! </h4>
+        
+            <p>
+                <bold>  Need a ride? </bold> 
+                Message us on Facebook or call <bold> +237 652 921000 </bold> to book your next trip with BoloRides. 
+                We’ll get you where you need to go, safely and on time.
+            </p>
+
+        </div>
+
+
+        <div class="p-2 contact-second">
+        
+            <img class="brown-circle" src="{% static 'assets/imgs/slider/prado.jpeg' %}" alt="black prado car" />
+
+            <img class="show-car" src="{% static 'assets/imgs/slider/brown2.jpeg' %}" alt="circle drawing" />
+        
+        </div>
+   </div>
+
+   <br>
+   <br>
+   <br>
+
+   <section class="home-slider position-relative style=width: 100%; ">
+      <div class="home-slide-cover" style="background-image: url('{% static 'assets/imgs/slider/prado.jpeg' %}');">
+        <div class="hero-slider-1 style-4 dot-style-1 dot-style-1-position-1" >
+            <div class="single-hero-slider single-animation-wrap " >
+                <div class="container mt-5">
+                    <h3> Reach Us ...</h3>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            {{ form.name.label_tag}}
+                            {{ form.name}}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form.name.label_tag}}
+                            {{ form.email}}
+                        </div>
+
+                        <div class="form-group">
+                            {{ form.name.label_tag}}
+                            {{ form.message}}
+                        </div>
+
+                        <button type="submit" class="btn btn-primary"> Send us a message</button>
+
+                    </form>
+                    
+                </div>
+            </div>
+            
+        </div>
+        </div>
+    </section>     
+   
+</main>
+
+{% endblock content %}

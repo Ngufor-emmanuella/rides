@@ -33,6 +33,14 @@ def about(request):
 
   return render(request, 'core/about.html', context)
 
+def contact(request):
+
+  context = {
+    "header" : "Contact-Us"
+  }
+
+  return render(request, 'core/contact.html', context)
+
 #code below to create acccount and user authentication
 
 def registerview(request):
@@ -78,7 +86,7 @@ def loginview(request):
 
 def logoutview(request):
   logout(request)
-  return redirect('login')
+  return render(request, 'core/index.html')
 
 # code for forget password
 def forgotpasswordview(request):
@@ -351,7 +359,7 @@ def add_elvissection_view(request):
   
 def add_levinussection_view(request):
   return add_rentedcars_view(request, LevinusSectionForm)
-
+xz
 def add_sergesection_view(request):
   return add_rentedcars_view(request, SergeSectionForm)
 
@@ -384,24 +392,25 @@ def edit_sergesection(request, pk):
 
 # views for monthly and yearly goals
 
+
 def prado1_elvis_yearly_goal_view(request, year):
-  elvis_yearly_goal = []
+    elvis_yearly_goal = []
 
-  for month in range(1, 13):
-    result = ElvisSection.monthly_goal_percentage(year=year, month=month)
+    for month in range(1, 13):
+        result = ElvisSection.monthly_goal_percentage(year=year, month=month)
 
-    elvis_yearly_goal.append({
-      'month' : month,
-      'total_rental_rate' : result['total_rental_rate'],
-      'percentage_of_goal' : result['percentage_of_goal'],
-    })
+        elvis_yearly_goal.append({
+            'month': month,
+            'total_rental_rate': result['total_rental_rate'],  # This will be 0 if no data
+            'percentage_of_goal': result['percentage_of_goal'],  # This will be 0 if no data
+        })
 
-  context = {
-    'year' : year,
-    'elvis_yearly_goal' : elvis_yearly_goal,
+    context = {
+        'year': year,
+        'elvis_yearly_goal': elvis_yearly_goal,
     }
-  
-  return render(request, 'core/goal-prado1.html', context)
+
+    return render(request, 'core/goal-prado1.html', context)
 
 
 def prado2_levinus_yearly_goal_view(request, year):
@@ -436,6 +445,19 @@ def rav4_serge_yearly_goal_view(request, year):
     'serge_yearly_goal' : serge_yearly_goal,
   }
   return render(request, 'core/goal-rav4.html', context)
+
+
+def contact_view(request):
+   if request.method == 'POST':
+      forms.ContactForm(request.POST)
+      if forms.is_valid():
+          forms.save()
+          messages.success(request, 'message submitted successfully')
+          return render(request, "core/contact.html")
+      else:
+          return render(request, "core/index.html")
+         
+         
 
 
 

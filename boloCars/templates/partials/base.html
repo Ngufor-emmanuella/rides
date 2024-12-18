@@ -148,17 +148,26 @@
                                     </li>
 
                                     <li>
+                                        <a href="{% url 'core:contact'%}">Contact</a>
+                                    </li>
+
+                                    <li>
+                                        {% if user.is_authenticated %}
                                         <a href="#">Car Sheets<i class="fi-rs-angle-down"></i></a>
+
                                         <ul class="sub-menu">
                                             <li><a href="{% url 'core:prado-1-elvis' %}">Prado 1 - Elvis</a></li>
                                             <li><a href="{% url 'core:prado-2-levinus' %}">Prado 2 - Levinus</a></li>
                                             <li><a href="{% url 'core:rav4-serge-view' %}"> Rav 4 - Serge</a></li>
+
+                                            {% else %}
+                                            <p>You are not logged in. <a href="{% url 'core:login' %}">Login</a>
+                                            </p>
+                                            
                                         </ul>
+                                        {% endif %}
                                     </li>
-                                   
-                                    <li>
-                                        <a href="page-contact.html">Contact</a>
-                                    </li>
+
                                 </ul>
                             </nav>
                         </div>
