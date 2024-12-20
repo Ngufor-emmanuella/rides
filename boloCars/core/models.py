@@ -312,3 +312,10 @@ class SergeSection(CarsType):
   class Meta:
     verbose_name = "Serge Section"
     verbose_name_plural = "Serge Sections"
+
+class Contact(models.Model):
+  name=models.CharField(max_length=200)
+  email=models.EmailField()
+  subject=models.TextField()
+  def __str__(self):
+    return self.name

@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from core.models import Product, Category,  CartOrder, CartOrderItems, ProductImages, ProductReview, Wishlist, Address, ElvisSection, CarsType
+from core.models import Product, Category,  CartOrder, CartOrderItems, ProductImages, ProductReview, Wishlist, Address, ElvisSection, CarsType, Contact
 from .forms import *
 from django.contrib import messages
 # importing for creating accounts
@@ -359,7 +359,7 @@ def add_elvissection_view(request):
   
 def add_levinussection_view(request):
   return add_rentedcars_view(request, LevinusSectionForm)
-xz
+
 def add_sergesection_view(request):
   return add_rentedcars_view(request, SergeSectionForm)
 
@@ -446,17 +446,22 @@ def rav4_serge_yearly_goal_view(request, year):
   }
   return render(request, 'core/goal-rav4.html', context)
 
+def contact(request):
+    if request.method == "POST":
+        contact = Contact()
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        subject = request.POST.get('subject')
 
-def contact_view(request):
-   if request.method == 'POST':
-      forms.ContactForm(request.POST)
-      if forms.is_valid():
-          forms.save()
-          messages.success(request, 'message submitted successfully')
-          return render(request, "core/contact.html")
-      else:
-          return render(request, "core/index.html")
-         
+        contact.name = name
+        contact.email = email
+        contact.subject = subject
+        contact.save()
+        
+        return HttpResponse("<h2>Thanks for contacting us. Our team will get in touch with you shortly!</h2>")
+    
+    return render(request, 'core/contact.html')
+   
          
 
 

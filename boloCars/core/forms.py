@@ -19,8 +19,3 @@ class SergeSectionForm(forms.ModelForm):
     fields = ('destination', 'rental_rate_amount', 'expenses', 'expense_tag', 'driver_income', 'comments')
 
 
-class ContactForm(forms.ModelForm):
-  name = forms.CharField(label='Your Name', max_length= 100)
-  email = forms.EmailField(label= 'Your Email')
-  message = forms.CharField(label='Message', widget=forms.Textarea)
-

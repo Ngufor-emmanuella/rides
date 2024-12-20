@@ -219,6 +219,33 @@ body {
     left: 12%;
 }
 
+ /* Set the overall width of the form */
+ form {
+    width: 60%;
+    margin: auto;
+    height: auto;
+}
+
+/* Style for labels */
+.label {
+    font-size: 20px;
+    color: #6f0808;
+}
+
+.change-color {
+    background-color: rgb(255, 255, 255, 0.9); 
+    color: #6f0808;
+    padding: 5%;
+}
+
+.form-color {
+    font-size: 18px;
+    background-color: brown; /* Initial background color */
+    color: #6f0808; /* Text color */
+    transition: background-color 0.3s; /* Smooth transition */
+}
+
+
 .about-container h4 {
     color: #6f0808;
     margin: 0 auto;

@@ -42,35 +42,37 @@
 
    <section class="home-slider position-relative style=width: 100%; ">
       <div class="home-slide-cover" style="background-image: url('{% static 'assets/imgs/slider/prado.jpeg' %}');">
-        <div class="hero-slider-1 style-4 dot-style-1 dot-style-1-position-1" >
+        
             <div class="single-hero-slider single-animation-wrap " >
                 <div class="container mt-5">
-                    <h3> Reach Us ...</h3>
-                    <form method="post">
+                <h2> Reach Us Now !!</h2>
+                    <form method="POST">
                         {% csrf_token %}
-                        <div class="form-group">
-                            {{ form.name.label_tag}}
-                            {{ form.name}}
+                        <div class="form-group change-color">
+                            <label for="fname" class="label">Your Name</label>
+                            <input type="text" id="fname" name="name" class="form-control input-change" placeholder="your name here ..." required>
+                    
+                            <label for="exampleInputEmail1" class="label">Email address</label>
+                            <input type="email" class="form-control" id="exampleInputEmail1" name="email" aria-describedby="emailHelp" placeholder="Enter email" required>
+                    
+                            <label for="subject" class="label">Your Message</label>
+                            <textarea class="form-control" id="subject" name="subject" placeholder="Leave us a message here" rows="5" maxlength="500" required></textarea>
+                    
+                            <br>
+            
+                            <button type="submit" class="btn btn-primary">Submit Your Message</button>
+                           
                         </div>
-
-                        <div class="form-group">
-                            {{ form.name.label_tag}}
-                            {{ form.email}}
-                        </div>
-
-                        <div class="form-group">
-                            {{ form.name.label_tag}}
-                            {{ form.message}}
-                        </div>
-
-                        <button type="submit" class="btn btn-primary"> Send us a message</button>
-
                     </form>
+                    <br>
+                    <br>
+
                     
                 </div>
+                <br>
             </div>
             
-        </div>
+        
         </div>
     </section>     
    
