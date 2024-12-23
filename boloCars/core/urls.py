@@ -28,7 +28,7 @@ urlpatterns = [
   path("rav4-serge-view", rav4_serge_view, name="rav4-serge-view"),
 
   # link to add car details for each table
-  path("add_elvissection_view", views.add_elvissection_view, name="add_elvissection_view"),
+  path("add_elvissection_view/", views.add_elvissection_view, name="add_elvissection_view"),
   path("add_levinussection_view", views.add_levinussection_view, name="add_levinussection_view"),
   path("add_sergesection_view", views.add_sergesection_view, name="add_sergesection_view"),
 
