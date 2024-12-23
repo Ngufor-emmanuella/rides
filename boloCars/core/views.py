@@ -205,13 +205,6 @@ def category_product_list__view(request, cid):
   }
   return render(request, "core/category-product-list.html", context)
 
-# def vendor_list_view(request):
-#   vendor = Vendor.objects.all()
-  
-#   context = {
-#      "vendor": vendor,
-#   }
-#   return render(request, "core/vendor-list.html", context)
   
 def product_detail_view(request, pid):
   product = Product.objects.get(pid=pid)
@@ -393,58 +386,123 @@ def edit_sergesection(request, pk):
 # views for monthly and yearly goals
 
 
-def prado1_elvis_yearly_goal_view(request, year):
+def prado1_elvis_yearly_goal_view(request, year=None):
+    if year is None:
+        year = timezone.now().year
+
     elvis_yearly_goal = []
+    total_yearly_rental = Decimal('0.00')
 
-    for month in range(1, 13):
-        result = ElvisSection.monthly_goal_percentage(year=year, month=month)
+    # List of month names
+    month_names = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ]
 
-        elvis_yearly_goal.append({
-            'month': month,
-            'total_rental_rate': result['total_rental_rate'],  # This will be 0 if no data
-            'percentage_of_goal': result['percentage_of_goal'],  # This will be 0 if no data
-        })
+    try:
+        for month in range(1, 13):
+            result = ElvisSection.monthly_goal_percentage(year=year, month=month)
+            total_yearly_rental += result['total_rental_rate']
 
-    context = {
-        'year': year,
-        'elvis_yearly_goal': elvis_yearly_goal,
-    }
+            elvis_yearly_goal.append({
+                'month_number': month,
+                'month_name': month_names[month - 1], 
+                'total_rental_rate': result['total_rental_rate'], 
+                'percentage_of_goal': result['percentage_of_goal'],
+            })
 
-    return render(request, 'core/goal-prado1.html', context)
+        yearly_percentage = (total_yearly_rental / Decimal('1000000')) * Decimal('100')
+
+        context = {
+            'year': year,
+            'elvis_yearly_goal': elvis_yearly_goal,
+            'total_yearly_rental': total_yearly_rental,
+            'yearly_percentage': yearly_percentage,
+        }
+
+        return render(request, 'core/goal-prado1.html', context)
+
+    except Exception as e:
+        return render(request, 'core/error.html', {'error_message': 'An error occurred. Please try again.'})
 
 
-def prado2_levinus_yearly_goal_view(request, year):
-  levinus_yearly_goal = []
+def prado2_levinus_yearly_goal_view(request, year=None):
+    if year is None:
+        year = timezone.now().year
 
-  for month in range(1, 13):
-    result = LevinusSection.monthly_goal_percentage(year=year, month=month)
-    levinus_yearly_goal.append({
-      'month' : month,
-      'total_rental_rate' : result['total_rental_rate'],
-      'percentage_of_goal' : result['percentage_of_goal'],
-    })
+    levinus_yearly_goal = []
+    total_yearly_rental = Decimal('0.00')
 
-  context = {
-    'year' : year,
-    'levinus_yearly_goal' : levinus_yearly_goal,
-    }
-  return render(request, 'core/goal-prado2.html', context)
+    month_names = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ]
 
-def rav4_serge_yearly_goal_view(request, year):
-  serge_yearly_goal = []
+    try:
+        for month in range(1, 13):
+            result = LevinusSection.monthly_goal_percentage(year=year, month=month)
+            total_yearly_rental += result['total_rental_rate']
 
-  for month in range(1, 13):
-    result = SergeSection.monthly_goal_percentage(year=year, month=month)
-    serge_yearly_goal.append({
-      'month' : month,
-      'total_rental_rate' : result['total_rental_rate'],
-      'percentage_of_goal' : result['percentage_of_goal'],
-    })
-  context = {
-    'year' : year,
-    'serge_yearly_goal' : serge_yearly_goal,
-  }
-  return render(request, 'core/goal-rav4.html', context)
+            levinus_yearly_goal.append({
+                'month_number': month,
+                'month_name': month_names[month - 1],
+                'total_rental_rate': result['total_rental_rate'],
+                'percentage_of_goal': result['percentage_of_goal'],
+            })
+
+        yearly_percentage = (total_yearly_rental / Decimal('1000000')) * Decimal('100')
+
+        context = {
+            'year': year,
+            'levinus_yearly_goal': levinus_yearly_goal,
+            'total_yearly_rental': total_yearly_rental,
+            'yearly_percentage': yearly_percentage,
+        }
+
+        return render(request, 'core/goal-prado2.html', context)
+
+    except Exception as e:
+        return render(request, 'core/error.html', {'error_message': 'An error occurred. Please try again.'})
+
+def rav4_serge_yearly_goal_view(request, year=None):
+    if year is None:
+        year = timezone.now().year
+
+    serge_yearly_goal = []
+    total_yearly_rental = Decimal('0.00')
+
+    month_names = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ]
+
+    try:
+        for month in range(1, 13):
+            result = SergeSection.monthly_goal_percentage(year=year, month=month)
+            total_yearly_rental += result['total_rental_rate']
+
+            serge_yearly_goal.append({
+                'month_number': month,
+                'month_name': month_names[month - 1],
+                'total_rental_rate': result['total_rental_rate'],
+                'percentage_of_goal': result['percentage_of_goal'],
+            })
+
+        yearly_percentage = (total_yearly_rental / Decimal('1000000')) * Decimal('100')
+
+        context = {
+            'year': year,
+            'serge_yearly_goal': serge_yearly_goal,
+            'total_yearly_rental': total_yearly_rental,
+            'yearly_percentage': yearly_percentage,
+        }
+
+        return render(request, 'core/goal-rav4.html', context)
+
+    except Exception as e:
+        return render(request, 'core/error.html', {'error_message': 'An error occurred. Please try again.'})
+
+# contact view
 
 def contact(request):
     if request.method == "POST":

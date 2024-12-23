@@ -63,4 +63,5 @@ urlpatterns = [
   #restrict views only to those who have logged in 
   # path('login/', LoginView.as_view(), name='login'),
 
+  
 ]

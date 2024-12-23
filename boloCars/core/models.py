@@ -270,8 +270,6 @@ class CarsType(models.Model):
 
     percentage = (total_rental_rate / Decimal(goal)) * Decimal('100') if total_rental_rate > 0 else Decimal('0.00')
 
-
-
     return {
       'total_rental_rate': total_rental_rate,
       'percentage_of_goal': percentage

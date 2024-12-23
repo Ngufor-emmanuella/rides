@@ -245,6 +245,12 @@ body {
     transition: background-color 0.3s; /* Smooth transition */
 }
 
+.contact-now {
+    color: #6f0808;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
 
 .about-container h4 {
     color: #6f0808;
