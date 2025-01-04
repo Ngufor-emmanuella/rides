@@ -1,10 +1,8 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from core.models import Product, Category,  CartOrder, CartOrderItems, ProductImages, ProductReview, Wishlist, Address, ElvisSection, CarsType, Contact
+from core.models import Product, ElvisSection, Contact
 from .forms import *
 from django.contrib import messages
-# importing for creating accounts
-# from authuser.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -12,7 +10,26 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from django.urls import reverse
 from authuser.models import PasswordReset
+from .serializers import CategorySerializer, VendorSerializer, ProductSerializer, CartOrderSerializer, ProductReviewSerializer, WishlistSerializer, ContactSerializer
+from rest_framework.decorators import api_view
+from rest_framework import viewsets
+from rest_framework.response import Response
+from .serializers import ElvisSectionSerializer, UserRegistrationSerializer, LevinusSectionSerializer, SergeSectionSerializer, LoginSerializer
+from rest_framework import status
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
+from rest_framework.permissions import AllowAny
+from rest_framework import serializers
+from rest_framework.generics import ListCreateAPIView
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
+from rest_framework import generics
 
+
+User = get_user_model()
 
 # Create your views here.
 def index(request):
@@ -25,482 +42,198 @@ def index(request):
 
   return render(request, 'core/index.html', context)
 
-def about(request):
 
-  context = {
-    "header" : "About-Us"
-  }
-
-  return render(request, 'core/about.html', context)
-
-def contact(request):
-
-  context = {
-    "header" : "Contact-Us"
-  }
-
-  return render(request, 'core/contact.html', context)
 
 #code below to create acccount and user authentication
 
-def registerview(request):
-    if request.method == 'POST':
-        first_name = request.POST.get('first_name')
-        last_name = request.POST.get('last_name')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
+class RegisterView(ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserRegistrationSerializer
+    permission_classes = [AllowAny]
 
-        if User.objects.filter(email=email).exists():
-            messages.error(request, "Email already exists")
-            return redirect('core:register')
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            token, created = Token.objects.get_or_create(user=user)
+            return Response({
+                'user': UserRegistrationSerializer(user).data,
+                'token': token.key
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        if len(password) < 5:
-            messages.error(request, "Password must be at least 5 characters")
-            return redirect('core:register')
+class CustomAuthToken(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({
+            'token': token.key,
+            'user_id': user.pk,
+            'email': user.email
+        })
 
-        # Create a new user with the provided details
-        new_user = User.objects.create_user(email=email, password=password)
-        new_user.name = f"{first_name} {last_name}"
-        new_user.save()
+class LoginView(APIView):
+    permission_classes = [AllowAny]
 
-        messages.success(request, "Account created successfully. Login Now")
-        return redirect('core:login')
+    def post(self, request):
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
+            password = serializer.validated_data['password']
+            user = authenticate(request, email=email, password=password)
+           
+            if user is not None:
+                login(request, user)
+                return Response({"message": "Login successful"}, status=status.HTTP_200_OK)
+            return Response({"error": "Invalid login credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    return render(request, 'core/register.html')
+class LogoutView(APIView):
+    def post(self, request):
+        logout(request)
+        return Response({"message": "Successfully logged out"}, status=status.HTTP_200_OK)
 
-def loginview(request):
-    if request.method == "POST":
-        email = request.POST.get('email')  # Assuming your login form has an 'email' field
-        password = request.POST.get('password')
 
-        user = authenticate(request, email=email, password=password)
+class ForgotPasswordView(APIView):
+    permission_classes = [AllowAny]
 
-        if user is not None:
-            login(request, user)
-            return redirect('core:index')
-        else:
-            messages.error(request, 'Invalid login credentials')
-            return redirect('core:login')
-
-    return render(request, 'core/login.html')
-
-def logoutview(request):
-  logout(request)
-  return render(request, 'core/index.html')
-
-# code for forget password
-def forgotpasswordview(request):
-  if request.method == "POST":
-    email = request.POST.get('email')
-
-    try:
-      user = User.objects.get(email=email)
-
-      new_password_reset = PasswordReset(user=user)
-      new_password_reset.save()
-
-      password_reset_url = reverse('reset-password', kwargs={'reset_id': new_password_reset.reset_id}),
-      full_password_reset_url = f'{request.scheme}://{request.get_host()}{password_reset_url}'
-      email_body = f'Reset your password using the link below:\n\n\n (full_password_reset_url)'
-      
-      email_message = EmailMessage(
-        'Reset your password',
-        email_body,
-        settings.EMAIL_HOST_USER,
-        [email]
-      )
-
-      email_message.fail_silently = True
-      email_message.send()
-
-      return redirect('core:password-reset-sentview', reset_id=new_password_reset.reset_id)
-
-    except User.DoesNotExist:
-      messages.error(request, f"No user with email '{email}' found ")
-      return redirect('core:forgot_password')
+    def post(self, request):
+        email = request.data.get('email')
+        # Implement your forgot password logic here
+        return Response({"message": "Reset link sent to your email"}, status=200)
     
-  return render(request, 'core/forgot_password.html')
-
-# forgot and reset password code
-def passwordresetsentview(request, reset_id):
-  if PasswordReset.objects.filter(reset_id=reset_id).exists():
-    return render(request, 'core/password_reset_sent.html')
-  
-  else:
-    messages.error(request, 'Invalid reset Id')
-    return redirect('core:forgot_password')
-
-
-def resetpassword(request, reset_id):
-  try:
-    password_reset_id = PasswordReset.objects.get(reset_id=reset_id)
-
-    if request.method == "POST":
-      password = request.POST.get('password')
-      confirm_password = request.POST.get('confirm_password')
-
-      passwords_have_error = False
-
-      if password != confirm_password:
-        passwords_have_error = True
-        messages.error(request, 'Passwords do not match')
-
-      if len(password) < 5:
-        passwords_have_error = True
-        messages.error(request, 'Password must be at leat 5 characters long')
-        
-      expiration_time = password_reset_id.created_when + timezone.timedelta(minutes=10)
-
-      if timezone.now() > expiration_time:
-        passwords_have_error = True
-        messages.error(request, 'Reset link has expired')
-        reset_id.delete()
-
-      if not passwords_have_error:
-        user = password_reset_id.user
-        user.set_password(password)
-        user.save()
-
-        reset_id.delete()
-
-        messages.success(request, 'password reset. Proceed to login')
-        return redirect('core:login')
-            
-      else:
-        return redirect('core:reset-password', reset_id=reset_id)
-      
-  except PasswordReset.DoesNotExist:
-    messages.error(request, 'Invalid reset Id')
-    return redirect('core:forgot_passward')
-
-  return render(request, 'core/reset_password.html')
-
-
-#code to list different pages
-def product_list_view(request):
-  products = Product.objects.filter(product_status="published")
-
-  context = {
-    "products": products
-
-  }
-
-  return render(request, 'core/product-list.html', context)
-
-def category_list_view(request):
-  categories = Category.objects.all()
-
-  context = {
-    "categories": categories
-  }
-  return render(request, 'core/category_list.html', context)
-
-def category_product_list__view(request, cid):
-  category = Category.objects.get(cid=cid)
-  products = Product.objects.filter(product_status="published", category=category)
-
-  context = {
-    "category": category,
-    "products": products,
-  }
-  return render(request, "core/category-product-list.html", context)
-
-  
-def product_detail_view(request, pid):
-  product = Product.objects.get(pid=pid)
-
-  p_image = product.p_images.all()
-
-  context = {
-    "p": product,
-    # "p_image": p_image,
-  }
-  return render(request, "core/product-detail.html", context)
-
 #functionality to calculate total sum of fields
 
 # @login_required
-def prado1_elvis_view(request):
-  elvissection = ElvisSection.objects.all()
 
-  field_names = ['rental_rate_amount', 'expenses', 'management_fee_accruals', 'driver_income', 'net_income', 'transaction' ]
+class Prado1ElvisView(viewsets.ModelViewSet):
+    queryset = ElvisSection.objects.all()
+    serializer_class = ElvisSectionSerializer
 
- # Calculate total sums for each field listed above
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
 
-  total_sums = {}
-  for field_name in field_names:
-    total_sum = elvissection.aggregate(**{f"{field_name}_sum": Sum(field_name)})[f"{field_name}_sum"]
-    total_sums[field_name] = total_sum or Decimal('0.00')
-  print(total_sums)
+        field_names = ['destination', 'rental_rate_amount', 'expenses', 'expense_tag', 'management_fee_accruals', 'driver_income', 'net_income', 'transaction', 'comments']
 
-  context = {
-    'elvissection' : elvissection,
-    'header' : 'Prado1-Elvis',
-    'total_sums': total_sums,
+        # Calculate total sums for each field listed above
+        total_sums = {}
+        for field_name in field_names:
+            total_sum = self.queryset.aggregate(**{f"{field_name}_sum": Sum(field_name)})[f"{field_name}_sum"]
+            total_sums[field_name] = total_sum or Decimal('0.00')
 
-  }
-  return render(request, "core/prado-1-elvis.html", context)
-
-
-def prado1_elvis_history_view(request):
-    # Fetch history for each ElvisSection instance
-    elvissection = ElvisSection.objects.all()
-
-    elvis_history = []
-    for elvis in elvissection:
-        history = elvis.history.all()  # Get all historical records for this instance
-        elvis_history.append({
-            'current': elvis,
-            'history': history,
+        return Response({
+            'elvissections': response.data,
+            'header': 'Prado1-Elvis',
+            'total_sums': total_sums,
         })
 
-    context = {
-      'elvis_history': elvis_history, # Pass the history data to the template
-      'header' : 'prado1_elvis_history'
-    }
-    return render(request, 'core/history-prado1.html', context)
+class Prado2LevinusView(viewsets.ModelViewSet):
+    queryset = LevinusSection.objects.all()
+    serializer_class = LevinusSectionSerializer
 
-# @login_required
-def prado2_levinus_view(request):
-  levinussection = LevinusSection.objects.all()
-  field_names = ['rental_rate_amount', 'expenses', 'management_fee_accruals', 'driver_income', 'net_income', 'transaction' ]
-  total_sums = {}
-  for field_name in field_names:
-    total_sum = levinussection.aggregate(**{f"{field_name}_sum": Sum(field_name)})[f"{field_name}_sum"]
-    total_sums[field_name] = total_sum or Decimal('0.00')
-  print(total_sums)
+    
+    def list(self, request, *args, **kwargs):
+        response = super().list(request, *args, **kwargs)
+        
+        field_names = ['destination', 'rental_rate_amount', 'expenses', 'expense_tag', 'management_fee_accruals', 'driver_income', 'net_income', 'transaction', 'comments']
 
-  context = {
-    'levinussection' : levinussection,
-    'header' : 'Prado2-Levinus',
-    'total_sums': total_sums
-  }
-  return render(request, "core/prado-2-levinus.html", context)
+        # Calculate total sums for each field listed above
+        total_sums = {}
+        for field_name in field_names:
+            total_sum = self.queryset.aggregate(**{f"{field_name}_sum": Sum(field_name)})[f"{field_name}_sum"]
+            total_sums[field_name] = total_sum or Decimal('0.00')
 
-def prado2_levinus_history_view(request):
-    # Fetch history for each ElvisSection instancea
-    levinussection = LevinusSection.objects.all()
-
-    levinus_history = []
-    for levinus in levinussection:
-        history = levinus.history.all()  # Get all historical records for this instance
-        levinus_history.append({
-            'current': levinus,
-            'history': history,
+        return Response({
+            'levinussections': response.data,
+            'header': 'Prado2-Levinus',
+            'total_sums': total_sums,
         })
 
-    context = {
-      'levinus_history':  levinus_history, # Pass the history data to the template
-      'header' : 'prado2_levinus_history'
-    }
-    return render(request, 'core/history-prado2.html', context)
-
-
-# @login_required
-def rav4_serge_view(request):
-  sergesection = SergeSection.objects.all()
-  field_names = ['rental_rate_amount', 'expenses', 'management_fee_accruals', 'driver_income', 'net_income', 'transaction' ]
-  total_sums = {}
-  for field_name in field_names:
-    total_sum = sergesection.aggregate(**{f"{field_name}_sum": Sum(field_name)})[f"{field_name}_sum"]
-    total_sums[field_name] = total_sum or Decimal('0.00')
-  print(total_sums)
-
-  context = {
-    'sergesection' : sergesection,
-    'header' : 'Rav-4 Serge',
-    'total_sums': total_sums
-  }
-  return render(request, "core/rav-4-serge.html", context)
-
-def rav4_serge_history_view(request):
-    # Fetch history for each ElvisSection instancea
-    sergesection = SergeSection.objects.all()
-
-    serge_history = []
-    for serge in sergesection:
-        history = serge.history.all()  # Get all historical records for this instance
-        serge_history.append({
-            'current': serge,
-            'history': history,
+      
+class Rav4SergeView(viewsets.ModelViewSet):
+  queryset = SergeSection.objects.all()
+  serializer_class = SergeSectionSerializer
+  
+  def list(self, request, *args, **kwargs):
+    response = super().list(request, *args, **kwargs)
+    field_names = ['destination', 'rental_rate_amount', 'expenses','expenses_tag',  'management_fee_accruals', 'driver_income', 'net_income', 'transaction', 'comments']
+    
+      # Calculate total sums for each field listed above
+    total_sums = {}
+    for field_name in field_names:
+      total_sum = self.queryset.aggregate(**{f"{field_name}_sum": Sum(field_name)})[f"{field_name}_sum"]
+      total_sums[field_name] = total_sum or Decimal('0.00')
+      
+      return Response({
+         'sergesections': response.data,
+         'header': 'Rav4-Serge',
+         'total_sums': total_sums,
         })
+    
+    # functionality to add data to thne models table
 
-    context = {
-      'serge_history':  serge_history, # Pass the history data to the template
-      'header' : 'Rav4_serge_history'
-    }
-    return render(request, 'core/history-rav4.html', context)
+class ElvisSectionCreateView(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request):
+        serializer = ElvisSectionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
- 
-# function to add cars details to the sheet for each column
-def add_rentedcars_view(request, cls):
-  if request.method == "POST":
-    form = cls(request.POST)
+class LevinusSectionCreateView(APIView):
+    def post(self, request):
+        serializer = LevinusSectionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    if form.is_valid():
-      form.save()
-      messages.success(request, 'Car details submitted successfully')
-      return render(request, "core/index.html" ) 
-
-  else:
-    form = cls()
-    return render(request, "core/add_new.html", {'form' : form } )
-  
-# function inheritance from above , view to add car data on each table
-def add_elvissection_view(request):
-  return add_rentedcars_view(request, ElvisSectionForm)
-  
-def add_levinussection_view(request):
-  return add_rentedcars_view(request, LevinusSectionForm)
-
-def add_sergesection_view(request):
-  return add_rentedcars_view(request, SergeSectionForm)
-
-# add edit button on each row 
-def edit_rentedcars(request, pk, model, cls):
-  item = get_object_or_404(model, pk=pk)
-
-  if request.method == "POST":
-    item.save()
-    form = cls(request.POST, instance=item)
-
-    if form.is_valid():
-      form.save()
-      return render(request, "core/index.html" ) 
-
-  else:
-    form = cls(instance=item)
-    return render(request, "core/edit_item.html", {'form': form} )
-  
-# inheriting the above code...
-def edit_elvissection(request, pk):
-  return edit_rentedcars(request, pk, ElvisSection, ElvisSectionForm)
-
-def edit_levinussection(request, pk):
-  return edit_rentedcars(request, pk, LevinusSection, LevinusSectionForm)
-
-def edit_sergesection(request, pk):
-  return edit_rentedcars(request, pk, SergeSection, SergeSectionForm)
+class SergeSectionCreateView(APIView):
+    def post(self, request):
+        serializer = SergeSectionSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# views for monthly and yearly goals
 
 
-def prado1_elvis_yearly_goal_view(request, year=None):
-    if year is None:
-        year = timezone.now().year
 
-    elvis_yearly_goal = []
-    total_yearly_rental = Decimal('0.00')
-
-    # List of month names
-    month_names = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    ]
-
-    try:
-        for month in range(1, 13):
-            result = ElvisSection.monthly_goal_percentage(year=year, month=month)
-            total_yearly_rental += result['total_rental_rate']
-
-            elvis_yearly_goal.append({
-                'month_number': month,
-                'month_name': month_names[month - 1], 
-                'total_rental_rate': result['total_rental_rate'], 
-                'percentage_of_goal': result['percentage_of_goal'],
-            })
-
-        yearly_percentage = (total_yearly_rental / Decimal('1000000')) * Decimal('100')
-
-        context = {
-            'year': year,
-            'elvis_yearly_goal': elvis_yearly_goal,
-            'total_yearly_rental': total_yearly_rental,
-            'yearly_percentage': yearly_percentage,
-        }
-
-        return render(request, 'core/goal-prado1.html', context)
-
-    except Exception as e:
-        return render(request, 'core/error.html', {'error_message': 'An error occurred. Please try again.'})
+    # functionality to edit views
+class ElvisSectionUpdateView(generics.RetrieveUpdateAPIView):
+    queryset = ElvisSection.objects.all()
+    serializer_class = ElvisSectionSerializer
+    permission_classes = [AllowAny]
 
 
-def prado2_levinus_yearly_goal_view(request, year=None):
-    if year is None:
-        year = timezone.now().year
+class LevinusSectionUpdateView(generics.UpdateAPIView):
+    queryset = LevinusSection.objects.all()
+    serializer_class = LevinusSectionSerializer
 
-    levinus_yearly_goal = []
-    total_yearly_rental = Decimal('0.00')
+class SergeSectionUpdateView(generics.UpdateAPIView):
+    queryset = SergeSection.objects.all()
+    serializer_class = SergeSectionSerializer
 
-    month_names = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    ]
 
-    try:
-        for month in range(1, 13):
-            result = LevinusSection.monthly_goal_percentage(year=year, month=month)
-            total_yearly_rental += result['total_rental_rate']
 
-            levinus_yearly_goal.append({
-                'month_number': month,
-                'month_name': month_names[month - 1],
-                'total_rental_rate': result['total_rental_rate'],
-                'percentage_of_goal': result['percentage_of_goal'],
-            })
+# history view
+# class ElvisSectionHistoryAPIView(generics.ListAPIView):
+#     serializer_class = ElvisSectionHistorySerializer
+#     permission_classes = [AllowAny]
 
-        yearly_percentage = (total_yearly_rental / Decimal('1000000')) * Decimal('100')
+#     def get_queryset(self):
+#         return ElvisSection.objects.all()
+    
+#     def list(self, request, *args, **kwargs):
+#         queryset = self.get_queryset()
+#         serializer = self.get_serializer(queryset, many=True)
+#         return Response(serializer.data)
+      
 
-        context = {
-            'year': year,
-            'levinus_yearly_goal': levinus_yearly_goal,
-            'total_yearly_rental': total_yearly_rental,
-            'yearly_percentage': yearly_percentage,
-        }
-
-        return render(request, 'core/goal-prado2.html', context)
-
-    except Exception as e:
-        return render(request, 'core/error.html', {'error_message': 'An error occurred. Please try again.'})
-
-def rav4_serge_yearly_goal_view(request, year=None):
-    if year is None:
-        year = timezone.now().year
-
-    serge_yearly_goal = []
-    total_yearly_rental = Decimal('0.00')
-
-    month_names = [
-        "January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    ]
-
-    try:
-        for month in range(1, 13):
-            result = SergeSection.monthly_goal_percentage(year=year, month=month)
-            total_yearly_rental += result['total_rental_rate']
-
-            serge_yearly_goal.append({
-                'month_number': month,
-                'month_name': month_names[month - 1],
-                'total_rental_rate': result['total_rental_rate'],
-                'percentage_of_goal': result['percentage_of_goal'],
-            })
-
-        yearly_percentage = (total_yearly_rental / Decimal('1000000')) * Decimal('100')
-
-        context = {
-            'year': year,
-            'serge_yearly_goal': serge_yearly_goal,
-            'total_yearly_rental': total_yearly_rental,
-            'yearly_percentage': yearly_percentage,
-        }
-
-        return render(request, 'core/goal-rav4.html', context)
-
-    except Exception as e:
-        return render(request, 'core/error.html', {'error_message': 'An error occurred. Please try again.'})
 
 # contact view
 
@@ -516,9 +249,13 @@ def contact(request):
         contact.subject = subject
         contact.save()
         
-        return HttpResponse("<h2>Thanks for contacting us. Our team will get in touch with you shortly!</h2>")
+        return Response("<h2>Thanks for contacting us. Our team will get in touch with you shortly!</h2>")
     
     return render(request, 'core/contact.html')
+
+@api_view()
+def testing_api(request):
+   return Response('Correct emma')
    
          
 

@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserM
 from django.utils import timezone
 import uuid 
 
+
 class CustomUserManager(UserManager):
     def _create_user(self, email, password, **extra_fields):
         if not email:
@@ -39,15 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
-    EMAIL_FIELD = 'email'
     REQUIRED_FIELDS = []
-
-    groups = models.ManyToManyField(
-        'CustomGroup',
-        verbose_name='groups',
-        blank=True,
-        related_name='user_groups'  # Specify the related_name here
-    )
 
     class Meta:
         verbose_name = 'User'

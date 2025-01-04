@@ -1,67 +1,45 @@
-from django.urls import path
-from core.views import category_list_view, category_product_list__view, index, product_list_view, product_detail_view, prado1_elvis_view
-from .views import *
-from . import views
-# from django.contrib.auth.views import LoginView
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from rest_framework.authtoken.views import ObtainAuthToken  # Correct import
+from .views import (
+    index,
+    LogoutView, ForgotPasswordView, LoginView,
+    Rav4SergeView, Prado1ElvisView, RegisterView, ElvisSectionCreateView,
+    Prado2LevinusView, CustomAuthToken, ElvisSectionUpdateView, LevinusSectionCreateView,
+    LevinusSectionUpdateView, SergeSectionUpdateView, SergeSectionCreateView
+)
 
+app_name = 'core'
 
-app_name ='core'
+router = DefaultRouter()
+router.register(r'prado1', Prado1ElvisView)
+router.register(r'prado2', Prado2LevinusView)
+router.register(r'rav4', Rav4SergeView)
 
 urlpatterns = [
-  path("", index, name="index"),
-  path("about/", about, name="about"),
-  path("products/", product_list_view, name="product-list"),
-  path("product/<pid>/", product_detail_view, name="product-detail"),
-  path("contact/", contact, name="contact"),
+    path('users/', RegisterView.as_view(), name='register'),  # Added trailing slash
+    path('api/', include(router.urls)),
+    path("", index, name="index"),
 
+    # path to add data to model table
+    path('api/elvis/', ElvisSectionCreateView.as_view(), name='elvis-section-create'),
+    path('api/levinus/', LevinusSectionCreateView.as_view(), name='levinus-section-create'),
+    path('api/serge/', SergeSectionCreateView.as_view(), name='serge-section-create'),
 
-  # category
-  path("category/", category_list_view, name="category-list"),
-  path("category/<cid>/", category_product_list__view, name="category-product-list"),
-
-  # vendors
-  # path("vendors/", vendor_list_view, name="vendor-list"),
-
-  #car category page to view tabular car transcations 
-  path("prado-1-elvis", prado1_elvis_view, name="prado-1-elvis"),
-  path("prado-2-levinus", prado2_levinus_view, name="prado-2-levinus"),
-  path("rav4-serge-view", rav4_serge_view, name="rav4-serge-view"),
-
-  # link to add car details for each table
-  path("add_elvissection_view/", views.add_elvissection_view, name="add_elvissection_view"),
-  path("add_levinussection_view", views.add_levinussection_view, name="add_levinussection_view"),
-  path("add_sergesection_view", views.add_sergesection_view, name="add_sergesection_view"),
-
-
-  # link for edit button
-  path("edit_elvissection/<int:pk>/", views.edit_elvissection, name="edit_elvissection"),
-  path("edit_levinussection/<int:pk>/", views.edit_levinussection, name="edit_levinussection"),
-  path("edit_sergesection/<int:pk>/", views.edit_sergesection, name="edit_sergesection"),
-
- 
-  #add history view of sheets
-  path("prado1_elvis_history_view", views.prado1_elvis_history_view, name='prado1_elvis_history_view'),
-  path("prado2_levinus_history_view", views.prado2_levinus_history_view, name='prado2_levinus_history_view'),
-  path("rav4_serge_history_view", views.rav4_serge_history_view, name='rav4_serge_history_view'),
-
-
-  #link for monthly and yearly goals achieved
-  path("prado1_elvis_yearly_goal_view/<int:year>/", views.prado1_elvis_yearly_goal_view, name='prado1_elvis_yearly_goal_view'),
-  path("prado2_levinus_yearly_goal_view/<int:year>/", views.prado2_levinus_yearly_goal_view, name='prado2_levinus_yearly_goal_view'),
-  path("rav4_serge_yearly_goal_view/<int:year>/", views.rav4_serge_yearly_goal_view, name='rav4_serge_yearly_goal_view'),
-
-  #path to login and register auth
-  path('login/', views.loginview, name='login' ),
-  path('register', views.registerview, name='register'),
-  path('logout/', views.logoutview, name='logout'),
-
-  #path to reset and forgot password
-  path('forgot_password/', views.forgotpasswordview, name='forgot_password'),
-  path('password-reset-sentview/<str:reset_id>/', views.passwordresetsentview, name='password-reset-sentview'),
-  path('reset-password/<str:reset_id>/', views.resetpassword, name='reset-password'),
-
-  #restrict views only to those who have logged in 
-  # path('login/', LoginView.as_view(), name='login'),
-
-  
+    # paths to edit views
+    path('api/elvisupdate/<int:pk>/', ElvisSectionUpdateView.as_view(), name='elvis-section-update'),
+    path('api/levinus/<int:pk>/', LevinusSectionUpdateView.as_view(), name='edit_levinus'),
+    path('api/serge/<int:pk>/', SergeSectionUpdateView.as_view(), name='edit_serge'),
+    
+    # path for history
+    # path('api/elvis/history/', ElvisSectionHistoryAPIView.as_view(), name='elvis-section-history'),
+    
+    # Add other paths as needed...
+    
+    path('api/register/', RegisterView.as_view(), name='register'),
+    path('api/token-auth/', CustomAuthToken.as_view(), name='token_auth'),
+    
+    path('api/login/', LoginView.as_view(), name='login'),
+    path('api/logout/', LogoutView.as_view(), name='logout'),
+    path('api/forgot-password/', ForgotPasswordView.as_view(), name='forgot_password'),
 ]

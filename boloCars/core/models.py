@@ -217,7 +217,6 @@ class Address(models.Model):
     verbose_name_plural = "Address"
 
 
-
 class CarsType(models.Model):
   date_time = models.DateTimeField(default=timezone.now)
   destination = models.CharField(max_length=100, blank=False)
@@ -274,8 +273,7 @@ class CarsType(models.Model):
       'total_rental_rate': total_rental_rate,
       'percentage_of_goal': percentage
     }
-
-
+    
   class Meta:
     abstract = True
     verbose_name = "Cars Type"
@@ -285,27 +283,20 @@ class CarsType(models.Model):
     return f"{self.destination } - {self.date_time}"
   
 # Inherit from CarsType and add history tracking
-
-  
+ 
 class ElvisSection(CarsType):
-
-  history = HistoricalRecords()
-
+  
   class Meta:
     verbose_name = "Elvis Section"
     verbose_name_plural = "Elvis Sections"
 
 class LevinusSection(CarsType):
-
-  history = HistoricalRecords()
   
   class Meta:
     verbose_name = "Levinus Section"
     verbose_name_plural = "Levinus Sections"
 
 class SergeSection(CarsType):
-
-  history = HistoricalRecords() 
   
   class Meta:
     verbose_name = "Serge Section"
