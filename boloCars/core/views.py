@@ -107,7 +107,8 @@ class ForgotPasswordView(APIView):
 #functionality to calculate total sum of fields
 
 # @login_required
-
+#
+# functionality to display all added data in tables
 class Prado1ElvisView(viewsets.ModelViewSet):
     queryset = ElvisSection.objects.all()
     serializer_class = ElvisSectionSerializer
@@ -172,7 +173,8 @@ class Rav4SergeView(viewsets.ModelViewSet):
          'total_sums': total_sums,
         })
     
-    # functionality to add data to thne models table
+
+    # functionality to add data to the models table
 
 class ElvisSectionCreateView(APIView):
     permission_classes = [AllowAny]
@@ -184,6 +186,8 @@ class ElvisSectionCreateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LevinusSectionCreateView(APIView):
+    permission_classes = [AllowAny]
+
     def post(self, request):
         serializer = LevinusSectionSerializer(data=request.data)
         if serializer.is_valid():
@@ -200,9 +204,6 @@ class SergeSectionCreateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-
-
     # functionality to edit views
 class ElvisSectionUpdateView(generics.RetrieveUpdateAPIView):
     queryset = ElvisSection.objects.all()
@@ -210,13 +211,15 @@ class ElvisSectionUpdateView(generics.RetrieveUpdateAPIView):
     permission_classes = [AllowAny]
 
 
-class LevinusSectionUpdateView(generics.UpdateAPIView):
+class LevinusSectionUpdateView(generics.RetrieveUpdateAPIView):
     queryset = LevinusSection.objects.all()
     serializer_class = LevinusSectionSerializer
+    permission_classes = [AllowAny]
 
-class SergeSectionUpdateView(generics.UpdateAPIView):
+class SergeSectionUpdateView(generics.RetrieveUpdateAPIView):
     queryset = SergeSection.objects.all()
     serializer_class = SergeSectionSerializer
+    permission_classes = [AllowAny]
 
 
 # history view

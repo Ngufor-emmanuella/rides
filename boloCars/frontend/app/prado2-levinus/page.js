@@ -1,5 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
+
 
 const Prado2 = () => {
     const [levinussections, setLevinusSections] = useState([]);
@@ -32,6 +34,11 @@ const Prado2 = () => {
     return (
         <div>
             <h1>Prado 2 Levinus Sections</h1>
+            <Link href="/levinusform">
+                <button className="btn btn-primary"> Add Transactions</button>
+            </Link>
+
+
             <table className="table">
                 <thead>
                     <tr>
@@ -63,6 +70,11 @@ const Prado2 = () => {
                             <td>{section.net_income}</td>
                             <td>{section.transaction}</td>
                             <td>{section.comments}</td>
+                            <td>
+                                <Link href={`/prado2-levinus/${section.id}`}>
+                                    <button className="btn btn-success btn-sm">Edit</button>
+                                </Link>
+                            </td>
                         </tr>
 
 ))}

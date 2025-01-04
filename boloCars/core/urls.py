@@ -29,7 +29,7 @@ urlpatterns = [
 
     # paths to edit views
     path('api/elvisupdate/<int:pk>/', ElvisSectionUpdateView.as_view(), name='elvis-section-update'),
-    path('api/levinus/<int:pk>/', LevinusSectionUpdateView.as_view(), name='edit_levinus'),
+    path('api/levinusupdate/<int:pk>/', LevinusSectionUpdateView.as_view(), name='edit_levinus'),
     path('api/serge/<int:pk>/', SergeSectionUpdateView.as_view(), name='edit_serge'),
     
     # path for history
