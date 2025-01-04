@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from core.models import Category, Vendor, Product, ProductImages, CartOrder, CartOrderItems, ProductReview, Wishlist, Address, Contact, ElvisSection, LevinusSection, SergeSection 
+from core.models import Category, Vendor, Product, ProductImages, CartOrder, CartOrderItems, ProductReview, Wishlist, Address, Contact, ElvisSection, LevinusSection, SergeSection, EditHistory 
 from django.contrib.auth.models import User
+import json
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
@@ -124,44 +125,38 @@ class SergeSectionSerializer(serializers.ModelSerializer):
                   'expenses', 'expense_tag', 'management_fee_accruals', 
                   'driver_income', 'net_income', 'transaction', 'comments']
 
-
-
-# class ElvisSectionHistorySerializer(serializers.ModelSerializer):
-    previous_data = serializers.SerializerMethodField()
-    current_data = serializers.SerializerMethodField()
-
+# history serializer
+class EditHistorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = ElvisSection
-        fields = ('id', 'history_type', 'history_date', 'previous_data', 'current_data')
+        model = EditHistory
+        fields = ['id', 'content_type', 'object_id', 'edited_at']
 
-    def get_previous_data(self, obj):
-        last_history = obj.history.order_by('-history_date').first()
-        if last_history:
-            changes = {}
-            current_values = self.get_current_data(obj)
-            for field in current_values.keys():
-                if hasattr(last_history, field):
-                    previous_value = getattr(last_history, field)
-                    current_value = current_values[field]
-                    if current_value != previous_value:
-                        changes[field] = {
-                            'previous': previous_value,
-                            'current': current_value,
-                        }
-            return changes
-        return {}
+    def to_representation(self, instance):
+        """Customize the representation of the instance."""
+        representation = super().to_representation(instance)
 
-    def get_current_data(self, obj):
-        return {
-            'date_time': obj.date_time,
-            'destination': obj.destination,
-            'rental_rate_amount': obj.rental_rate_amount,
-            'expenses': obj.expenses,
-            'expense_tag': obj.expense_tag,
-            'management_fee_accruals': obj.management_fee_accruals,
-            'driver_income': obj.driver_income,
-            'net_income': obj.net_income,
-            'transaction': obj.transaction,
-            'comments': obj.comments,
-            'history_type': obj.history_type,
+        try:
+            previous_data = json.loads(instance.previous_data)
+            current_data = json.loads(instance.current_data)
+        except (json.JSONDecodeError, TypeError):
+            previous_data = {}
+            current_data = {}
+
+        # Mapping extracted data to representation
+        field_mappings = {
+            'destination': 'destination',
+            'rental_rate_amount': 'rental_rate_amount',
+            'expenses': 'expenses',
+            'expense_tag': 'expense_tag',
+            'management_fee_accruals': 'management_fee_accruals',
+            'driver_income': 'driver_income',
+            'net_income': 'net_income',
+            'transaction': 'transaction',
+            'comments': 'comments',
         }
+
+        for field, key in field_mappings.items():
+            representation[f'previous_{key}'] = previous_data.get(field, None)
+            representation[f'current_{key}'] = current_data.get(field, None)
+
+        return representation

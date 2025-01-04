@@ -33,6 +33,11 @@ const Prado1 = () => {
     return (
         <div>
             <h1>Prado 1 Elvis Sections</h1>
+            <Link href="/elvis-history">
+                <button className="btn btn-primary">See History</button>
+            </Link>
+
+
             <table className="table">
                 <thead>
                     <tr>

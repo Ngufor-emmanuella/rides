@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
-from core.models import Product, ElvisSection, Contact
+from core.models import Product, ElvisSection, Contact, EditHistory
 from .forms import *
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -10,7 +10,7 @@ from django.conf import settings
 from django.core.mail import EmailMessage
 from django.urls import reverse
 from authuser.models import PasswordReset
-from .serializers import CategorySerializer, VendorSerializer, ProductSerializer, CartOrderSerializer, ProductReviewSerializer, WishlistSerializer, ContactSerializer
+from .serializers import CategorySerializer, VendorSerializer, ProductSerializer, CartOrderSerializer, ProductReviewSerializer, WishlistSerializer, ContactSerializer, EditHistorySerializer
 from rest_framework.decorators import api_view
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -219,21 +219,14 @@ class SergeSectionUpdateView(generics.UpdateAPIView):
     serializer_class = SergeSectionSerializer
 
 
-
 # history view
-# class ElvisSectionHistoryAPIView(generics.ListAPIView):
-#     serializer_class = ElvisSectionHistorySerializer
-#     permission_classes = [AllowAny]
+class EditHistoryListView(generics.ListAPIView):
+    queryset = EditHistory.objects.all()
+    serializer_class = EditHistorySerializer
 
-#     def get_queryset(self):
-#         return ElvisSection.objects.all()
-    
-#     def list(self, request, *args, **kwargs):
-#         queryset = self.get_queryset()
-#         serializer = self.get_serializer(queryset, many=True)
-#         return Response(serializer.data)
-      
-
+class EditHistoryDetailView(generics.RetrieveAPIView):
+    queryset = EditHistory.objects.all()
+    serializer_class = EditHistorySerializer
 
 # contact view
 

@@ -6,7 +6,8 @@ from .views import (
     LogoutView, ForgotPasswordView, LoginView,
     Rav4SergeView, Prado1ElvisView, RegisterView, ElvisSectionCreateView,
     Prado2LevinusView, CustomAuthToken, ElvisSectionUpdateView, LevinusSectionCreateView,
-    LevinusSectionUpdateView, SergeSectionUpdateView, SergeSectionCreateView
+    LevinusSectionUpdateView, SergeSectionUpdateView, SergeSectionCreateView, EditHistoryDetailView, EditHistoryListView
+
 )
 
 app_name = 'core'
@@ -32,8 +33,11 @@ urlpatterns = [
     path('api/serge/<int:pk>/', SergeSectionUpdateView.as_view(), name='edit_serge'),
     
     # path for history
-    # path('api/elvis/history/', ElvisSectionHistoryAPIView.as_view(), name='elvis-section-history'),
-    
+
+    path('api/elvis-history/', EditHistoryListView.as_view(), name='elvis-history-list'),
+    path('api/edit-history/<int:pk>/', EditHistoryDetailView.as_view(), name='edit-history-detail'),
+   
+   
     # Add other paths as needed...
     
     path('api/register/', RegisterView.as_view(), name='register'),
