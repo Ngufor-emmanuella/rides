@@ -160,3 +160,10 @@ class EditHistorySerializer(serializers.ModelSerializer):
             representation[f'current_{key}'] = current_data.get(field, None)
 
         return representation
+    
+# serializer code for monthly and yearly goals percentage
+class MonthlyGoalSerializer(serializers.Serializer):
+    month_number = serializers.IntegerField()
+    month_name = serializers.CharField()
+    total_rental_rate = serializers.DecimalField(max_digits=10, decimal_places=2)
+    percentage_of_goal = serializers.DecimalField(max_digits=5, decimal_places=2)

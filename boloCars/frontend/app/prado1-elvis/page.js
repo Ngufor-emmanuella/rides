@@ -37,6 +37,12 @@ const Prado1 = () => {
                 <button className="btn btn-primary">See History</button>
             </Link>
 
+            <br />
+
+            <Link href="/elvis-monthly-goals">
+                <button className="btn btn-primary"> Monthly / Yearly Goals Percentage</button>
+            </Link>
+
 
             <table className="table">
                 <thead>

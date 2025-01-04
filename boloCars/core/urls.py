@@ -5,7 +5,7 @@ from .views import (
     index,
     LogoutView, ForgotPasswordView, LoginView,
     Rav4SergeView, Prado1ElvisView, RegisterView, ElvisSectionCreateView,
-    Prado2LevinusView, CustomAuthToken, ElvisSectionUpdateView, LevinusSectionCreateView,
+    Prado2LevinusView, CustomAuthToken, ElvisSectionUpdateView, LevinusSectionCreateView, MonthlyGoalView,
     LevinusSectionUpdateView, SergeSectionUpdateView, SergeSectionCreateView, EditHistoryDetailView, EditHistoryListView
 
 )
@@ -37,7 +37,9 @@ urlpatterns = [
     path('api/elvis-history/', EditHistoryListView.as_view(), name='elvis-history-list'),
     path('api/edit-history/<int:pk>/', EditHistoryDetailView.as_view(), name='edit-history-detail'),
    
-   
+    # path for monthly and yearly goals percentage
+    path('api/elvis-monthly-goal/<int:year>/', MonthlyGoalView.as_view(), name='monthly-goal'),
+
     # Add other paths as needed...
     
     path('api/register/', RegisterView.as_view(), name='register'),

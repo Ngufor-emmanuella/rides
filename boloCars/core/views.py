@@ -14,7 +14,7 @@ from .serializers import CategorySerializer, VendorSerializer, ProductSerializer
 from rest_framework.decorators import api_view
 from rest_framework import viewsets
 from rest_framework.response import Response
-from .serializers import ElvisSectionSerializer, UserRegistrationSerializer, LevinusSectionSerializer, SergeSectionSerializer, LoginSerializer
+from .serializers import ElvisSectionSerializer, UserRegistrationSerializer, LevinusSectionSerializer, SergeSectionSerializer, LoginSerializer, MonthlyGoalSerializer
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -227,6 +227,51 @@ class EditHistoryListView(generics.ListAPIView):
 class EditHistoryDetailView(generics.RetrieveAPIView):
     queryset = EditHistory.objects.all()
     serializer_class = EditHistorySerializer
+
+
+# view for monthly and yearly goals percentage
+class MonthlyGoalView(APIView):
+    def get(self, request, year=None):
+        if year is None:
+            year = timezone.now().year
+
+        elvis_yearly_goal = []
+        total_yearly_rental = Decimal('0.00')
+
+        # List of month names
+        month_names = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ]
+
+        try:
+            for month in range(1, 13):
+                result = ElvisSection.monthly_goal_percentage(year=year, month=month)
+                total_yearly_rental += result['total_rental_rate']
+
+                monthly_goal_data = {
+                    'month_number': month,
+                    'month_name': month_names[month - 1],
+                    'total_rental_rate': result['total_rental_rate'],
+                    'percentage_of_goal': result['percentage_of_goal'],
+                }
+                
+                elvis_yearly_goal.append(monthly_goal_data)
+
+            yearly_percentage = (total_yearly_rental / Decimal('1000000')) * Decimal('100')
+
+            response_data = {
+                'year': year,
+                'elvis_yearly_goal': elvis_yearly_goal,
+                'total_yearly_rental': total_yearly_rental,
+                'yearly_percentage': yearly_percentage,
+            }
+
+            return Response(response_data, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({'error': 'An error occurred. Please try again.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
 
 # contact view
 
