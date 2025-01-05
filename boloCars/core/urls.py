@@ -3,8 +3,8 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken.views import ObtainAuthToken  # Correct import
 from .views import (
     index,
-    LogoutView, ForgotPasswordView, LoginView,
-    Rav4SergeView, Prado1ElvisView, RegisterView, ElvisSectionCreateView,
+    LogoutView, ForgotPasswordView, LoginView, LevinusHistoryListView, SergeHistoryListView,
+    Rav4SergeView, Prado1ElvisView, RegisterView, ElvisSectionCreateView, SergeMonthlyGoalView, LevinusMonthlyGoalView,
     Prado2LevinusView, CustomAuthToken, ElvisSectionUpdateView, LevinusSectionCreateView, MonthlyGoalView,
     LevinusSectionUpdateView, SergeSectionUpdateView, SergeSectionCreateView, EditHistoryDetailView, EditHistoryListView
 
@@ -37,8 +37,13 @@ urlpatterns = [
     path('api/elvis-history/', EditHistoryListView.as_view(), name='elvis-history-list'),
     path('api/edit-history/<int:pk>/', EditHistoryDetailView.as_view(), name='edit-history-detail'),
    
+    path('api/levinus-history/', LevinusHistoryListView.as_view(), name='levinus-history-list'),
+    path('api/serge-history/', SergeHistoryListView.as_view(), name='serge-history-list'),
+    
     # path for monthly and yearly goals percentage
     path('api/elvis-monthly-goal/<int:year>/', MonthlyGoalView.as_view(), name='monthly-goal'),
+    path('api/levinus-monthly-goal/<int:year>/', LevinusMonthlyGoalView.as_view(), name='levinus-monthly-goal'),
+    path('api/serge-monthly-goal/<int:year>/', SergeMonthlyGoalView.as_view(), name='serge-monthly-goal'),
 
     # Add other paths as needed...
     

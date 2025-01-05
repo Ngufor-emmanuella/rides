@@ -222,13 +222,21 @@ class SergeSectionUpdateView(generics.RetrieveUpdateAPIView):
     permission_classes = [AllowAny]
 
 
-# history view
+# functionality for history view
 class EditHistoryListView(generics.ListAPIView):
     queryset = EditHistory.objects.all()
     serializer_class = EditHistorySerializer
 
 class EditHistoryDetailView(generics.RetrieveAPIView):
     queryset = EditHistory.objects.all()
+    serializer_class = EditHistorySerializer
+
+class LevinusHistoryListView(generics.ListAPIView):
+    queryset = EditHistory.objects.filter(content_type=ContentType.objects.get_for_model(LevinusSection))
+    serializer_class = EditHistorySerializer
+
+class SergeHistoryListView(generics.ListAPIView):
+    queryset = EditHistory.objects.filter(content_type=ContentType.objects.get_for_model(SergeSection))
     serializer_class = EditHistorySerializer
 
 
@@ -275,6 +283,89 @@ class MonthlyGoalView(APIView):
         except Exception as e:
             return Response({'error': 'An error occurred. Please try again.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+
+class LevinusMonthlyGoalView(APIView):
+    def get(self, request, year=None):
+        if year is None:
+            year = timezone.now().year
+
+        levinus_yearly_goal = []
+        total_yearly_rental = Decimal('0.00')
+
+        month_names = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ]
+
+        try:
+            for month in range(1, 13):
+                result = LevinusSection.monthly_goal_percentage(year=year, month=month)  # Implement this method in your model
+                total_yearly_rental += result['total_rental_rate']
+
+                monthly_goal_data = {
+                    'month_number': month,
+                    'month_name': month_names[month - 1],
+                    'total_rental_rate': result['total_rental_rate'],
+                    'percentage_of_goal': result['percentage_of_goal'],
+                }
+                
+                levinus_yearly_goal.append(monthly_goal_data)
+
+            yearly_percentage = (total_yearly_rental / Decimal('1000000')) * Decimal('100')
+
+            response_data = {
+                'year': year,
+                'levinus_yearly_goal': levinus_yearly_goal,
+                'total_yearly_rental': total_yearly_rental,
+                'yearly_percentage': yearly_percentage,
+            }
+
+            return Response(response_data, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({'error': 'An error occurred. Please try again.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class SergeMonthlyGoalView(APIView):
+    def get(self, request, year=None):
+        if year is None:
+            year = timezone.now().year
+
+        serge_yearly_goal = []
+        total_yearly_rental = Decimal('0.00')
+
+        month_names = [
+            "January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ]
+
+        try:
+            for month in range(1, 13):
+                result = SergeSection.monthly_goal_percentage(year=year, month=month)  # Implement this method in your model
+                total_yearly_rental += result['total_rental_rate']
+
+                monthly_goal_data = {
+                    'month_number': month,
+                    'month_name': month_names[month - 1],
+                    'total_rental_rate': result['total_rental_rate'],
+                    'percentage_of_goal': result['percentage_of_goal'],
+                }
+                
+                serge_yearly_goal.append(monthly_goal_data)
+
+            yearly_percentage = (total_yearly_rental / Decimal('1000000')) * Decimal('100')
+
+            response_data = {
+                'year': year,
+                'serge_yearly_goal': serge_yearly_goal,
+                'total_yearly_rental': total_yearly_rental,
+                'yearly_percentage': yearly_percentage,
+            }
+
+            return Response(response_data, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({'error': 'An error occurred. Please try again.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 
 # contact view
 

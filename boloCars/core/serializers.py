@@ -167,3 +167,4 @@ class MonthlyGoalSerializer(serializers.Serializer):
     month_name = serializers.CharField()
     total_rental_rate = serializers.DecimalField(max_digits=10, decimal_places=2)
     percentage_of_goal = serializers.DecimalField(max_digits=5, decimal_places=2)
+

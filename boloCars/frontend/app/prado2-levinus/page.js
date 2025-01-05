@@ -37,6 +37,19 @@ const Prado2 = () => {
             <Link href="/levinusform">
                 <button className="btn btn-primary"> Add Transactions</button>
             </Link>
+            <br />
+
+            <Link href="/levinus-history">
+                <button className="btn btn-primary">See History</button>
+            </Link>
+
+            <br />
+
+            <Link href="/levinus-monthly-goals">
+                <button className="btn btn-primary">Monthly / Yearly Goals Percentage </button>
+            </Link>
+
+            <br />
 
 
             <table className="table">

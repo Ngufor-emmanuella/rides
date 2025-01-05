@@ -1,24 +1,24 @@
 "use client";
 import { useEffect, useState } from 'react';
 
-const MonthlyGoalTable = () => {
+const LevinusGoalTable = () => {
     const [monthlyGoals, setMonthlyGoals] = useState([]);
     const [totalYearlyRental, setTotalYearlyRental] = useState(0);
     const [yearlyPercentage, setYearlyPercentage] = useState(0);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     
-    const year = 2024; // Change year as needed
+    const year = 2025; // Change year as needed
 
     useEffect(() => {
         const fetchMonthlyGoals = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/api/elvis-monthly-goal/${year}/`);
+                const response = await fetch(`http://localhost:8000/api/levinus-monthly-goal/${year}/`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
-                setMonthlyGoals(data.elvis_yearly_goal);
+                setMonthlyGoals(data.levinus_yearly_goal);
                 setTotalYearlyRental(data.total_yearly_rental);
                 setYearlyPercentage(data.yearly_percentage);
             } catch (error) {
@@ -36,7 +36,7 @@ const MonthlyGoalTable = () => {
 
     return (
         <div>
-            <h1>Elvis Monthly Goals for {year}</h1>
+            <h1>Levinus Monthly Goals for {year}</h1>
             <h4>Monthly Target Goal : 1000.000 CFA </h4>
 
 
@@ -65,4 +65,4 @@ const MonthlyGoalTable = () => {
     );
 };
 
-export default MonthlyGoalTable;
+export default LevinusGoalTable ;
