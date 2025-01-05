@@ -1,6 +1,8 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import 'bootstrap/dist/css/bootstrap.min.css';
+// import '../styles/globals.css'; 
 
 const Prado1 = () => {
     const [elvisSections, setElvisSections] = useState([]);
@@ -31,8 +33,8 @@ const Prado1 = () => {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div>
-            <h1>Prado 1 Elvis Sections</h1>
+        <div className="container mt-5">
+            <h1 className="text-center">Prado 1 Elvis Sections</h1>
 
             <Link href="/elvisform">
                 <button className="btn btn-primary"> Add Transactions</button>
@@ -52,7 +54,7 @@ const Prado1 = () => {
             </Link>
 
 
-            <table className="table">
+            <table className="table table-striped">
                 <thead>
                     <tr>
                         <th>ID Num</th>
