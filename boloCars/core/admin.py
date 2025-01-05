@@ -1,5 +1,5 @@
 from django.contrib import admin
-from core.models import Product, Category, Vendor, CartOrder, CartOrderItems, ProductImages, ProductReview, Wishlist, Address, ElvisSection, LevinusSection, SergeSection
+from core.models import Product, Category, Vendor, CartOrder, CartOrderItems, ProductImages, ProductReview, Wishlist, Address, ElvisSection, LevinusSection, SergeSection, Contact
 
 # Register your models here.
 
@@ -59,6 +59,8 @@ admin.site.register(Address, AddressAdmin)
 admin.site.register(ElvisSection, ElvisSectionAdmin)
 admin.site.register(LevinusSection, LevinusSectionAdmin)
 admin.site.register(SergeSection, SergeSectionAdmin)
+admin.site.register(Contact)
+
 
 
 

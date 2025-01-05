@@ -160,6 +160,116 @@ body {
     line-height: 1;
 }
 
+.about-container {
+    background-color: rgb(111, 8, 8, 0.2);
+    border-radius: 20px;
+}
+
+.about-container h1 {
+    padding-top: 5%;
+    color: #6f0808;
+    width: 70%;
+    margin: 0 auto;
+}
+
+.about-container p {
+    color: #000;
+    font-size: 25px;
+    font-weight: 500;
+    line-height: 40px;
+    width: 77%;
+    margin: 0 auto;
+    padding-top: 2%;
+    padding-bottom: 1%;
+}
+
+
+/* contact styles */
+
+.flex-row {
+    width: 100%;
+    height: auto;
+}
+
+.contact-first {
+    width: 50%;
+}
+
+.contact-second {
+    width: 50%;
+    display: flex;
+    position: relative;
+}
+
+.brown-circle {
+    width: 62%;
+    top: 15%;
+    height: 30vh;
+    position: relative;
+    z-index: 5;
+    left: 23%;
+    border-radius: 77%;
+}
+
+.show-car {
+    width: 90%;
+    height: 51vh;
+    position: absolute;
+    z-index: 1;
+    left: 12%;
+}
+
+ /* Set the overall width of the form */
+ form {
+    width: 60%;
+    margin: auto;
+    height: auto;
+}
+
+/* Style for labels */
+.label {
+    font-size: 20px;
+    color: #6f0808;
+}
+
+.change-color {
+    background-color: rgb(255, 255, 255, 0.9); 
+    color: #6f0808;
+    padding: 5%;
+}
+
+.form-color {
+    font-size: 18px;
+    background-color: brown; /* Initial background color */
+    color: #6f0808; /* Text color */
+    transition: background-color 0.3s; /* Smooth transition */
+}
+
+.contact-now {
+    color: #6f0808;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+
+.about-container h4 {
+    color: #6f0808;
+    margin: 0 auto;
+    font-size: 30px;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.white-box {
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 5%;
+}
+
+
 ol,
 ul {
     list-style: none;
@@ -881,7 +991,7 @@ p {
     font-weight: 400;
     line-height: 24px;
     margin-bottom: 5px;
-    color: #fff;
+    color: #6f0808;
 }
 
 .text-heading {
@@ -2432,7 +2542,7 @@ input.qty-val {
     min-height: 215px;
     -webkit-transition: 0.2s;
     transition: 0.2s;
-    width: 13% !important;
+    width: 18% !important;
 
 }
 
@@ -11807,6 +11917,12 @@ footer .hotline img {
     .custom-modal .modal-dialog {
         max-width: 720px !important;
     }
+
+
+    /* contact design  */
+    .align-images {
+        background-color: red;
+    }
 }
 
 @media only screen and (min-width: 768px) and (max-width: 992px) {
@@ -12214,11 +12330,46 @@ footer .hotline img {
     .header-style-1.header-style-5 .header-bottom-bg-color {
         background-color: #fff !important;
     }
+
+   
 }
 
 /*small phone*/
 
 @media only screen and (max-width: 480px) {
+
+    .about-container h1 {
+        font-size: 1.5rem;
+        width: 90%;
+        font-weight: 700;
+    }
+
+    .about-container p {
+        font-size: 1.2rem;
+        line-height: 30px;
+        padding-top: 5%;
+        width: 97%;
+        padding-bottom: 5%;
+    }
+
+    .about-container h4 {
+        font-size: 23px;
+        padding-top: 5%;    
+    }
+
+    .white-box {
+        display: block;
+        margin-left: 6%;
+    }
+
+    .card-1 figure img {
+        max-width: 25%;
+    }
+
+    /* .card-1 {
+        width: 85%;
+    } */
+
     .archive-header {
         padding: 30px;
     }

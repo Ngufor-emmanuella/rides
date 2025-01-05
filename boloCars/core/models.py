@@ -6,6 +6,12 @@ from django.utils.html import mark_safe
 from authuser.models import User
 from django.utils import timezone
 from simple_history.models import HistoricalRecords 
+from django.db.models.signals import pre_save
+from django.dispatch import receiver
+from django.core.serializers.json import DjangoJSONEncoder
+import json
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 # Create your models here.
 
@@ -217,7 +223,6 @@ class Address(models.Model):
     verbose_name_plural = "Address"
 
 
-
 class CarsType(models.Model):
   date_time = models.DateTimeField(default=timezone.now)
   destination = models.CharField(max_length=100, blank=False)
@@ -268,14 +273,13 @@ class CarsType(models.Model):
       date_time__month = month
     ).aggregate(total=Sum('rental_rate_amount'))['total'] or Decimal('0.00')
 
-    percentage = (total_rental_rate / Decimal(goal)) * Decimal('100')
+    percentage = (total_rental_rate / Decimal(goal)) * Decimal('100') if total_rental_rate > 0 else Decimal('0.00')
 
     return {
       'total_rental_rate': total_rental_rate,
       'percentage_of_goal': percentage
     }
-
-
+    
   class Meta:
     abstract = True
     verbose_name = "Cars Type"
@@ -285,28 +289,81 @@ class CarsType(models.Model):
     return f"{self.destination } - {self.date_time}"
   
 # Inherit from CarsType and add history tracking
-
-  
+ 
 class ElvisSection(CarsType):
-
-  history = HistoricalRecords()
-
+  
   class Meta:
     verbose_name = "Elvis Section"
     verbose_name_plural = "Elvis Sections"
 
 class LevinusSection(CarsType):
-
-  history = HistoricalRecords()
   
   class Meta:
     verbose_name = "Levinus Section"
     verbose_name_plural = "Levinus Sections"
 
 class SergeSection(CarsType):
-
-  history = HistoricalRecords() 
   
   class Meta:
     verbose_name = "Serge Section"
     verbose_name_plural = "Serge Sections"
+
+
+# model to store previous and current data
+
+class EditHistory(models.Model):
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+    object_id = models.PositiveIntegerField()
+    section = GenericForeignKey('content_type', 'object_id')
+    
+    previous_data = models.JSONField()  # Store previous data as JSON
+    current_data = models.JSONField()   # Store current data as JSON
+    edited_at = models.DateTimeField(default=timezone.now)  # Timestamp of when edited
+
+    def __str__(self):
+        return f"Edit history for {self.section} at {self.edited_at}"
+
+@receiver(pre_save, sender=ElvisSection)
+@receiver(pre_save, sender=LevinusSection)
+@receiver(pre_save, sender=SergeSection)
+def track_history(sender, instance, **kwargs):
+    if instance.pk:  # Check if it's an update (not a new instance)
+        previous_instance = sender.objects.get(pk=instance.pk)
+        
+        # Create an EditHistory record
+        EditHistory.objects.create(
+            content_type=ContentType.objects.get_for_model(instance),
+            object_id=instance.pk,
+            previous_data=json.dumps({
+                'destination': previous_instance.destination,
+                'rental_rate_amount': previous_instance.rental_rate_amount,
+                'expenses': previous_instance.expenses,
+                'expense_tag': previous_instance.expense_tag,
+                'management_fee_accruals': previous_instance.management_fee_accruals,
+                'driver_income': previous_instance.driver_income,
+                'net_income': previous_instance.net_income,
+                'transaction': previous_instance.transaction,
+                'comments': previous_instance.comments,
+                'date_time': previous_instance.date_time,
+            }, cls=DjangoJSONEncoder),
+            current_data=json.dumps({
+                'destination': instance.destination,
+                'rental_rate_amount': instance.rental_rate_amount,
+                'expenses': instance.expenses,
+                'expense_tag': instance.expense_tag,
+                'management_fee_accruals': instance.management_fee_accruals,
+                'driver_income': instance.driver_income,
+                'net_income': instance.net_income,
+                'transaction': instance.transaction,
+                'comments': instance.comments,
+                'date_time': instance.date_time,
+            }, cls=DjangoJSONEncoder),
+        )
+
+class Contact(models.Model):
+  name=models.CharField(max_length=200)
+  email=models.EmailField()
+  subject=models.TextField()
+  def __str__(self):
+    return self.name
+  

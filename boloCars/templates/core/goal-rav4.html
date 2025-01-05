@@ -30,11 +30,21 @@
         <tbody>
             {% for goal in serge_yearly_goal %}
                 <tr>
-                    <td>{{ goal.month }}</td>
-                    <td>{{ goal.total_rental_rate }}</td>
-                    <td>{{ goal.percentage_of_goal }}%</td> <!-- Add percentage sign -->
+                    <td>{{ goal.month_number }} - {{ goal.month_name }}</td>
+                    <td>{{ goal.total_rental_rate|floatformat:2 }}</td>
+                    <td>{{ goal.percentage_of_goal|floatformat:2 }}%</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="3">No data available for this year</td>
                 </tr>
             {% endfor %}
+    
+            <tr class="table-info">
+                <th><strong>Yearly Total</strong></th>
+                <td><strong>{{ total_yearly_rental|floatformat:2 }}</strong></td>
+                <td><strong>{{ yearly_percentage|floatformat:2 }}%</strong></td>
+            </tr>
         </tbody>
     </table>
 

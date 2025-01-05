@@ -18,5 +18,4 @@ class SergeSectionForm(forms.ModelForm):
     model = SergeSection
     fields = ('destination', 'rental_rate_amount', 'expenses', 'expense_tag', 'driver_income', 'comments')
 
-    
 

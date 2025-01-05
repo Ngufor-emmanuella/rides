@@ -12,9 +12,10 @@
     <div class="button-group">
         <a href="{% url 'core:add_sergesection_view' %}" class="btn btn-sucess btn-md" role="button"> + Add Car Rental Details </a>
         <a href="{% url 'core:rav4-serge-view' %}" class="btn btn-sucess btn-md" role="button"> Rental Transaction Page </a>
-        <a href="{% url 'core:rav4_serge_yearly_goal_view' year=2023 %}" class="btn btn-sucess btn-md" role="button"> Monthly / Yearly % Goals </a>
 
-        
+        {% now "Y" as current_year %}
+        <a href="{% url 'core:rav4_serge_yearly_goal_view'  year=current_year %}" class="btn btn-sucess btn-md" role="button"> Monthly / Yearly % Goals </a>
+      
       </div>
       <br>
       <br>
