@@ -1,3 +1,64 @@
-.head {
-    color: red;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    width: 100%;
+    overflow-x: hidden;
+    max-width: 100%;
+}
+
+.main {
+    width: 100%;
+}
+
+.homebackground {
+    position: relative;
+    background-image: url('/images/prado.jpeg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    width: 100%;
+    color: rgb(255, 255, 255);
+    overflow-x: hidden;
+}
+
+.homebackground::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.homebackground h1,
+.homebackground h3,
+.homebackground .btn {
+    position: relative; 
+    z-index: 2;
+}
+
+.card-1 {
+    border: 1px solid #ddd; /* Optional: border for the card */
+    border-radius: 5px; /* Optional: rounded corners */
+    overflow: hidden; /* Ensures overflow is hidden */
+    background: white; /* Background color for cards */
+    text-align: center; /* Center text */
+    padding: 15px; /* Padding inside cards */
+}
+
+.card-1 h6 {
+    margin: 10px 0; /* Margin for spacing */
+}
+
+.card-1 p {
+    margin: 5px 0; /* Margin for spacing */
 }
