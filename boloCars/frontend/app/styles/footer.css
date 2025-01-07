@@ -1,0 +1,61 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.logo1 {
+    width: 20vw;
+    height: 20vh;
+}
+
+
+.row-footer {
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.widget-title {
+    color: 000;
+    font-size: 1.2rem;
+}
+
+.footer-list {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.bolo-list {
+    color: #000;
+    list-style-type: none;
+    text-decoration: none;
+    padding-top: 16px;
+    line-height: 2rem;
+}
+
+.bolo-list:hover {
+    text-decoration: underline;
+    color: #4e0606;
+}
+
+.address strong {
+    color: #A66953;
+}
+
+.widget-title {
+    color: #A66953;
+}
+
+.site-copyright {
+    display: flex;
+    color: #a66953;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 2rem;
+}
+
+.brown-icon {
+    width: 8%;
+    height: 2%;
+    margin-right: 10px;
+}
+

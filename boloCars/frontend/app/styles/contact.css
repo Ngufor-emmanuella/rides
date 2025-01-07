@@ -1,0 +1,65 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.main {
+    padding-top: 10%;
+}
+
+.about-header {
+    color: #A66953;
+    padding-top: 3rem;
+}
+
+.about-welcome {
+    font-weight: 700;
+    font-size: 2rem;
+    color:  #A66953;
+}
+
+.about-paragragh {
+    font-weight: 500;
+    font-size: 1.5rem;
+    line-height: 2.5rem;
+    word-spacing: 0.5rem;
+    padding-top: 2rem;
+}
+
+.contact-second {
+    position: relative;
+    margin-top: 13%;
+}
+
+.show-car {
+    display: block; 
+}
+
+.brown-circle {
+    position: absolute;
+    top: 6%;
+    left: 24.5%;
+    border-radius: 70%;
+    width: 51%;
+    height: auto;
+    pointer-events: none;
+}
+
+.label {
+    font-weight: 400;
+    font-size: 1.1rem;
+}
+
+.button {
+    background-color: #A66953 !important;
+    color: #fff !important;
+    padding: 8px;
+    border: 2px solid #A66953;
+    border-radius: 3px;
+}
+
+.button:hover {
+    background-color: #fff;
+    color: #A66953;
+}

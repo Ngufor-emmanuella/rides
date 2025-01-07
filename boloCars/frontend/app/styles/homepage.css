@@ -11,6 +11,7 @@ body {
     width: 100%;
     overflow-x: hidden;
     max-width: 100%;
+    padding-top: 7%;
 }
 
 .main {
@@ -44,21 +45,73 @@ body {
 .homebackground .btn {
     position: relative; 
     z-index: 2;
+    color: #feeae1;
+    bottom: -7rem;
 }
 
 .card-1 {
-    border: 1px solid #ddd; /* Optional: border for the card */
-    border-radius: 5px; /* Optional: rounded corners */
-    overflow: hidden; /* Ensures overflow is hidden */
-    background: white; /* Background color for cards */
-    text-align: center; /* Center text */
-    padding: 15px; /* Padding inside cards */
+    border: 3px solid #A66953;
+    border-radius: 10%; 
+    overflow: hidden; 
+  
+    text-align: center;
+    padding: 15px; 
 }
 
 .card-1 h6 {
-    margin: 10px 0; /* Margin for spacing */
+    margin: 10px 0; 
 }
 
 .card-1 p {
-    margin: 5px 0; /* Margin for spacing */
+    margin: 5px 0; 
+}
+
+.next-button {
+   color: 6f0808 !important;
+}
+/* #6f0808
+#A66953 */
+
+.carousel-item {
+    height: 50%;
+}
+.carousel-item img {
+    object-fit: cover;
+    height: 2%;
+    width: 50%; 
+}
+
+.about-welcome {
+    color: #A66953;
+}
+
+.card-1 p {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color:  #4b2d21;
+}
+
+.home-card {
+    font-weight: 700;
+    font-size: 1.3rem;
+    color:  #A66953;
+}
+
+.col-md-4 {
+    padding: 1.5rem;
+    width: 100%;
+}
+
+.img-fluid {
+    width: 40%;
+}
+
+.assorts {
+    width: 60%;
+}
+
+.d-block {
+    width: 90%;
+    height: 70%;
+    margin: 0 auto;
 }

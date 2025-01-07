@@ -13,7 +13,7 @@ export default function Header() {
     }, []); 
 
     return (
-        <nav className="navbar navbar-expand-lg bg-body-tertiary">
+        <nav className="navbar navbar-expand-lg bg-body-tertiary fixed-top">
             <div className="container">
                 <Image src="/images/bolo-logo1.jpeg" alt="Bolo Rides Logo" width={500} height={300} className="logo" />
                 <Link className="navbar-brand navigation" href="/">BOLO - Rides</Link>
