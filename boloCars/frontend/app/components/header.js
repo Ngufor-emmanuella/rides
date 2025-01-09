@@ -51,7 +51,7 @@ export default function Header() {
                                Our Categories
                             </Link>
                             <ul className="dropdown-menu">
-                                <li><Link className="dropdown-item navigation" href="/category1"> Small Cars </Link></li>
+                                <li><Link className="dropdown-item navigation" href="/smallcars"> Small Cars </Link></li>
                                 <li><Link className="dropdown-item navigation" href="/category2"> Big Cars </Link></li>
                                 <li><Link className="dropdown-item navigation" href="/category3"> All Cars Categories</Link></li>
                                 <li><hr className="dropdown-divider navigation" /></li>

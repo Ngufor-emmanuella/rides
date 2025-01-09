@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
+import '../styles/prado1.css';
 
 const EditHistoryPage = () => {
     const [editHistory, setEditHistory] = useState([]);
@@ -31,7 +32,7 @@ const EditHistoryPage = () => {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div>
+        <div className="elvis-main">
             <h1>Edit History</h1>
 
             <h2>Previous Data</h2>

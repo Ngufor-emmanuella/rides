@@ -15,9 +15,9 @@ export default function Contact() {
                         coupe for a weekend ride with a date or a roadster for a road trip in Cameroon for a few days.
                         We ensure our rides fit your specific needs.
                     </p>
-                    <br />
+                  
                     <h4 className="about-header">Book Your Ride Today!</h4>
-                    <br />
+                 
                     <p  className="about-paragragh">
                         <strong className="about-header"> Need a ride?</strong> <br /> 
                         Message us on Facebook or call <strong>+237 652 921000</strong> to book your next trip with BoloRides. 
@@ -31,8 +31,6 @@ export default function Contact() {
                     <Image className="brown-circle" src="/images/prado-round.jpeg" alt="Circle Drawing" width={500} height={300} />
                 </div>
             </div>
-
-            <br />
 
             <section className="home-slider position-relative" style={{ width: '100%' }}>
                 <div className="container mt-5">
@@ -76,8 +74,8 @@ export default function Contact() {
                             <button type="submit" className="btn button">Submit Your Message</button>
                         </div>
                     </form>
-                    <br />
-                    <br />
+                 
+                   
                 </div>
             </section>     
         </main>

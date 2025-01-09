@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import '../styles/globals.css'; 
+import '../styles/prado1.css'; 
 
 const Prado1 = () => {
     const [elvisSections, setElvisSections] = useState([]);
@@ -33,7 +33,7 @@ const Prado1 = () => {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div className="container mt-5">
+        <div className="container mt-5 elvis-main">
             <h1 className="text-center">Prado 1 Elvis Sections</h1>
 
             <Link href="/elvisform">

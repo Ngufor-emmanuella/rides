@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import '../styles/prado1.css';
 
 const ElvisForm = ({ onFormSubmit }) => {
     const [formData, setFormData] = useState({
@@ -59,7 +60,7 @@ const ElvisForm = ({ onFormSubmit }) => {
     };
 
     return (
-        <div>
+        <div className="elvis-main" >
             <form onSubmit={handleSubmit}>
                 <h2>Add New Elvis Section</h2>
                 <label>
