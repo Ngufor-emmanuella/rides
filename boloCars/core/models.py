@@ -233,8 +233,15 @@ class CarsType(models.Model):
   driver_income = models.DecimalField(blank=True, null=True, max_digits=10,  decimal_places=2, default=0.00)
   net_income = models.DecimalField(blank=True, null=True, max_digits=10,  decimal_places=2, default=0.00)
   transaction = models.DecimalField(blank=True, null=True, max_digits=10,  decimal_places=2, default=0.00)
-  comments = models.CharField(max_length=100, blank=False, default="leave message")
+ 
+  number_of_rental_days = models.IntegerField(blank=False, default=1)
+  daily_rental_amount = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=0.00 )
+  total_amount_due = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=0.00)
+  paid_amount = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=0.00)
+  balance_amount_due = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=0.00)
 
+  comments = models.CharField(max_length=100, blank=False, default="leave message")
+  
   #functionality to sum  total amount on each fields 
   @classmethod
   def get_total_sums(cls, field_names):
@@ -262,8 +269,51 @@ class CarsType(models.Model):
     if self.rental_rate_amount is not None and self.expenses is not None:
       result = self.rental_rate_amount - self.expenses
       self.transaction = Decimal(result)
-      
+
+    # calculates total amount and amount due
+    if self.daily_rental_amount is not None and self.number_of_rental_days is not None:
+      result = self.daily_rental_amount * self.number_of_rental_days
+      self.total_amount_due = Decimal(result)
+
+    # calculation for amount due based on paid amount
+    if self.total_amount_due is not None and self.paid_amount is not None:
+      result = self.total_amount_due - self.paid_amount
+      self.balance_amount_due = Decimal(result)
+    else:
+      # if paid amount is None, set balance amount due  to total amount due
+      self.balance_amount_due = self.total_amount_due if self.total_amount_due is not None else Decimal('0.00')
+
+
       super(CarsType, self).save(*args, **kwargs)
+
+  def make_payments(self, payment_amount):
+    if self.balance_amount_due <=0:
+      return "Payment has already been completed. No further payments can be made."
+    
+    if self.paid_amount is None:
+      self.paid_amount = Decimal('0.00')
+
+      # code if payment exceeds balance due
+    if self.paid_amount > self.balance_amount_due:
+      return "Payment exceeds the balance amount due. pleadse enter a valid amount."
+    
+    # record payments
+    payment = payment.objects.create(car_rental=self, amount=payment_amount)
+ 
+    # update payment amount
+    self.paid_amount += Decimal(payment_amount)
+
+    # calculate balance again after payment
+    self.balance_amount_due = self.total_amount_due - self.paid_amount
+
+    # check of payment completes the total amount due
+    if self.paid_amount >= self.total_amount_due:
+      self.balance_amount_due = Decimal('0.00')
+      self.save()
+      return "Payment has been completed !"
+    
+    self.save()
+    return f"Payment of {payment_amount} accepted. Amount due: {self.balance_amount_due}."
 
   # method calculates sum of rental rate for each month and percentage achieved
   @classmethod
