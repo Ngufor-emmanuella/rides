@@ -235,7 +235,6 @@ class CarsType(models.Model):
   transaction = models.DecimalField(blank=True, null=True, max_digits=10,  decimal_places=2, default=0.00)
  
   number_of_rental_days = models.IntegerField(blank=False, default=1)
-  daily_rental_amount = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=0.00 )
   total_amount_due = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=0.00)
   paid_amount = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=0.00)
   balance_amount_due = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=0.00)
@@ -252,6 +251,10 @@ class CarsType(models.Model):
     return total_sums
 
   def save(self, *args, **kwargs):
+     # Ensure self.expenses is a Decimal
+    if self.expenses is not None:
+        self.expenses = Decimal(str(self.expenses))
+        
     if self.rental_rate_amount is not None:
       if isinstance(self.rental_rate_amount, Decimal):
         #calculate 10% of rental_rate_amount
@@ -271,8 +274,8 @@ class CarsType(models.Model):
       self.transaction = Decimal(result)
 
     # calculates total amount and amount due
-    if self.daily_rental_amount is not None and self.number_of_rental_days is not None:
-      result = self.daily_rental_amount * self.number_of_rental_days
+    if self.rental_rate_amount is not None and self.number_of_rental_days is not None:
+      result = self.rental_rate_amount * self.number_of_rental_days
       self.total_amount_due = Decimal(result)
 
     # calculation for amount due based on paid amount
@@ -322,7 +325,7 @@ class CarsType(models.Model):
       date_time__year = year,
       date_time__month = month
     ).aggregate(total=Sum('rental_rate_amount'))['total'] or Decimal('0.00')
-
+    
     percentage = (total_rental_rate / Decimal(goal)) * Decimal('100') if total_rental_rate > 0 else Decimal('0.00')
 
     return {
@@ -395,6 +398,12 @@ def track_history(sender, instance, **kwargs):
                 'transaction': previous_instance.transaction,
                 'comments': previous_instance.comments,
                 'date_time': previous_instance.date_time,
+
+                'number_of_rental_days': previous_instance.number_of_rental_days,
+                'total_amount_due': previous_instance.total_amount_due,
+                'paid_amount': previous_instance.paid_amount,
+                'balance_amount_due':previous_instance.balance_amount_due,
+
             }, cls=DjangoJSONEncoder),
             current_data=json.dumps({
                 'destination': instance.destination,
@@ -407,6 +416,12 @@ def track_history(sender, instance, **kwargs):
                 'transaction': instance.transaction,
                 'comments': instance.comments,
                 'date_time': instance.date_time,
+
+                'number_of_rental_days': instance.number_of_rental_days,
+                'total_amount_due': instance.total_amount_due,
+                'paid_amount': instance.paid_amount,
+                'balance_amount_due':instance.balance_amount_due,
+
             }, cls=DjangoJSONEncoder),
         )
 

@@ -27,6 +27,10 @@ from rest_framework.generics import ListCreateAPIView
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework import generics
+from .serializers import ElvisSectionSerializer
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+
 
 
 User = get_user_model()
@@ -110,13 +114,21 @@ class ForgotPasswordView(APIView):
 #
 # functionality to display all added data in tables
 class Prado1ElvisView(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
+
     queryset = ElvisSection.objects.all()
     serializer_class = ElvisSectionSerializer
+
+    def perform_create(self, serializer):
+        # This method is called when creating a new instance.
+        serializer.save()
 
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
 
-        field_names = ['destination', 'rental_rate_amount', 'expenses', 'expense_tag', 'management_fee_accruals', 'driver_income', 'net_income', 'transaction', 'comments']
+        field_names = ['destination', 'rental_rate_amount', 'expenses', 'expense_tag', 'management_fee_accruals', 'driver_income', 'net_income', 'transaction', 'comments',
+                        'number_of_rental_days', 'total_amount_due',
+                        'paid_amount', 'balance_amount_due']
 
         # Calculate total sums for each field listed above
         total_sums = {}
@@ -182,8 +194,11 @@ class ElvisSectionCreateView(APIView):
         serializer = ElvisSectionSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            calculations = serializer.calculate_amounts(serializer.validated_data)
+            
+            return Response({**serializer.data, **calculations}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            
 
 class LevinusSectionCreateView(APIView):
     permission_classes = [AllowAny]
@@ -204,6 +219,22 @@ class SergeSectionCreateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+    # functionality to calculate balance amount due etc
+@method_decorator(csrf_exempt, name='dispatch')
+class CalculateAmountsView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer  = ElvisSectionSerializer(data=request.data)
+        if serializer.is_valid():
+            calculations = serializer.calculate_amounts(serializer.validated_data)
+            return Response(calculations)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def options(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_200_OK)
+
+ 
     # functionality to edit views
 class ElvisSectionUpdateView(generics.RetrieveUpdateAPIView):
     queryset = ElvisSection.objects.all()

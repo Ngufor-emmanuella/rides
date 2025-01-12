@@ -3,21 +3,23 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken.views import ObtainAuthToken  # Correct import
 from .views import (
     index,
-    LogoutView, ForgotPasswordView, LoginView, LevinusHistoryListView, SergeHistoryListView,
+    LogoutView, ForgotPasswordView, LoginView, LevinusHistoryListView, SergeHistoryListView, CalculateAmountsView,
     Rav4SergeView, Prado1ElvisView, RegisterView, ElvisSectionCreateView, SergeMonthlyGoalView, LevinusMonthlyGoalView,
     Prado2LevinusView, CustomAuthToken, ElvisSectionUpdateView, LevinusSectionCreateView, MonthlyGoalView,
-    LevinusSectionUpdateView, SergeSectionUpdateView, SergeSectionCreateView, EditHistoryDetailView, EditHistoryListView
+    LevinusSectionUpdateView, SergeSectionUpdateView, SergeSectionCreateView, EditHistoryDetailView, EditHistoryListView,
 
 )
 
 app_name = 'core'
 
+# paths to display all the field in tabble format
 router = DefaultRouter()
 router.register(r'prado1', Prado1ElvisView)
 router.register(r'prado2', Prado2LevinusView)
 router.register(r'rav4', Rav4SergeView)
 
 urlpatterns = [
+    # paths to display all the field in tabble format
     path('users/', RegisterView.as_view(), name='register'),  # Added trailing slash
     path('api/', include(router.urls)),
     path("", index, name="index"),
@@ -26,7 +28,10 @@ urlpatterns = [
     path('api/elvis/', ElvisSectionCreateView.as_view(), name='elvis-section-create'),
     path('api/levinus/', LevinusSectionCreateView.as_view(), name='levinus-section-create'),
     path('api/serge/', SergeSectionCreateView.as_view(), name='serge-section-create'),
-
+   
+    #path for balance amount
+    path('api/balanceelvis/', CalculateAmountsView.as_view(), name='balance-elvis'),
+    
     # paths to edit views
     path('api/elvisupdate/<int:pk>/', ElvisSectionUpdateView.as_view(), name='elvis-section-update'),
     path('api/levinusupdate/<int:pk>/', LevinusSectionUpdateView.as_view(), name='edit_levinus'),
