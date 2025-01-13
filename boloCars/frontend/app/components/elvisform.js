@@ -6,7 +6,7 @@ const ElvisForm = ({ onFormSubmit }) => {
     const [formData, setFormData] = useState({
         destination: '',
         rental_rate_amount: '',
-        number_of_rental_days: '',
+        number_of_rental_days: '1',
         paid_amount: '',
         driver_income: '',
         comments: '',
@@ -42,7 +42,7 @@ const ElvisForm = ({ onFormSubmit }) => {
 
         try {
             // Submit form data to your API
-            const response = await fetch('http://127.0.0.1:8000/api/prado1/', {
+            const response = await fetch('http://127.0.0.1:8000/api/elvis/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -55,19 +55,18 @@ const ElvisForm = ({ onFormSubmit }) => {
             }
 
             const data = await response.json();
+            console.log('Response from API:', data);
+            
             setSuccess('Data submitted successfully!');
             setError('');
 
-            // Call onFormSubmit to refresh data in parent component
-            if (onFormSubmit) {
-                onFormSubmit(data);
-            }
+            onFormSubmit(data);
 
             // Reset form fields
             setFormData({
                 destination: '',
                 rental_rate_amount: '',
-                number_of_rental_days: '',
+                number_of_rental_days: '1',
                 paid_amount: '',
                 driver_income: '',
                 comments: '',

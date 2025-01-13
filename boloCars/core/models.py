@@ -224,22 +224,25 @@ class Address(models.Model):
 
 
 class CarsType(models.Model):
+  id = models.BigAutoField(primary_key=True)
   date_time = models.DateTimeField(default=timezone.now)
   destination = models.CharField(max_length=100, blank=False)
-  rental_rate_amount = models.DecimalField(blank=True, null=True, max_digits=10,  decimal_places=2, default=0.00)
-  expenses = models.DecimalField(blank=True, null=True, max_digits=10,  decimal_places=2, default=0.00)
+  rental_rate_amount = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=Decimal('0.00'))
+  expenses = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=Decimal('0.00'))
   expense_tag = models.CharField(max_length=100, blank=False)
-  management_fee_accruals = models.DecimalField(blank=True, null=True, max_digits=10,  decimal_places=2, default=0.00)
-  driver_income = models.DecimalField(blank=True, null=True, max_digits=10,  decimal_places=2, default=0.00)
-  net_income = models.DecimalField(blank=True, null=True, max_digits=10,  decimal_places=2, default=0.00)
-  transaction = models.DecimalField(blank=True, null=True, max_digits=10,  decimal_places=2, default=0.00)
- 
+  management_fee_accruals = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=Decimal('0.00'))
+  driver_income = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=Decimal('0.00'))
+  net_income = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=Decimal('0.00'))
+  transaction = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=Decimal('0.00'))
   number_of_rental_days = models.IntegerField(blank=False, default=1)
-  total_amount_due = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=0.00)
-  paid_amount = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=0.00)
-  balance_amount_due = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=0.00)
+  total_amount_due = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=Decimal('0.00'))
+  paid_amount = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=Decimal('0.00'))
+  balance_amount_due = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=Decimal('0.00'))
 
   comments = models.CharField(max_length=100, blank=False, default="leave message")
+
+  # temp_field = models.CharField(max_length=100, null=True, blank=True)
+
   
   #functionality to sum  total amount on each fields 
   @classmethod
@@ -256,15 +259,13 @@ class CarsType(models.Model):
         self.expenses = Decimal(str(self.expenses))
         
     if self.rental_rate_amount is not None:
-      if isinstance(self.rental_rate_amount, Decimal):
+        self.rental_rate_amount = Decimal(str(self.rental_rate_amount))
+
         #calculate 10% of rental_rate_amount
         self.management_fee_accruals = self.rental_rate_amount * Decimal('0.10')
-      else:
-        #handles the case where rental_rate is not a decimal eg converts to decimal
-        self.management_fee_accruals = Decimal(str(self.rental_rate_amount)) * Decimal('0.10')
-    
+      
     # to perform substraction operation from fields
-    if self.rental_rate_amount is not None and self.management_fee_accruals is not None and self.driver_income:
+    if self.rental_rate_amount is not None and self.management_fee_accruals is not None and self.driver_income is not None:
       result = self.rental_rate_amount - self.management_fee_accruals - self.driver_income
       self.net_income = Decimal(result)
     
@@ -275,7 +276,7 @@ class CarsType(models.Model):
 
     # calculates total amount and amount due
     if self.rental_rate_amount is not None and self.number_of_rental_days is not None:
-      result = self.rental_rate_amount * self.number_of_rental_days
+      result = self.rental_rate_amount * Decimal(self.number_of_rental_days)
       self.total_amount_due = Decimal(result)
 
     # calculation for amount due based on paid amount

@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/prado1.css';
+import ElvisForm from '../components/elvisform';
 
 const Prado1 = () => {
     const [elvisSections, setElvisSections] = useState([]);
@@ -10,9 +11,16 @@ const Prado1 = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        fetchElvisSections();
-    }, []);
+        const cachedData = localStorage.getItem('elvisSections');
+        if (cachedData) {
+          setElvisSections(JSON.parse(cachedData));
+          setLoading(false);
+        } else {
+          fetchElvisSections();
+        }
+      }, []);
 
+    
     const fetchElvisSections = async () => {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL;
         try {
@@ -21,21 +29,29 @@ const Prado1 = () => {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
-            console.log(data);
-
-            setElvisSections(data.elvissections); // Adjusted to match your API response structure
+            setElvisSections(data.elvissections);
+            localStorage.setItem('elvisSections', JSON.stringify(data.elvissections));
         } catch (error) {
             setError(error.message);
         } finally {
             setLoading(false);
         }
     };
-
+    
     // Function to handle form submission
+    const handleFormSubmit = async (newEntry) => {
+        console.log('New entry submitted:', newEntry);
+        const updatedSections = [...elvisSections, newEntry];
+        setElvisSections(updatedSections);
+        localStorage.setItem('elvisSections', JSON.stringify(updatedSections));
+    };
+
    
     return (
         <div className="container mt-5 prado1-box">
             <h1 className="text-center">Prado 1 Elvis Sections</h1>
+
+            <ElvisForm onFormSubmit={handleFormSubmit} />
 
             <table className="table table-striped">
                 <thead>

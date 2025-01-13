@@ -120,11 +120,19 @@ class Prado1ElvisView(viewsets.ModelViewSet):
     serializer_class = ElvisSectionSerializer
 
     def perform_create(self, serializer):
-        # This method is called when creating a new instance.
-        serializer.save()
-
+        validated_data = serializer.validated_data
+        amounts = serializer.calculate_amounts(validated_data)
+        serializer.save(**amounts)  # Include calculated fields
+ 
     def list(self, request, *args, **kwargs):
-        response = super().list(request, *args, **kwargs)
+        queryset = self.get_queryset()
+        print(f"Queryset count: {queryset.count()}")
+
+        for obj in queryset:
+            print(f"Object ID: {obj.id}")
+
+        serializer = self.get_serializer(queryset, many=True)
+
 
         field_names = ['destination', 'rental_rate_amount', 'expenses', 'expense_tag', 'management_fee_accruals', 'driver_income', 'net_income', 'transaction', 'comments',
                         'number_of_rental_days', 'total_amount_due',
@@ -133,11 +141,11 @@ class Prado1ElvisView(viewsets.ModelViewSet):
         # Calculate total sums for each field listed above
         total_sums = {}
         for field_name in field_names:
-            total_sum = self.queryset.aggregate(**{f"{field_name}_sum": Sum(field_name)})[f"{field_name}_sum"]
+            total_sum = queryset.aggregate(Sum(field_name))[f'{field_name}__sum']
             total_sums[field_name] = total_sum or Decimal('0.00')
 
         return Response({
-            'elvissections': response.data,
+            'elvissections': serializer.data,
             'header': 'Prado1-Elvis',
             'total_sums': total_sums,
         })
@@ -190,15 +198,19 @@ class Rav4SergeView(viewsets.ModelViewSet):
 
 class ElvisSectionCreateView(APIView):
     permission_classes = [AllowAny]
+
     def post(self, request):
         serializer = ElvisSectionSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            calculations = serializer.calculate_amounts(serializer.validated_data)
-            
-            return Response({**serializer.data, **calculations}, status=status.HTTP_201_CREATED)
+            instance = serializer.save()
+            response_data = ElvisSectionSerializer(instance).data
+
+            print(f"Created instance with ID: {instance.id}")
+
+            return Response(response_data, status=status.HTTP_201_CREATED)
+                
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            
+ 
 
 class LevinusSectionCreateView(APIView):
     permission_classes = [AllowAny]

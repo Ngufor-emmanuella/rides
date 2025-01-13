@@ -76,19 +76,19 @@ class ContactSerializer(serializers.ModelSerializer):
 
 class ElvisSectionSerializer(serializers.ModelSerializer):
     destination = serializers.CharField(required=False) 
-    rental_rate_amount = serializers.DecimalField(required=False, max_digits=10, decimal_places=2) 
-    expenses = serializers.DecimalField(required=False, max_digits=10, decimal_places=2) 
+    rental_rate_amount = serializers.DecimalField(required=False, max_digits=10, decimal_places=2, default=Decimal('0.00'))
+    expenses = serializers.DecimalField(required=False, max_digits=10, decimal_places=2, default=Decimal('0.00'))
     expense_tag = serializers.CharField(required=False)  
-    management_fee_accruals = serializers.DecimalField(required=False, max_digits=10, decimal_places=2) 
-    driver_income = serializers.DecimalField(required=False, max_digits=10, decimal_places=2) 
-    net_income = serializers.DecimalField(required=False, max_digits=10, decimal_places=2) 
-    transaction = serializers.DecimalField(required=False, max_digits=10, decimal_places=2) 
+    management_fee_accruals = serializers.DecimalField(required=False, max_digits=10, decimal_places=2, default=Decimal('0.00'))
+    driver_income = serializers.DecimalField(required=False, max_digits=10, decimal_places=2, default=Decimal('0.00'))
+    net_income = serializers.DecimalField(required=False, max_digits=10, decimal_places=2, default=Decimal('0.00'))
+    transaction = serializers.DecimalField(required=False, max_digits=10, decimal_places=2, default=Decimal('0.00'))
     comments = serializers.CharField(required=False, allow_blank=True)
     
     number_of_rental_days = serializers.IntegerField(required=False,  default=1)
-    total_amount_due = serializers.DecimalField(required=False,  allow_null=True, max_digits=10, decimal_places=2, default=0.00)
-    paid_amount = serializers.DecimalField(required=False,  allow_null=True, max_digits=10, decimal_places=2, default=0.00)
-    balance_amount_due = serializers.DecimalField(required=False,  allow_null=True, max_digits=10, decimal_places=2, default=0.00)
+    total_amount_due = serializers.DecimalField(required=False,  allow_null=True, read_only=True, max_digits=10, decimal_places=2, default=0.00)
+    paid_amount = serializers.DecimalField(required=False, allow_null=True, max_digits=10, decimal_places=2, default=Decimal('0.00'))
+    balance_amount_due = serializers.DecimalField(required=False, read_only=True, allow_null=True, max_digits=10, decimal_places=2, default=Decimal('0.00'))
 
     class Meta:
         model = ElvisSection
@@ -99,25 +99,27 @@ class ElvisSectionSerializer(serializers.ModelSerializer):
                   'paid_amount', 'balance_amount_due']
         
     def calculate_amounts(self, validated_data):
-        rental_rate_amount = validated_data.get('rental_rate_amount')
-        number_of_rental_days = validated_data.get('number_of_rental_days')
-        paid_amount = validated_data.get('paid_amount')
+        rental_rate_amount = Decimal(validated_data.get('rental_rate_amount', 0))
+        number_of_rental_days = validated_data.get('number_of_rental_days', 1)
+        paid_amount = Decimal(validated_data.get('paid_amount', 0))
 
-        total_amount_due = Decimal(rental_rate_amount * number_of_rental_days) if rental_rate_amount and number_of_rental_days else Decimal('0.00')
-        balance_amount_due = total_amount_due - Decimal(paid_amount) if paid_amount else total_amount_due
+        total_amount_due = rental_rate_amount * Decimal(number_of_rental_days)
+        balance_amount_due = total_amount_due - paid_amount
 
         return {
-            ' total_amount_due':  total_amount_due,
-            ' balance_amount_due':  balance_amount_due,
+            'total_amount_due':  total_amount_due,
+            'balance_amount_due':  balance_amount_due,
         }
+    
+    def create(self, validated_data):
+        amounts = self.calculate_amounts(validated_data)
+        validated_data.update(amounts) 
+        return ElvisSection.objects.create(**validated_data)
 
     def validate_expenses(self, value):
         return Decimal(value) if value is not None else Decimal('0.00')
     
-    
-    def create(self, validated_data):
-        return ElvisSection.objects.create(**validated_data)
-
+   
 
 class LevinusSectionSerializer(serializers.ModelSerializer):
 
