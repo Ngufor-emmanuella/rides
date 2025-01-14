@@ -7,6 +7,7 @@ from .views import (
     Rav4SergeView, Prado1ElvisView, RegisterView, ElvisSectionCreateView, SergeMonthlyGoalView, LevinusMonthlyGoalView,
     Prado2LevinusView, CustomAuthToken, ElvisSectionUpdateView, LevinusSectionCreateView, MonthlyGoalView,
     LevinusSectionUpdateView, SergeSectionUpdateView, SergeSectionCreateView, EditHistoryDetailView, EditHistoryListView,
+    ElvisSectionViewSet,
 
 )
 
@@ -17,6 +18,7 @@ router = DefaultRouter()
 router.register(r'prado1', Prado1ElvisView)
 router.register(r'prado2', Prado2LevinusView)
 router.register(r'rav4', Rav4SergeView)
+router.register(r'elvis-sections', ElvisSectionViewSet, basename='elvis-section')
 
 urlpatterns = [
     # paths to display all the field in tabble format
@@ -25,7 +27,6 @@ urlpatterns = [
     path("", index, name="index"),
 
     # path to add data to model table
-    path('api/elvis/', ElvisSectionCreateView.as_view(), name='elvis-section-create'),
     path('api/levinus/', LevinusSectionCreateView.as_view(), name='levinus-section-create'),
     path('api/serge/', SergeSectionCreateView.as_view(), name='serge-section-create'),
    

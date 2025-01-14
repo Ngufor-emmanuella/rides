@@ -98,29 +98,24 @@ class ElvisSectionSerializer(serializers.ModelSerializer):
                   'number_of_rental_days', 'total_amount_due',
                   'paid_amount', 'balance_amount_due']
         
-    def calculate_amounts(self, validated_data):
-        rental_rate_amount = Decimal(validated_data.get('rental_rate_amount', 0))
-        number_of_rental_days = validated_data.get('number_of_rental_days', 1)
-        paid_amount = Decimal(validated_data.get('paid_amount', 0))
+        def create(self, validated_data):
+            return ElvisSection.objects.create(**validated_data)
 
-        total_amount_due = rental_rate_amount * Decimal(number_of_rental_days)
-        balance_amount_due = total_amount_due - paid_amount
-
-        return {
-            'total_amount_due':  total_amount_due,
-            'balance_amount_due':  balance_amount_due,
-        }
-    
-    def create(self, validated_data):
-        amounts = self.calculate_amounts(validated_data)
-        validated_data.update(amounts) 
-        return ElvisSection.objects.create(**validated_data)
-
-    def validate_expenses(self, value):
-        return Decimal(value) if value is not None else Decimal('0.00')
-    
+        def validate(self, data):
+            rental_rate_amount = data.get('rental_rate_amount', Decimal('0.00'))
+            number_of_rental_days = data.get('number_of_rental_days',1)
+            paid_amount = data.get('paid_amount',  Decimal('0.00'))
+            
+            if rental_rate_amount is not None and number_of_rental_days is not None:
+                data['total_amount_due'] = rental_rate_amount * number_of_rental_days
+                
+            else:
+                data['total_amount_due'] = Decimal('0.00')
+                
+                data['balance_amount_due'] = data['total_amount_due'] - paid_amount
+                
+                return data
    
-
 class LevinusSectionSerializer(serializers.ModelSerializer):
 
     destination = serializers.CharField(required=False) 

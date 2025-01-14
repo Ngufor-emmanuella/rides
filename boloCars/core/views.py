@@ -196,6 +196,14 @@ class Rav4SergeView(viewsets.ModelViewSet):
 
     # functionality to add data to the models table
 
+class ElvisSectionViewSet(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
+    queryset = ElvisSection.objects.all()
+    serializer_class = ElvisSectionSerializer
+
+    def perform_create(self, serializer):
+        serializer.save()
+
 class ElvisSectionCreateView(APIView):
     permission_classes = [AllowAny]
 
@@ -203,14 +211,15 @@ class ElvisSectionCreateView(APIView):
         serializer = ElvisSectionSerializer(data=request.data)
         if serializer.is_valid():
             instance = serializer.save()
-            response_data = ElvisSectionSerializer(instance).data
-
-            print(f"Created instance with ID: {instance.id}")
-
-            return Response(response_data, status=status.HTTP_201_CREATED)
-                
+            return Response(ElvisSectionSerializer(instance).data, status=status.HTTP_201_CREATED)
+        
+        else:
+            print(serializer.errors)
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
- 
+
+
+
 
 class LevinusSectionCreateView(APIView):
     permission_classes = [AllowAny]

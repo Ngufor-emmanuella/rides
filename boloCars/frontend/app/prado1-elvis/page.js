@@ -11,26 +11,20 @@ const Prado1 = () => {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const cachedData = localStorage.getItem('elvisSections');
-        if (cachedData) {
-          setElvisSections(JSON.parse(cachedData));
-          setLoading(false);
-        } else {
           fetchElvisSections();
-        }
+        
       }, []);
 
     
     const fetchElvisSections = async () => {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
         try {
-            const response = await fetch(`${apiUrl}/api/prado1/`);
+            const response =  await fetch('http://127.0.0.1:8000/api/elvis-sections/');
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
-            setElvisSections(data.elvissections);
-            localStorage.setItem('elvisSections', JSON.stringify(data.elvissections));
+            setElvisSections(data);
+
         } catch (error) {
             setError(error.message);
         } finally {
@@ -39,14 +33,15 @@ const Prado1 = () => {
     };
     
     // Function to handle form submission
-    const handleFormSubmit = async (newEntry) => {
+    const handleFormSubmit = (newEntry) => {
         console.log('New entry submitted:', newEntry);
-        const updatedSections = [...elvisSections, newEntry];
-        setElvisSections(updatedSections);
-        localStorage.setItem('elvisSections', JSON.stringify(updatedSections));
+        setElvisSections((prevSections) => [...prevSections, newEntry]);
     };
 
-   
+    if (loading) return <div>Loading... Hold on please</div>;
+    if (error) return <div>Error: {error}</div>;
+
+
     return (
         <div className="container mt-5 prado1-box">
             <h1 className="text-center">Prado 1 Elvis Sections</h1>
@@ -77,7 +72,7 @@ const Prado1 = () => {
                 </thead>
                 <tbody>
 
-                {Array.isArray(elvisSections) && elvisSections.map((section) => (
+                {elvisSections.map((section) => (
                     <tr key={section.id}>
                         {/* Table Data */}
                         <td>{section.id}</td>

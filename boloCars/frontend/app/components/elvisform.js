@@ -12,37 +12,27 @@ const ElvisForm = ({ onFormSubmit }) => {
         comments: '',
     });
 
-    const [totalAmountDue, setTotalAmountDue] = useState(0);
-    const [balanceAmountDue, setBalanceAmountDue] = useState(0);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+
+    // Calculate totals
+    const rentalRate = parseFloat(formData.rental_rate_amount) || 0;
+    const rentalDays = parseInt(formData.number_of_rental_days) || 1;
+    const paidAmount = parseFloat(formData.paid_amount) || 0;
+
+    const totalAmountDue = rentalRate * rentalDays;
+    const balanceAmountDue = totalAmountDue - paidAmount;
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
-
-        // Calculate totals whenever an input changes
-        calculateTotals({ ...formData, [name]: value });
-    };
-
-    const calculateTotals = (data) => {
-        const rentalRate = parseFloat(data.rental_rate_amount) || 0;
-        const rentalDays = parseInt(data.number_of_rental_days) || 1;
-        const paidAmount = parseFloat(data.paid_amount) || 0;
-
-        const totalDue = rentalRate * rentalDays;
-        const balanceDue = totalDue - paidAmount;
-
-        setTotalAmountDue(totalDue);
-        setBalanceAmountDue(balanceDue);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         try {
-            // Submit form data to your API
-            const response = await fetch('http://127.0.0.1:8000/api/elvis/', {
+            const response = await fetch('http://127.0.0.1:8000/api/elvis-sections/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -60,7 +50,7 @@ const ElvisForm = ({ onFormSubmit }) => {
             setSuccess('Data submitted successfully!');
             setError('');
 
-            onFormSubmit(data);
+            onFormSubmit(data); // Pass the complete object with ID back to parent component
 
             // Reset form fields
             setFormData({
@@ -102,20 +92,23 @@ const ElvisForm = ({ onFormSubmit }) => {
                     Driver Income:
                     <input type="number" name="driver_income" value={formData.driver_income} onChange={handleChange} required />
                 </label>
+               
                 <label>
                     Comments:
                     <textarea name="comments" value={formData.comments} onChange={handleChange}></textarea>
                 </label>
-                <button type="submit">Submit</button>
 
+                {/* Display calculated amounts */}
                 <div>
                     <h3>Total Amount Due: {totalAmountDue.toFixed(2)}</h3>
                     <h3>Balance Amount Due: {balanceAmountDue.toFixed(2)}</h3>
                 </div>
-            </form>
 
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            {success && <p style={{ color: 'green' }}>{success}</p>}
+                <button type="submit">Submit</button>
+
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+                {success && <p style={{ color: 'green' }}>{success}</p>}
+            </form>
         </div>
     );
 };
