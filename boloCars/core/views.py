@@ -240,22 +240,7 @@ class SergeSectionCreateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-    # functionality to calculate balance amount due etc
-@method_decorator(csrf_exempt, name='dispatch')
-class CalculateAmountsView(APIView):
-    permission_classes = [AllowAny]
-
-    def post(self, request):
-        serializer  = ElvisSectionSerializer(data=request.data)
-        if serializer.is_valid():
-            calculations = serializer.calculate_amounts(serializer.validated_data)
-            return Response(calculations)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
-    def options(self, request, *args, **kwargs):
-        return Response(status=status.HTTP_200_OK)
-
- 
+# functionality to calculate balance amount due etc
     # functionality to edit views
 class ElvisSectionUpdateView(generics.RetrieveUpdateAPIView):
     queryset = ElvisSection.objects.all()

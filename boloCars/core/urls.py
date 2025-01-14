@@ -3,8 +3,8 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken.views import ObtainAuthToken  # Correct import
 from .views import (
     index,
-    LogoutView, ForgotPasswordView, LoginView, LevinusHistoryListView, SergeHistoryListView, CalculateAmountsView,
-    Rav4SergeView, Prado1ElvisView, RegisterView, ElvisSectionCreateView, SergeMonthlyGoalView, LevinusMonthlyGoalView,
+    LogoutView, ForgotPasswordView, LoginView, LevinusHistoryListView, SergeHistoryListView, 
+    Rav4SergeView, Prado1ElvisView, RegisterView, SergeMonthlyGoalView, LevinusMonthlyGoalView,
     Prado2LevinusView, CustomAuthToken, ElvisSectionUpdateView, LevinusSectionCreateView, MonthlyGoalView,
     LevinusSectionUpdateView, SergeSectionUpdateView, SergeSectionCreateView, EditHistoryDetailView, EditHistoryListView,
     ElvisSectionViewSet,
@@ -31,7 +31,6 @@ urlpatterns = [
     path('api/serge/', SergeSectionCreateView.as_view(), name='serge-section-create'),
    
     #path for balance amount
-    path('api/balanceelvis/', CalculateAmountsView.as_view(), name='balance-elvis'),
     
     # paths to edit views
     path('api/elvisupdate/<int:pk>/', ElvisSectionUpdateView.as_view(), name='elvis-section-update'),
