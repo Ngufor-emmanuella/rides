@@ -2,12 +2,12 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken.views import ObtainAuthToken  # Correct import
 from .views import (
-    index,
-    LogoutView, ForgotPasswordView, LoginView, LevinusHistoryListView, SergeHistoryListView, 
+    index, LogoutView, ForgotPasswordView, LoginView, LevinusHistoryListView, SergeHistoryListView, 
     Rav4SergeView, Prado1ElvisView, RegisterView, SergeMonthlyGoalView, LevinusMonthlyGoalView,
     Prado2LevinusView, CustomAuthToken, ElvisSectionUpdateView, LevinusSectionCreateView, MonthlyGoalView,
     LevinusSectionUpdateView, SergeSectionUpdateView, SergeSectionCreateView, EditHistoryDetailView, EditHistoryListView,
-    ElvisSectionViewSet,
+    ElvisSectionCreateView,
+  
 
 )
 
@@ -18,15 +18,15 @@ router = DefaultRouter()
 router.register(r'prado1', Prado1ElvisView)
 router.register(r'prado2', Prado2LevinusView)
 router.register(r'rav4', Rav4SergeView)
-router.register(r'elvis-sections', ElvisSectionViewSet, basename='elvis-section')
 
 urlpatterns = [
     # paths to display all the field in tabble format
-    path('users/', RegisterView.as_view(), name='register'),  # Added trailing slash
+    path('users/', RegisterView.as_view(), name='register'), 
     path('api/', include(router.urls)),
     path("", index, name="index"),
 
     # path to add data to model table
+    path('api/elvis-sections/', ElvisSectionCreateView.as_view(), name='elvis-sections'),
     path('api/levinus/', LevinusSectionCreateView.as_view(), name='levinus-section-create'),
     path('api/serge/', SergeSectionCreateView.as_view(), name='serge-section-create'),
    

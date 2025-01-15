@@ -18,12 +18,12 @@ const Prado1 = () => {
     
     const fetchElvisSections = async () => {
         try {
-            const response =  await fetch('http://127.0.0.1:8000/api/elvis-sections/');
+            const response =  await fetch('http://127.0.0.1:8000/api/prado1/');
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
-            setElvisSections(data);
+            setElvisSections(data.elvissections);
 
         } catch (error) {
             setError(error.message);
@@ -35,7 +35,7 @@ const Prado1 = () => {
     // Function to handle form submission
     const handleFormSubmit = (newEntry) => {
         console.log('New entry submitted:', newEntry);
-        setElvisSections((prevSections) => [...prevSections, newEntry]);
+        fetchElvisSections(); 
     };
 
     if (loading) return <div>Loading... Hold on please</div>;

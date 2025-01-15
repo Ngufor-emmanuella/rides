@@ -196,14 +196,7 @@ class Rav4SergeView(viewsets.ModelViewSet):
 
     # functionality to add data to the models table
 
-class ElvisSectionViewSet(viewsets.ModelViewSet):
-    permission_classes = [AllowAny]
-    queryset = ElvisSection.objects.all()
-    serializer_class = ElvisSectionSerializer
-
-    def perform_create(self, serializer):
-        serializer.save()
-
+# code for creating new enteries in the db
 class ElvisSectionCreateView(APIView):
     permission_classes = [AllowAny]
 
@@ -213,12 +206,7 @@ class ElvisSectionCreateView(APIView):
             instance = serializer.save()
             return Response(ElvisSectionSerializer(instance).data, status=status.HTTP_201_CREATED)
         
-        else:
-            print(serializer.errors)
-        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 
 
 class LevinusSectionCreateView(APIView):
@@ -241,7 +229,7 @@ class SergeSectionCreateView(APIView):
 
 
 # functionality to calculate balance amount due etc
-    # functionality to edit views
+# functionality to edit views
 class ElvisSectionUpdateView(generics.RetrieveUpdateAPIView):
     queryset = ElvisSection.objects.all()
     serializer_class = ElvisSectionSerializer
@@ -269,11 +257,11 @@ class EditHistoryDetailView(generics.RetrieveAPIView):
     serializer_class = EditHistorySerializer
 
 class LevinusHistoryListView(generics.ListAPIView):
-    queryset = EditHistory.objects.filter(content_type=ContentType.objects.get_for_model(LevinusSection))
+    queryset = EditHistory.objects.all()
     serializer_class = EditHistorySerializer
 
 class SergeHistoryListView(generics.ListAPIView):
-    queryset = EditHistory.objects.filter(content_type=ContentType.objects.get_for_model(SergeSection))
+    queryset = EditHistory.objects.all()
     serializer_class = EditHistorySerializer
 
 

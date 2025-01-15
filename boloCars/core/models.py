@@ -252,43 +252,28 @@ class CarsType(models.Model):
       total_sum = cls.objects.aggregate(**{f"{field_name}_sum": Sum(field_name)})[f"{field_name}_sum"]
       total_sums[field_name] = total_sum or Decimal('0.00')
     return total_sums
-
+  
   def save(self, *args, **kwargs):
-     # Ensure self.expenses is a Decimal
-    if self.expenses is not None:
-        self.expenses = Decimal(str(self.expenses))
-        
-    if self.rental_rate_amount is not None:
-        self.rental_rate_amount = Decimal(str(self.rental_rate_amount))
+    # Ensure expenses is a Decimal
+    self.expenses = self.expenses or Decimal('0.00')
+    self.rental_rate_amount = self.rental_rate_amount or Decimal('0.00')
 
-        #calculate 10% of rental_rate_amount
-        self.management_fee_accruals = self.rental_rate_amount * Decimal('0.10')
-      
-    # to perform substraction operation from fields
-    if self.rental_rate_amount is not None and self.management_fee_accruals is not None and self.driver_income is not None:
-      result = self.rental_rate_amount - self.management_fee_accruals - self.driver_income
-      self.net_income = Decimal(result)
-    
-    # calculation for transaction
-    if self.rental_rate_amount is not None and self.expenses is not None:
-      result = self.rental_rate_amount - self.expenses
-      self.transaction = Decimal(result)
+    # Calculate management fee accruals
+    self.management_fee_accruals = self.rental_rate_amount * Decimal('0.10')
 
-    # calculates total amount and amount due
-    if self.rental_rate_amount is not None and self.number_of_rental_days is not None:
-      result = self.rental_rate_amount * Decimal(self.number_of_rental_days)
-      self.total_amount_due = Decimal(result)
+    # Calculate net income
+    self.net_income = self.rental_rate_amount - self.management_fee_accruals - (self.driver_income or Decimal('0.00'))
 
-    # calculation for amount due based on paid amount
-    if self.total_amount_due is not None and self.paid_amount is not None:
-      result = self.total_amount_due - self.paid_amount
-      self.balance_amount_due = Decimal(result)
-    else:
-      # if paid amount is None, set balance amount due  to total amount due
-      self.balance_amount_due = self.total_amount_due if self.total_amount_due is not None else Decimal('0.00')
+    # Transaction calculation
+    self.transaction = self.rental_rate_amount - self.expenses
 
+    # Total amount due
+    self.total_amount_due = self.rental_rate_amount * self.number_of_rental_days
 
-      super(CarsType, self).save(*args, **kwargs)
+    # Balance amount due calculation
+    self.balance_amount_due = self.total_amount_due - (self.paid_amount or Decimal('0.00'))
+
+    super(CarsType, self).save(*args, **kwargs)
 
   def make_payments(self, payment_amount):
     if self.balance_amount_due <=0:

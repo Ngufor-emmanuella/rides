@@ -98,23 +98,23 @@ class ElvisSectionSerializer(serializers.ModelSerializer):
                   'number_of_rental_days', 'total_amount_due',
                   'paid_amount', 'balance_amount_due']
         
-        def create(self, validated_data):
-            return ElvisSection.objects.create(**validated_data)
+    def create(self, validated_data):
+        return ElvisSection.objects.create(**validated_data)
 
-        def validate(self, data):
-            rental_rate_amount = data.get('rental_rate_amount', Decimal('0.00'))
-            number_of_rental_days = data.get('number_of_rental_days',1)
-            paid_amount = data.get('paid_amount',  Decimal('0.00'))
+    def validate(self, data):
+        rental_rate_amount = data.get('rental_rate_amount', Decimal('0.00'))
+        number_of_rental_days = data.get('number_of_rental_days',1)
+        paid_amount = data.get('paid_amount',  Decimal('0.00'))
             
-            if rental_rate_amount is not None and number_of_rental_days is not None:
-                data['total_amount_due'] = rental_rate_amount * number_of_rental_days
+        if rental_rate_amount is not None and number_of_rental_days is not None:
+            data['total_amount_due'] = rental_rate_amount * number_of_rental_days
+            
+        else:
+            data['total_amount_due'] = Decimal('0.00')
+            
+            data['balance_amount_due'] = data['total_amount_due'] - paid_amount
                 
-            else:
-                data['total_amount_due'] = Decimal('0.00')
-                
-                data['balance_amount_due'] = data['total_amount_due'] - paid_amount
-                
-                return data
+        return data
    
 class LevinusSectionSerializer(serializers.ModelSerializer):
 
