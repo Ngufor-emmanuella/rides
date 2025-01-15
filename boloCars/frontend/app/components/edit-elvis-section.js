@@ -14,7 +14,7 @@ const EditElvisSection = () => {
         number_of_rental_days: '1',
         paid_amount: '',
         driver_income: '',
-        comments: '',
+       
     });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
@@ -115,11 +115,6 @@ const EditElvisSection = () => {
                     Driver Income:
                     <input type="number" name="driver_income" value={formData.driver_income} onChange={handleChange} required />
                 </label>
-                <label>
-                    Comments:
-                    <textarea name="comments" value={formData.comments} onChange={handleChange}></textarea>
-                </label>
-
                 <div>
                 <h3>Total Amount Due: {totalAmountDue.toFixed(2)}</h3>
                 <h3>Balance Amount Due: {balanceAmount.toFixed(2)}</h3>
