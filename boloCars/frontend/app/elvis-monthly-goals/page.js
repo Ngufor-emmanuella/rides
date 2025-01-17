@@ -1,5 +1,7 @@
 "use client";
 import { useEffect, useState } from 'react';
+import '../styles/prado1.css';
+
 
 const MonthlyGoalTable = () => {
     const [monthlyGoals, setMonthlyGoals] = useState([]);
@@ -8,7 +10,7 @@ const MonthlyGoalTable = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     
-    const year = 2024; // Change year as needed
+    const year = 2025; // Change year as needed
 
     useEffect(() => {
         const fetchMonthlyGoals = async () => {
@@ -35,7 +37,7 @@ const MonthlyGoalTable = () => {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div>
+        <div className="prado1-box">
             <h1>Elvis Monthly Goals for {year}</h1>
             <h4>Monthly Target Goal : 1000.000 CFA </h4>
 

@@ -195,6 +195,10 @@ class EditHistorySerializer(serializers.ModelSerializer):
             'net_income': 'net_income',
             'transaction': 'transaction',
             'comments': 'comments',
+            'number_of_rental_days': 'number_of_rental_days',
+            'total_amount_due': 'total_amount_due',
+            'paid_amount': 'paid_amount',
+            'balance_amount_due': 'balance_amount_due',
         }
 
         for field, key in field_mappings.items():

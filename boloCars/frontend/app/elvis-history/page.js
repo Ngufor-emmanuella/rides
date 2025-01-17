@@ -1,5 +1,5 @@
 "use client";
-
+import '../styles/prado1.css';
 import { useEffect, useState } from 'react';
 
 const EditHistoryPage = () => {
@@ -31,7 +31,7 @@ const EditHistoryPage = () => {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div>
+        <div className="prado1-box">
             <h1>Edit History</h1>
 
             <h2>Previous Data</h2>
@@ -50,6 +50,11 @@ const EditHistoryPage = () => {
                         <th>Previous Net Income</th>
                         <th>Previous Transaction</th>
                         <th>Previous Comments</th>
+                        <th>Number Of Rental Days</th>
+                        <th>Total Amount Due</th>
+                        <th>Paid Amounts</th>
+                        <th>Balance Amount Due</th>
+                    
                     </tr>
                 </thead>
                 <tbody>
@@ -67,6 +72,10 @@ const EditHistoryPage = () => {
                             <td>{item.previous_net_income}</td>
                             <td>{item.previous_transaction}</td>
                             <td>{item.previous_comments}</td>
+                            <td>{item.number_of_rental_days}</td>
+                            <td>{item.total_amount_due}</td>
+                            <td>{item.paid_amount}</td>
+                            <td>{item.balance_amount_due}</td>
                         </tr>
                     ))}
                 </tbody>
@@ -88,6 +97,11 @@ const EditHistoryPage = () => {
                         <th>Current Net Income</th>
                         <th>Current Transaction</th>
                         <th>Current Comments</th>
+                        <th>Previous Comments</th>
+                        <th>Number Of Rental Days</th>
+                        <th>Total Amount Due</th>
+                        <th>Paid Amounts</th>
+                        <th>Balance Amount Due</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -105,6 +119,10 @@ const EditHistoryPage = () => {
                             <td>{item.current_net_income}</td>
                             <td>{item.current_transaction}</td>
                             <td>{item.current_comments}</td>
+                            <td>{item.number_of_rental_days}</td>
+                            <td>{item.total_amount_due}</td>
+                            <td>{item.paid_amount}</td>
+                            <td>{item.balance_amount_due}</td>
                         </tr>
                     ))}
                 </tbody>

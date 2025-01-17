@@ -355,9 +355,9 @@ class EditHistory(models.Model):
     object_id = models.PositiveIntegerField()
     section = GenericForeignKey('content_type', 'object_id')
     
-    previous_data = models.JSONField()  # Store previous data as JSON
-    current_data = models.JSONField()   # Store current data as JSON
-    edited_at = models.DateTimeField(default=timezone.now)  # Timestamp of when edited
+    previous_data = models.JSONField()
+    current_data = models.JSONField() 
+    edited_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"Edit history for {self.section} at {self.edited_at}"
@@ -366,7 +366,7 @@ class EditHistory(models.Model):
 @receiver(pre_save, sender=LevinusSection)
 @receiver(pre_save, sender=SergeSection)
 def track_history(sender, instance, **kwargs):
-    if instance.pk:  # Check if it's an update (not a new instance)
+    if instance.pk:
         previous_instance = sender.objects.get(pk=instance.pk)
         
         # Create an EditHistory record

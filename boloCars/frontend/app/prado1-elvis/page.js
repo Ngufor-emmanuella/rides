@@ -52,6 +52,15 @@ const Prado1 = () => {
             <ElvisForm onFormSubmit={handleFormSubmit} />
             <br />
 
+            <Link href="/elvis-history">
+                <button className="btn btn-success btn-sm">Car Histroy</button>
+            </Link>
+            <br />
+            <br />
+            <Link href="/elvis-monthly-goals">
+                <button className="btn btn-success btn-sm">Car Histroy</button>
+            </Link>
+
             <table className="table table-striped">
                 <thead>
                     {/* Table Headers */}
