@@ -1,0 +1,55 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+.about-div {
+    background-color: #A66953;
+    padding-top: 2rem;
+    border-radius: 16px;
+}
+
+.about-header {
+    color: #A66953;
+    padding-top: 3rem;
+}
+
+.about-welcome {
+    font-weight: 700;
+    font-size: 2rem;
+    color:  #A66953;
+}
+
+.about-paragragh {
+    font-weight: 500;
+    font-size: 1.5rem;
+    line-height: 2.5rem;
+    word-spacing: 0.5rem;
+    padding-top: 2rem;
+}
+
+.columnrows {
+    border: 2px solid #fff;
+    padding: 1rem;
+   
+}
+
+.col {
+    height: 30%;
+}
+
+.card-h6 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #fff;
+    padding-top: 1rem;
+}
+
+.card-h6 .card-link {
+    color: #fff;
+}
+
+/* #6f0808
+#A66953 */

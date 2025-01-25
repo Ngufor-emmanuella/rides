@@ -1,0 +1,117 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    width: 100%;
+    overflow-x: hidden;
+    max-width: 100%;
+    padding-top: 7%;
+}
+
+.main {
+    width: 100%;
+}
+
+.homebackground {
+    position: relative;
+    background-image: url('/images/prado.jpeg');
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    width: 100%;
+    color: rgb(255, 255, 255);
+    overflow-x: hidden;
+}
+
+.homebackground::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.homebackground h1,
+.homebackground h3,
+.homebackground .btn {
+    position: relative; 
+    z-index: 2;
+    color: #feeae1;
+    bottom: -7rem;
+}
+
+.card-1 {
+    border: 3px solid #A66953;
+    border-radius: 10%; 
+    overflow: hidden; 
+  
+    text-align: center;
+    padding: 15px; 
+}
+
+.card-1 h6 {
+    margin: 10px 0; 
+}
+
+.card-1 p {
+    margin: 5px 0; 
+}
+
+.next-button {
+   color: 6f0808 !important;
+}
+/* #6f0808
+#A66953 */
+
+.carousel-item {
+    height: 50%;
+}
+.carousel-item img {
+    object-fit: cover;
+    height: 2%;
+    width: 50%; 
+}
+
+.about-welcome {
+    color: #A66953;
+}
+
+.card-1 p {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color:  #4b2d21;
+}
+
+.home-card {
+    font-weight: 700;
+    font-size: 1.3rem;
+    color:  #A66953;
+}
+
+.col-md-4 {
+    padding: 1.5rem;
+    width: 100%;
+}
+
+.img-fluid {
+    width: 40%;
+}
+
+.assorts {
+    width: 60%;
+}
+
+.d-block {
+    width: 90%;
+    height: 70%;
+    margin: 0 auto;
+}
