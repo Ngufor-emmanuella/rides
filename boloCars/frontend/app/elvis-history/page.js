@@ -1,5 +1,5 @@
 "use client";
-
+import '../styles/prado1.css';
 import { useEffect, useState } from 'react';
 import '../styles/prado1.css';
 
@@ -10,13 +10,14 @@ const EditHistoryPage = () => {
 
     useEffect(() => {
         const fetchEditHistory = async () => {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL;
             try {
-                const response = await fetch('http://localhost:8000/api/elvis-history/');
+                const response = await fetch(`${apiUrl}core/api/elvis-history/`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
-                setEditHistory(data);
+                setEditHistory(data); // Ensure this matches the structure of the response
             } catch (error) {
                 console.error('Fetch error:', error);
                 setError(error.message);
@@ -32,84 +33,52 @@ const EditHistoryPage = () => {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div className="elvis-main">
+        <div className="prado1-box">
             <h1>Edit History</h1>
 
             <h2>Previous Data</h2>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Content Type</th>
-                        <th>Object ID</th>
-                        <th>Edited At</th>
-                        <th>Previous Destination</th>
-                        <th>Previous Rental Rate Amount</th>
-                        <th>Previous Expenses</th>
-                        <th>Previous Management Fee Accruals</th>
-                        <th>Previous Driver Income</th>
-                        <th>Previous Net Income</th>
-                        <th>Previous Transaction</th>
-                        <th>Previous Comments</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {editHistory.map((item) => (
-                        <tr key={item.id} style={{ border: '1px solid black' }}>
-                            <td>{item.id}</td>
-                            <td>{item.content_type}</td>
-                            <td>{item.object_id}</td>
-                            <td>{new Date(item.edited_at).toLocaleString()}</td>
-                            <td>{item.previous_destination}</td>
-                            <td>{item.previous_rental_rate_amount}</td>
-                            <td>{item.previous_expenses}</td>
-                            <td>{item.previous_management_fee_accruals}</td>
-                            <td>{item.previous_driver_income}</td>
-                            <td>{item.previous_net_income}</td>
-                            <td>{item.previous_transaction}</td>
-                            <td>{item.previous_comments}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            {editHistory.map((item) => (
+                <div key={item.id} style={{ border: '1px solid black', margin: '10px', padding: '10px' }}>
+                    <h3>ID: {item.id}</h3>
+                    <p><strong>Content Type:</strong> {item.content_type}</p>
+                    <p><strong>Object ID:</strong> {item.object_id}</p>
+                    <p><strong>Edited At:</strong> {new Date(item.edited_at).toLocaleString()}</p>
+                    <p><strong>Previous Destination:</strong> {item.previous_destination}</p>
+                    <p><strong>Previous Rental Rate Amount:</strong> {item.previous_rental_rate_amount}</p>
+                    <p><strong>Previous Expenses:</strong> {item.previous_expenses}</p>
+                    <p><strong>Previous Management Fee Accruals:</strong> {item.previous_management_fee_accruals}</p>
+                    <p><strong>Previous Driver Income:</strong> {item.previous_driver_income}</p>
+                    <p><strong>Previous Net Income:</strong> {item.previous_net_income}</p>
+                    <p><strong>Previous Transaction:</strong> {item.previous_transaction}</p>
+                    <p><strong>Previous Comments:</strong> {item.previous_comments}</p>
+                    <p><strong>Number Of Rental Days:</strong> {item.number_of_rental_days}</p>
+                    <p><strong>Total Amount Due:</strong> {item.total_amount_due}</p>
+                    <p><strong>Paid Amounts:</strong> {item.paid_amount}</p>
+                    <p><strong>Balance Amount Due:</strong> {item.balance_amount_due}</p>
+                </div>
+            ))}
 
             <h2>Current Data</h2>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Content Type</th>
-                        <th>Object ID</th>
-                        <th>Edited At</th>
-                        <th>Current Destination</th>
-                        <th>Current Rental Rate Amount</th>
-                        <th>Current Expenses</th>
-                        <th>Current Management Fee Accruals</th>
-                        <th>Current Driver Income</th>
-                        <th>Current Net Income</th>
-                        <th>Current Transaction</th>
-                        <th>Current Comments</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {editHistory.map((item) => (
-                        <tr key={item.id} style={{ border: '1px solid black' }}>
-                            <td>{item.id}</td>
-                            <td>{item.content_type}</td>
-                            <td>{item.object_id}</td>
-                            <td>{new Date(item.edited_at).toLocaleString()}</td>
-                            <td>{item.current_destination}</td>
-                            <td>{item.current_rental_rate_amount}</td>
-                            <td>{item.current_expenses}</td>
-                            <td>{item.current_management_fee_accruals}</td>
-                            <td>{item.current_driver_income}</td>
-                            <td>{item.current_net_income}</td>
-                            <td>{item.current_transaction}</td>
-                            <td>{item.current_comments}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            {editHistory.map((item) => (
+                <div key={item.id} style={{ border: '1px solid black', margin: '10px', padding: '10px' }}>
+                    <h3>ID: {item.id}</h3>
+                    <p><strong>Content Type:</strong> {item.content_type}</p>
+                    <p><strong>Object ID:</strong> {item.object_id}</p>
+                    <p><strong>Edited At:</strong> {new Date(item.edited_at).toLocaleString()}</p>
+                    <p><strong>Current Destination:</strong> {item.current_destination}</p>
+                    <p><strong>Current Rental Rate Amount:</strong> {item.current_rental_rate_amount}</p>
+                    <p><strong>Current Expenses:</strong> {item.current_expenses}</p>
+                    <p><strong>Current Management Fee Accruals:</strong> {item.current_management_fee_accruals}</p>
+                    <p><strong>Current Driver Income:</strong> {item.current_driver_income}</p>
+                    <p><strong>Current Net Income:</strong> {item.current_net_income}</p>
+                    <p><strong>Current Transaction:</strong> {item.current_transaction}</p>
+                    <p><strong>Current Comments:</strong> {item.current_comments}</p>
+                    <p><strong>Number Of Rental Days:</strong> {item.number_of_rental_days}</p>
+                    <p><strong>Total Amount Due:</strong> {item.total_amount_due}</p>
+                    <p><strong>Paid Amounts:</strong> {item.paid_amount}</p>
+                    <p><strong>Balance Amount Due:</strong> {item.balance_amount_due}</p>
+                </div>
+            ))}
         </div>
     );
 };

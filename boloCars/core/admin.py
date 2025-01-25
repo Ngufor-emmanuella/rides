@@ -34,8 +34,11 @@ class AddressAdmin(admin.ModelAdmin):
 
 
 class BaseSectionAdmin(admin.ModelAdmin):
-  list_display = ['date_time', 'destination', 'rental_rate_amount', 'expenses', 'expense_tag', 'management_fee_accruals',
-                  'driver_income', 'net_income', 'transaction', 'comments'
+  list_display = ['id', 'date_time', 'destination', 'rental_rate_amount', 
+                  'car_expense', 'expense_tag', 'management_fee_accruals', 
+                  'driver_income', 'net_income', 'total_expenses', 'comments',
+                  'number_of_rental_days', 'total_amount_due',
+                  'paid_amount', 'balance_amount_due'
   ]
 
 class ElvisSectionAdmin(BaseSectionAdmin):

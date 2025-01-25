@@ -27,6 +27,10 @@ from rest_framework.generics import ListCreateAPIView
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework import generics
+from .serializers import ElvisSectionSerializer
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+
 
 
 User = get_user_model()
@@ -110,22 +114,31 @@ class ForgotPasswordView(APIView):
 #
 # functionality to display all added data in tables
 class Prado1ElvisView(viewsets.ModelViewSet):
+    permission_classes = [AllowAny]
+
     queryset = ElvisSection.objects.all()
     serializer_class = ElvisSectionSerializer
 
+    def perform_create(self, serializer):
+        
+        serializer.save()
+ 
     def list(self, request, *args, **kwargs):
-        response = super().list(request, *args, **kwargs)
+        queryset = self.get_queryset()
 
-        field_names = ['destination', 'rental_rate_amount', 'expenses', 'expense_tag', 'management_fee_accruals', 'driver_income', 'net_income', 'transaction', 'comments']
+     
+        serializer = self.get_serializer(queryset, many=True)
+
+
+        field_names = ['destination', 'rental_rate_amount', 'car_expense', 'expense_tag', 'management_fee_accruals', 'driver_income', 'net_income', 'total_expenses', 'comments',
+                        'number_of_rental_days', 'total_amount_due',
+                        'paid_amount', 'balance_amount_due']
 
         # Calculate total sums for each field listed above
-        total_sums = {}
-        for field_name in field_names:
-            total_sum = self.queryset.aggregate(**{f"{field_name}_sum": Sum(field_name)})[f"{field_name}_sum"]
-            total_sums[field_name] = total_sum or Decimal('0.00')
+        total_sums={field_name: queryset.aggregate(Sum(field_name))[f'{field_name}__sum'] or Decimal ('0.00') for field_name in field_names}
 
         return Response({
-            'elvissections': response.data,
+            'elvissections': serializer.data,
             'header': 'Prado1-Elvis',
             'total_sums': total_sums,
         })
@@ -138,7 +151,7 @@ class Prado2LevinusView(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
         
-        field_names = ['destination', 'rental_rate_amount', 'expenses', 'expense_tag', 'management_fee_accruals', 'driver_income', 'net_income', 'transaction', 'comments']
+        field_names = ['destination', 'rental_rate_amount', 'car_expenses', 'expense_tag', 'management_fee_accruals', 'driver_income', 'net_income', 'transaction', 'comments']
 
         # Calculate total sums for each field listed above
         total_sums = {}
@@ -159,7 +172,7 @@ class Rav4SergeView(viewsets.ModelViewSet):
   
   def list(self, request, *args, **kwargs):
     response = super().list(request, *args, **kwargs)
-    field_names = ['destination', 'rental_rate_amount', 'expenses','expenses_tag',  'management_fee_accruals', 'driver_income', 'net_income', 'transaction', 'comments']
+    field_names = ['destination', 'rental_rate_amount', 'car_expenses','expenses_tag',  'management_fee_accruals', 'driver_income', 'net_income', 'transaction', 'comments']
     
       # Calculate total sums for each field listed above
     total_sums = {}
@@ -176,14 +189,18 @@ class Rav4SergeView(viewsets.ModelViewSet):
 
     # functionality to add data to the models table
 
+# code for creating new enteries in the db
 class ElvisSectionCreateView(APIView):
     permission_classes = [AllowAny]
+
     def post(self, request):
-        serializer = ElvisSectionSerializer(data=request.data)
+        serializer = ElvisSectionSerializer(data=request.data, many=True)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            instance = serializer.save()
+            return Response(ElvisSectionSerializer(instance, many=True).data, status=status.HTTP_201_CREATED)
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class LevinusSectionCreateView(APIView):
     permission_classes = [AllowAny]
@@ -204,7 +221,8 @@ class SergeSectionCreateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-    # functionality to edit views
+# functionality to calculate balance amount due etc
+# functionality to edit views
 class ElvisSectionUpdateView(generics.RetrieveUpdateAPIView):
     queryset = ElvisSection.objects.all()
     serializer_class = ElvisSectionSerializer
@@ -232,11 +250,11 @@ class EditHistoryDetailView(generics.RetrieveAPIView):
     serializer_class = EditHistorySerializer
 
 class LevinusHistoryListView(generics.ListAPIView):
-    queryset = EditHistory.objects.filter(content_type=ContentType.objects.get_for_model(LevinusSection))
+    queryset = EditHistory.objects.all()
     serializer_class = EditHistorySerializer
 
 class SergeHistoryListView(generics.ListAPIView):
-    queryset = EditHistory.objects.filter(content_type=ContentType.objects.get_for_model(SergeSection))
+    queryset = EditHistory.objects.all()
     serializer_class = EditHistorySerializer
 
 
@@ -258,29 +276,39 @@ class MonthlyGoalView(APIView):
         try:
             for month in range(1, 13):
                 result = ElvisSection.monthly_goal_percentage(year=year, month=month)
-                total_yearly_rental += result['total_rental_rate']
 
                 monthly_goal_data = {
                     'month_number': month,
                     'month_name': month_names[month - 1],
-                    'total_rental_rate': result['total_rental_rate'],
+                    'total_amount_due': result['total_amount_due'],
                     'percentage_of_goal': result['percentage_of_goal'],
+                    'net_income': result['net_income'],
+                    'total_amount_due': result['total_amount_due'],
+                    
+                    'total_expenses': result['total_expenses'],
+                    'management_fee_accruals': result['management_fee_accruals'],
                 }
                 
                 elvis_yearly_goal.append(monthly_goal_data)
 
-            yearly_percentage = (total_yearly_rental / Decimal('1000000')) * Decimal('100')
+                total_yearly_rental += result['total_amount_due']
+
+
+            yearly_percentage = (total_yearly_rental / Decimal('1000000')) * Decimal('100') if total_yearly_rental else Decimal('0.00')
 
             response_data = {
                 'year': year,
                 'elvis_yearly_goal': elvis_yearly_goal,
                 'total_yearly_rental': total_yearly_rental,
                 'yearly_percentage': yearly_percentage,
+                
             }
 
             return Response(response_data, status=status.HTTP_200_OK)
 
         except Exception as e:
+            print(f"Error occurred: {e}")
+            
             return Response({'error': 'An error occurred. Please try again.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
 

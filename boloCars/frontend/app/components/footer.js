@@ -14,7 +14,7 @@ export default function Footer() {
                     <div className="col">
                         <div className="widget-about font-md mb-md-3 mb-lg-3 mb-xl-0">
                             <div className="logo mb-30">
-                                <Link href="index.html" className="mb-15"><Image src="/images/bolo-logo1.jpeg" alt="logo" width={500} height={300} className="logo1" /></Link>
+                                <Link href="index.html" className="mb-15"><Image src="/images/bolo-logo1.jpeg" alt="logo" width={500} height={300}  priority className="logo1" /></Link>
                             </div>
                             <ul className="contact-infor bolo-list">
                                 <li className="address"><Image src="/images/brown.jpeg" alt="brown round icon"  width={500} height={300} className="brown-icon" /><strong>Address: </strong> <span> Douala, Inbetween total Bonateki and Pharmacy Akwa Nord</span></li>

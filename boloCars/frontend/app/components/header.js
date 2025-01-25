@@ -15,7 +15,7 @@ export default function Header() {
     return (
         <nav className="navbar navbar-expand-lg bg-body-tertiary fixed-top">
             <div className="container">
-                <Image src="/images/bolo-logo1.jpeg" alt="Bolo Rides Logo" width={500} height={300} className="logo" />
+                <Image src="/images/bolo-logo1.jpeg" alt="Bolo Rides Logo" width={500} height={300}  priority className="logo" />
                 <Link className="navbar-brand navigation" href="/">BOLO - Rides</Link>
                 <button 
                     className="navbar-toggler" 
@@ -71,7 +71,7 @@ export default function Header() {
                                 data-bs-toggle="dropdown" 
                                 aria-expanded="false"
                             >
-                                Car Sheets
+                                Vehicles
                             </Link>
                             <ul className="dropdown-menu">
                                 <li><Link className="dropdown-item navigation" href="/prado1-elvis"> Prado1 - Elvis </Link></li>

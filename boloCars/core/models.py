@@ -224,77 +224,125 @@ class Address(models.Model):
 
 
 class CarsType(models.Model):
-  date_time = models.DateTimeField(default=timezone.now)
-  destination = models.CharField(max_length=100, blank=False)
-  rental_rate_amount = models.DecimalField(blank=True, null=True, max_digits=10,  decimal_places=2, default=0.00)
-  expenses = models.DecimalField(blank=True, null=True, max_digits=10,  decimal_places=2, default=0.00)
-  expense_tag = models.CharField(max_length=100, blank=False)
-  management_fee_accruals = models.DecimalField(blank=True, null=True, max_digits=10,  decimal_places=2, default=0.00)
-  driver_income = models.DecimalField(blank=True, null=True, max_digits=10,  decimal_places=2, default=0.00)
-  net_income = models.DecimalField(blank=True, null=True, max_digits=10,  decimal_places=2, default=0.00)
-  transaction = models.DecimalField(blank=True, null=True, max_digits=10,  decimal_places=2, default=0.00)
-  comments = models.CharField(max_length=100, blank=False, default="leave message")
-
-  #functionality to sum  total amount on each fields 
-  @classmethod
-  def get_total_sums(cls, field_names):
-    total_sums = {}
-    for field_name in field_names:
-      total_sum = cls.objects.aggregate(**{f"{field_name}_sum": Sum(field_name)})[f"{field_name}_sum"]
-      total_sums[field_name] = total_sum or Decimal('0.00')
-    return total_sums
-
-  def save(self, *args, **kwargs):
-    if self.rental_rate_amount is not None:
-      if isinstance(self.rental_rate_amount, Decimal):
-        #calculate 10% of rental_rate_amount
-        self.management_fee_accruals = self.rental_rate_amount * Decimal('0.10')
-      else:
-        #handles the case where rental_rate is not a decimal eg converts to decimal
-        self.management_fee_accruals = Decimal(str(self.rental_rate_amount)) * Decimal('0.10')
+    id = models.BigAutoField(primary_key=True)
+    date_time = models.DateTimeField(default=timezone.now)
+    destination = models.CharField(max_length=100, blank=True, default="No destination")
+    rental_rate_amount = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=Decimal('0.00'))
+    car_expense = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=Decimal('0.00'))
+    expense_tag = models.CharField(max_length=100, blank=True)
+    management_fee_accruals = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=Decimal('0.00'))
+    driver_income = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=Decimal('0.00'))
+    net_income = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=Decimal('0.00'))
+    total_expenses = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=Decimal('0.00'))
+    number_of_rental_days = models.IntegerField(blank=False, default=1)
+    total_amount_due = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=Decimal('0.00'))
+    paid_amount = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=Decimal('0.00'))
+    balance_amount_due = models.DecimalField(blank=True, null=True, max_digits=10, decimal_places=2, default=Decimal('0.00'))
+    driver_salary = models.DecimalField(max_digits=10, decimal_places=2, default=Decimal('50000.00'))
+    comments = models.CharField(max_length=100, blank=True, default="leave message")
     
-    # to perform substraction operation from fields
-    if self.rental_rate_amount is not None and self.management_fee_accruals is not None and self.driver_income:
-      result = self.rental_rate_amount - self.management_fee_accruals - self.driver_income
-      self.net_income = Decimal(result)
-    
-    # calculation for transaction
-    if self.rental_rate_amount is not None and self.expenses is not None:
-      result = self.rental_rate_amount - self.expenses
-      self.transaction = Decimal(result)
-      
-      super(CarsType, self).save(*args, **kwargs)
+    # thoughts = models.CharField(max_length=100, blank=False, default="leave message")
 
-  # method calculates sum of rental rate for each month and percentage achieved
-  @classmethod
-  def monthly_goal_percentage(cls, year, month, goal=1000000):
-    total_rental_rate = cls.objects.filter(
-      date_time__year = year,
-      date_time__month = month
-    ).aggregate(total=Sum('rental_rate_amount'))['total'] or Decimal('0.00')
+    @classmethod
+    def get_total_sums(cls, field_names):
+        total_sums = {}
+        
+        total_amount_due = cls.objects.aggregate(total=Sum('rental_rate_amount'))['total'] or Decimal('0.00')
+        total_number_of_days = cls.objects.aggregate(total=Sum('number_of_rental_days'))['total'] or 0
+        
+        total_sums['total_amount_due'] = total_amount_due * total_number_of_days
+        total_sums['balance_amount_due'] = total_sums['total_amount_due'] - (cls.objects.aggregate(total=Sum('paid_amount'))['total'] or Decimal('0.00'))
+        
+        for field_name in field_names:
+            total_sum = cls.objects.aggregate(**{f"{field_name}_sum": Sum(field_name)})[f"{field_name}_sum"]
+            total_sums[field_name] = total_sum or Decimal('0.00')
+        return total_sums
 
-    percentage = (total_rental_rate / Decimal(goal)) * Decimal('100') if total_rental_rate > 0 else Decimal('0.00')
+    def save(self, *args, **kwargs):
+        self.car_expense = self.car_expense or Decimal('0.00')
+        self.rental_rate_amount = self.rental_rate_amount or Decimal('0.00')
 
-    return {
-      'total_rental_rate': total_rental_rate,
-      'percentage_of_goal': percentage
-    }
+        # Total amount due
+        self.total_amount_due = self.rental_rate_amount * self.number_of_rental_days
+
+        # Calculate management fee accruals
+        self.management_fee_accruals = self.total_amount_due * Decimal('0.10')
+
+        # Total expenses calculation
+        self.total_expenses = self.car_expense + self.management_fee_accruals + self.driver_income + self.driver_salary
+
+        # Balance amount due calculation
+        self.balance_amount_due = self.total_amount_due - (self.paid_amount or Decimal('0.00'))
+
+        super().save(*args, **kwargs)
+
+    def make_payments(self, payment_amount):
+        if self.balance_amount_due <= 0:
+            return "Payment has already been completed. No further payments can be made."
+        
+        # Ensure paid_amount is initialized
+        if self.paid_amount is None:
+            self.paid_amount = Decimal('0.00')
+
+        # Check if payment exceeds balance due
+        if payment_amount > self.balance_amount_due:
+            return "Payment exceeds the balance amount due. Please enter a valid amount."
+        
+        # Update payment amount
+        self.paid_amount += Decimal(payment_amount)
+
+        # Calculate balance again after payment
+        self.balance_amount_due = self.total_amount_due - self.paid_amount
+
+        if self.paid_amount >= self.total_amount_due:
+            self.balance_amount_due = Decimal('0.00')
+            self.save()
+            return "Payment has been completed!"
+        
+        self.save()
+        return f"Payment of {payment_amount} accepted. Amount due: {self.balance_amount_due}."
+
+    @classmethod
+    def monthly_goal_percentage(cls, year, month, goal=1000000):
+        rentals = cls.objects.filter(date_time__year=year, date_time__month=month)
+
+        total_amount_due = rentals.aggregate(total=Sum('rental_rate_amount'))['total'] or Decimal('0.00')
+        
+        car_expense = rentals.aggregate(total=Sum('car_expense'))['total'] or Decimal('0.00')
+        
+        driver_income = rentals.aggregate(total=Sum('driver_income'))['total'] or Decimal('0.00')
+
+        management_fee_accruals = total_amount_due * Decimal('0.10')
+        
+        total_expenses = driver_income + management_fee_accruals + car_expense
+        
+        net_income = total_amount_due - total_expenses
+        
+        percentage = (total_amount_due / Decimal(goal)) * Decimal('100') if total_amount_due > 0 else Decimal('0.00')
+
+        return {
+            'total_amount_due': total_amount_due,
+            'total_expenses': total_expenses,
+            'total_driver_income': driver_income,
+            'management_fee_accruals': management_fee_accruals,
+            'net_income': net_income,
+            'percentage_of_goal': percentage
+        }
+
+    class Meta:
+        abstract = True
+        verbose_name = "Cars Type"
+        verbose_name_plural = "Cars Types"
     
-  class Meta:
-    abstract = True
-    verbose_name = "Cars Type"
-    verbose_name_plural = "Cars Types"
-    
-  def __str__(self):
-    return f"{self.destination } - {self.date_time}"
-  
-# Inherit from CarsType and add history tracking
- 
+    def __str__(self):
+        return f"{self.destination} - {self.date_time}"
+
 class ElvisSection(CarsType):
-  
-  class Meta:
-    verbose_name = "Elvis Section"
-    verbose_name_plural = "Elvis Sections"
+    
+    class Meta:
+        verbose_name = "Elvis Section"
+        verbose_name_plural = "Elvis Sections"
+
 
 class LevinusSection(CarsType):
   
@@ -316,9 +364,9 @@ class EditHistory(models.Model):
     object_id = models.PositiveIntegerField()
     section = GenericForeignKey('content_type', 'object_id')
     
-    previous_data = models.JSONField()  # Store previous data as JSON
-    current_data = models.JSONField()   # Store current data as JSON
-    edited_at = models.DateTimeField(default=timezone.now)  # Timestamp of when edited
+    previous_data = models.JSONField()
+    current_data = models.JSONField() 
+    edited_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f"Edit history for {self.section} at {self.edited_at}"
@@ -327,7 +375,7 @@ class EditHistory(models.Model):
 @receiver(pre_save, sender=LevinusSection)
 @receiver(pre_save, sender=SergeSection)
 def track_history(sender, instance, **kwargs):
-    if instance.pk:  # Check if it's an update (not a new instance)
+    if instance.pk:
         previous_instance = sender.objects.get(pk=instance.pk)
         
         # Create an EditHistory record
@@ -337,7 +385,7 @@ def track_history(sender, instance, **kwargs):
             previous_data=json.dumps({
                 'destination': previous_instance.destination,
                 'rental_rate_amount': previous_instance.rental_rate_amount,
-                'expenses': previous_instance.expenses,
+                'car_expenses': previous_instance.car_expenses,
                 'expense_tag': previous_instance.expense_tag,
                 'management_fee_accruals': previous_instance.management_fee_accruals,
                 'driver_income': previous_instance.driver_income,
@@ -345,11 +393,17 @@ def track_history(sender, instance, **kwargs):
                 'transaction': previous_instance.transaction,
                 'comments': previous_instance.comments,
                 'date_time': previous_instance.date_time,
+
+                'number_of_rental_days': previous_instance.number_of_rental_days,
+                'total_amount_due': previous_instance.total_amount_due,
+                'paid_amount': previous_instance.paid_amount,
+                'balance_amount_due':previous_instance.balance_amount_due,
+
             }, cls=DjangoJSONEncoder),
             current_data=json.dumps({
                 'destination': instance.destination,
                 'rental_rate_amount': instance.rental_rate_amount,
-                'expenses': instance.expenses,
+                'car_expenses': instance.car_expenses,
                 'expense_tag': instance.expense_tag,
                 'management_fee_accruals': instance.management_fee_accruals,
                 'driver_income': instance.driver_income,
@@ -357,6 +411,12 @@ def track_history(sender, instance, **kwargs):
                 'transaction': instance.transaction,
                 'comments': instance.comments,
                 'date_time': instance.date_time,
+
+                'number_of_rental_days': instance.number_of_rental_days,
+                'total_amount_due': instance.total_amount_due,
+                'paid_amount': instance.paid_amount,
+                'balance_amount_due':instance.balance_amount_due,
+
             }, cls=DjangoJSONEncoder),
         )
 

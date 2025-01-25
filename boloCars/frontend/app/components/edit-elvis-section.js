@@ -2,36 +2,33 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
+import '../styles/prado1.css';
 
 const EditElvisSection = () => {
     const router = useRouter();
-    const { id } = useParams(); // Get the ID from the URL
+    const { id } = useParams();
     const [formData, setFormData] = useState({
         destination: '',
         rental_rate_amount: '',
-        expenses: '',
-        expense_tag: '',
+        number_of_rental_days: '1',
+        paid_amount: '',
         driver_income: '',
-        comments: '',
     });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
+    const [totalAmountDue, setTotalAmountDue] = useState(0);
+    const [balanceAmount, setBalanceAmount] = useState(0);
 
     // Fetch current data when component mounts
     useEffect(() => {
         if (id) {
             const fetchData = async () => {
                 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-                console.log('Fetching data from:', `${apiUrl}/api/elvisupdate/${id}/`);
-
                 try {
-                    const response = await fetch(`${apiUrl}/api/elvisupdate/${id}/`);
-                    
+                    const response = await fetch(`${apiUrl}core/api/elvisupdate/${id}/`);
                     if (!response.ok) {
-                        console.error('Response status:', response.status);
                         throw new Error('Failed to fetch data');
                     }
-                    
                     const data = await response.json();
                     setFormData(data);
                 } catch (error) {
@@ -41,6 +38,17 @@ const EditElvisSection = () => {
             fetchData();
         }
     }, [id]);
+
+    // Calculate total and balance amounts
+    useEffect(() => {
+        const rentalRate = parseFloat(formData.rental_rate_amount || '0');
+        const rentalDays = parseInt(formData.number_of_rental_days || '1');
+        const paidAmount = parseFloat(formData.paid_amount || '0');
+
+        const totalDue = rentalRate * rentalDays;
+        setTotalAmountDue(totalDue);
+        setBalanceAmount(totalDue - paidAmount);
+    }, [formData.rental_rate_amount, formData.number_of_rental_days, formData.paid_amount]);
 
     // Handle input changes
     const handleChange = (e) => {
@@ -54,13 +62,15 @@ const EditElvisSection = () => {
         const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
         try {
-            const response = await fetch(`${apiUrl}/api/elvisupdate/${id}/`, {
+            const response = await fetch(`${apiUrl}core/api/elvisupdate/${id}/`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(formData),
             });
+
+            console.log('Response:', response); // Log response for debugging
 
             if (!response.ok) {
                 throw new Error('Failed to update data');
@@ -78,9 +88,8 @@ const EditElvisSection = () => {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div>
+        <div className="prado1-box">
             <form onSubmit={handleSubmit}>
-                {/* Form fields for editing go here */}
                 <label>
                     Destination:
                     <input type="text" name="destination" value={formData.destination} onChange={handleChange} required />
@@ -90,25 +99,26 @@ const EditElvisSection = () => {
                     <input type="number" name="rental_rate_amount" value={formData.rental_rate_amount} onChange={handleChange} required />
                 </label>
                 <label>
-                    Expenses:
-                    <input type="number" name="expenses" value={formData.expenses} onChange={handleChange} required />
+                    Number Of Rental Days:
+                    <input type="number" name="number_of_rental_days" value={formData.number_of_rental_days} onChange={handleChange} required />
                 </label>
                 <label>
-                    Expense Tag:
-                    <input type="text" name="expense_tag" value={formData.expense_tag} onChange={handleChange} required />
+                    Paid Amount:
+                    <input type="number" name="paid_amount" value={formData.paid_amount} onChange={handleChange} required />
                 </label>
                 <label>
                     Driver Income:
                     <input type="number" name="driver_income" value={formData.driver_income} onChange={handleChange} required />
                 </label>
-                <label>
-                    Comments:
-                    <textarea name="comments" value={formData.comments} onChange={handleChange}></textarea>
-                </label>
+                <div>
+                    <h3>Total Amount Due: {totalAmountDue.toFixed(2)}</h3>
+                    <h3>Balance Amount Due: {balanceAmount.toFixed(2)}</h3>
+                </div>
 
                 <button type="submit">Update</button>
 
                 {success && <p style={{ color: 'green' }}>{success}</p>}
+                {error && <p style={{ color: 'red' }}>{error}</p>}
             </form>
         </div>
     );
