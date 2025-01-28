@@ -282,9 +282,7 @@ class MonthlyGoalView(APIView):
                     'month_name': month_names[month - 1],
                     'total_amount_due': result['total_amount_due'],
                     'percentage_of_goal': result['percentage_of_goal'],
-                    'net_income': result['net_income'],
-                    'total_amount_due': result['total_amount_due'],
-                    
+                    'net_income': result['net_income'],                    
                     'total_expenses': result['total_expenses'],
                     'management_fee_accruals': result['management_fee_accruals'],
                 }

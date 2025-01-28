@@ -66,11 +66,12 @@ const Prado1 = () => {
                         <th>Date</th>
                         <th>Destination</th>
                         <th>Rental Rate Amount</th>
-                        <th>Rental Days</th>
+                        <th>Num of Rental Days</th>
+                        <th>Total Amount Due</th>
                         <th>Car Expense</th>
                         <th>Expense Tag</th>
                         <th>Driver's Income</th>
-                        <th>Total Amount Due</th>
+                      
                         <th>Paid Amounts </th>
                         <th>Balance Amount Due</th>
                         
@@ -85,10 +86,12 @@ const Prado1 = () => {
                             <td>{section.destination}</td>
                             <td>{section.rental_rate_amount}</td>
                             <td>{section.number_of_rental_days}</td>
+                            <td>{section.total_amount_due}</td>
+                            
                             <td>{section.car_expense}</td>
                             <td>{section.expense_tag}</td>
                             <td>{section.driver_income}</td>
-                            <td>{section.total_amount_due}</td>
+                          
                             <td>{section.paid_amount}</td>
                             <td>{section.balance_amount_due}</td>
 
