@@ -96,6 +96,8 @@ const EditElvisSection = () => {
     <div className="row justify-content-center">
         <div className="col-md-6">
             <form onSubmit={handleSubmit} className="needs-validation" noValidate>
+            <br />
+            <br />
                 <div className="mb-3">
                     <label htmlFor="destination" className="form-label">Destination</label>
                     <input 
@@ -108,7 +110,9 @@ const EditElvisSection = () => {
                         required 
                     />
                 </div>
+              
                 <div className="mb-3">
+             
                     <label htmlFor="rental_rate_amount" className="form-label">Rental Rate Amount</label>
                     <input 
                         type="number" 
@@ -167,7 +171,8 @@ const EditElvisSection = () => {
             </form>
         </div>
     </div>
-</div>
+    <br />
+ </div>
 
     );
 };

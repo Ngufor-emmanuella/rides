@@ -72,6 +72,9 @@ const MonthlyGoalTable = () => {
             <br />
             <h5>Total Yearly Rental: {totalYearlyRental}</h5>
             <h5>Yearly Percentage: {yearlyPercentage}%</h5>
+            <br />
+           
+
         </div>
     );
 };
