@@ -125,7 +125,7 @@ class LevinusSectionSerializer(serializers.ModelSerializer):
     management_fee_accruals = serializers.DecimalField(required=False, max_digits=10, decimal_places=2) 
     driver_income = serializers.DecimalField(required=False, max_digits=10, decimal_places=2) 
     net_income = serializers.DecimalField(required=False, max_digits=10, decimal_places=2) 
-    transaction = serializers.CharField(required=False, allow_blank=True) 
+    total_expenses = serializers.CharField(required=False, allow_blank=True) 
     comments = serializers.CharField(required=False, allow_blank=True)
 
     number_of_rental_days = serializers.IntegerField(required=False,  default=1)
@@ -138,7 +138,7 @@ class LevinusSectionSerializer(serializers.ModelSerializer):
         model = LevinusSection
         fields = ['id', 'date_time', 'destination', 'rental_rate_amount', 
                   'car_expense', 'expense_tag', 'management_fee_accruals', 
-                  'driver_income', 'net_income', 'transaction', 'comments'
+                  'driver_income', 'net_income', 'total_expenses', 'comments'
                   'number_of_rental_days', 'total_amount_due',
                   'paid_amount', 'balance_amount_due']
 
@@ -150,7 +150,7 @@ class SergeSectionSerializer(serializers.ModelSerializer):
     management_fee_accruals = serializers.DecimalField(required=False, max_digits=10, decimal_places=2) 
     driver_income = serializers.DecimalField(required=False, max_digits=10, decimal_places=2) 
     net_income = serializers.DecimalField(required=False, max_digits=10, decimal_places=2) 
-    transaction = serializers.CharField(required=False, allow_blank=True) 
+    total_expenses = serializers.CharField(required=False, allow_blank=True) 
     comments = serializers.CharField(required=False, allow_blank=True)
 
     number_of_rental_days = serializers.IntegerField(required=False,  default=1)
@@ -163,7 +163,7 @@ class SergeSectionSerializer(serializers.ModelSerializer):
         model = SergeSection
         fields = ['id', 'date_time', 'destination', 'rental_rate_amount', 
                   'car_expense', 'expense_tag', 'management_fee_accruals', 
-                  'driver_income', 'net_income', 'transaction', 'comments'
+                  'driver_income', 'net_income', 'total_expenses', 'comments'
                   'number_of_rental_days', 'total_amount_due',
                   'paid_amount', 'balance_amount_due']
 
@@ -193,7 +193,7 @@ class EditHistorySerializer(serializers.ModelSerializer):
             'management_fee_accruals': 'management_fee_accruals',
             'driver_income': 'driver_income',
             'net_income': 'net_income',
-            'transaction': 'transaction',
+            'total_expenses': 'total_expenses',
             'comments': 'comments',
             'number_of_rental_days': 'number_of_rental_days',
             'total_amount_due': 'total_amount_due',

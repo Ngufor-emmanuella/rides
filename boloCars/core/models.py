@@ -385,12 +385,12 @@ def track_history(sender, instance, **kwargs):
             previous_data=json.dumps({
                 'destination': previous_instance.destination,
                 'rental_rate_amount': previous_instance.rental_rate_amount,
-                'car_expenses': previous_instance.car_expenses,
+                'car_expense': previous_instance.car_expense,
                 'expense_tag': previous_instance.expense_tag,
                 'management_fee_accruals': previous_instance.management_fee_accruals,
                 'driver_income': previous_instance.driver_income,
                 'net_income': previous_instance.net_income,
-                'transaction': previous_instance.transaction,
+                'total_expenses': previous_instance.total_expenses,
                 'comments': previous_instance.comments,
                 'date_time': previous_instance.date_time,
 
@@ -403,12 +403,12 @@ def track_history(sender, instance, **kwargs):
             current_data=json.dumps({
                 'destination': instance.destination,
                 'rental_rate_amount': instance.rental_rate_amount,
-                'car_expenses': instance.car_expenses,
+                'car_expense': instance.car_expense,
                 'expense_tag': instance.expense_tag,
                 'management_fee_accruals': instance.management_fee_accruals,
                 'driver_income': instance.driver_income,
                 'net_income': instance.net_income,
-                'transaction': instance.transaction,
+                'total_expenses': instance.total_expenses,
                 'comments': instance.comments,
                 'date_time': instance.date_time,
 

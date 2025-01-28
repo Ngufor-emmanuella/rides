@@ -70,7 +70,7 @@ const EditElvisSection = () => {
                 body: JSON.stringify(formData),
             });
 
-            console.log('Response:', response); // Log response for debugging
+            console.log('Response:', response); 
 
             if (!response.ok) {
                 throw new Error('Failed to update data');
@@ -78,7 +78,11 @@ const EditElvisSection = () => {
 
             setSuccess('Data updated successfully!');
             setError('');
-            router.push('/prado1-elvis'); // Redirect to the list page after update
+
+            setTimeout(() => {
+                router.push('/prado1-elvis');
+            }, 1000);
+
         } catch (error) {
             setError(error.message);
             setSuccess('');
@@ -88,39 +92,83 @@ const EditElvisSection = () => {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div className="prado1-box">
-            <form onSubmit={handleSubmit}>
-                <label>
-                    Destination:
-                    <input type="text" name="destination" value={formData.destination} onChange={handleChange} required />
-                </label>
-                <label>
-                    Rental Rate Amount:
-                    <input type="number" name="rental_rate_amount" value={formData.rental_rate_amount} onChange={handleChange} required />
-                </label>
-                <label>
-                    Number Of Rental Days:
-                    <input type="number" name="number_of_rental_days" value={formData.number_of_rental_days} onChange={handleChange} required />
-                </label>
-                <label>
-                    Paid Amount:
-                    <input type="number" name="paid_amount" value={formData.paid_amount} onChange={handleChange} required />
-                </label>
-                <label>
-                    Driver Income:
-                    <input type="number" name="driver_income" value={formData.driver_income} onChange={handleChange} required />
-                </label>
-                <div>
-                    <h3>Total Amount Due: {totalAmountDue.toFixed(2)}</h3>
-                    <h3>Balance Amount Due: {balanceAmount.toFixed(2)}</h3>
+     <div className="container">
+    <div className="row justify-content-center">
+        <div className="col-md-6">
+            <form onSubmit={handleSubmit} className="needs-validation" noValidate>
+                <div className="mb-3">
+                    <label htmlFor="destination" className="form-label">Destination</label>
+                    <input 
+                        type="text" 
+                        className="form-control" 
+                        id="destination" 
+                        name="destination" 
+                        value={formData.destination} 
+                        onChange={handleChange} 
+                        required 
+                    />
                 </div>
-
-                <button type="submit">Update</button>
-
-                {success && <p style={{ color: 'green' }}>{success}</p>}
-                {error && <p style={{ color: 'red' }}>{error}</p>}
+                <div className="mb-3">
+                    <label htmlFor="rental_rate_amount" className="form-label">Rental Rate Amount</label>
+                    <input 
+                        type="number" 
+                        className="form-control" 
+                        id="rental_rate_amount" 
+                        name="rental_rate_amount" 
+                        value={formData.rental_rate_amount} 
+                        onChange={handleChange} 
+                        required 
+                    />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="number_of_rental_days" className="form-label">Number Of Rental Days</label>
+                    <input 
+                        type="number" 
+                        className="form-control" 
+                        id="number_of_rental_days" 
+                        name="number_of_rental_days" 
+                        value={formData.number_of_rental_days} 
+                        onChange={handleChange} 
+                        required 
+                    />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="paid_amount" className="form-label">Paid Amount</label>
+                    <input 
+                        type="number" 
+                        className="form-control" 
+                        id="paid_amount" 
+                        name="paid_amount" 
+                        value={formData.paid_amount} 
+                        onChange={handleChange} 
+                        required 
+                    />
+                </div>
+                <div className="mb-3">
+                    <label htmlFor="driver_income" className="form-label">Driver Income</label>
+                    <input 
+                        type="number" 
+                        className="form-control" 
+                        id="driver_income" 
+                        name="driver_income" 
+                        value={formData.driver_income} 
+                        onChange={handleChange} 
+                        required 
+                    />
+                </div>
+                <div className="mb-3">
+                    <h4>Total Amount Due: {totalAmountDue.toFixed(2)}</h4>
+                    <h4>Balance Amount Due: {balanceAmount.toFixed(2)}</h4>
+                </div>
+                <button type="submit" className="btn btn-primary">Update</button>
+                
+                {success && <div className="alert alert-success mt-3">{success}</div>}
+                {error && <div className="alert alert-danger mt-3">{error}</div>}
             </form>
         </div>
+    </div>
+</div>
+
     );
 };
 

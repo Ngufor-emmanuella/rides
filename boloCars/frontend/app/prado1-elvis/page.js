@@ -34,58 +34,84 @@ const Prado1 = () => {
     // Function to handle form submission
     const handleFormSubmit = (newEntry) => {
         console.log('New entry submitted:', newEntry);
-        fetchElvisSections(); // Refresh the sections after a successful submission
+        fetchElvisSections();
     };
 
     if (loading) return <div>Loading... Hold on please</div>;
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div className="container mt-5 prado1-box">
-            <h1 className="text-center">Prado 1 Elvis Sections</h1>
-            <br />
-
-            {/* Pass the handleFormSubmit function to ElvisForm */}
-            <ElvisForm onFormSubmit={handleFormSubmit} />
+        <div className="container-fluid mt-5 prado1-box">
+        <h1 className="text-center">Prado 1 Elvis Sections</h1>
+        <br />
+    
+        <ElvisForm onFormSubmit={handleFormSubmit} />
+        <div className="d-flex justify-content-between mb-3">
             <Link href="/elvis-history">
                 <button className="btn btn-success btn-sm">Car History</button>
             </Link>
-            <br />
-            <br />
             <Link href="/elvis-monthly-goals">
                 <button className="btn btn-success btn-sm">Car Monthly Details</button>
             </Link>
+        </div>
+    
+        <div className="table-container">
+            <table className="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Num</th>
+                        <th>Date</th>
+                        <th>Destination</th>
+                        <th>Rental Rate</th>
+                        <th>Rental Days</th>
+                        <th>Car Expense</th>
+                        <th>Expense Tag</th>
+                        <th>Driver's Income</th>
+                        {/* <th>Management Fee</th> */}
+                        {/* <th>Net Income</th> */}
+                        {/* <th>Total Expenses</th> */}
+                     
+                        {/* <th>Driver's Salary</th> */}
+                        <th>Total Due</th>
+                        <th>Paid Amount</th>
+                        <th>Balance Due</th>
+                        
+                        <th>Comments</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {elvisSections.map((section) => (
+                        <tr key={section.id}>
+                            <td>{section.id}</td>
+                            <td>{new Date(section.date_time).toLocaleDateString()}</td>
+                            <td>{section.destination}</td>
+                            <td>{section.rental_rate_amount}</td>
+                            <td>{section.number_of_rental_days}</td>
+                            <td>{section.car_expense}</td>
+                            <td>{section.expense_tag}</td>
+                            <td>{section.driver_income}</td>
+                            {/* <td>{section.management_fee_accruals}</td> */}
+                            {/* <td>{section.net_income}</td> */}
+                            {/* <td>{section.total_expenses}</td> */}
+                           
+                            {/* <td>{section.driver_salary}</td> */}
+                            <td>{section.total_amount_due}</td>
+                            <td>{section.paid_amount}</td>
+                            <td>{section.balance_amount_due}</td>
 
-            <div className="row">
-                {elvisSections.map((section) => (
-                    <div key={section.id} className="col-md-4 mb-4">
-                        <div className="card">
-                            <div className="card-body">
-                                <h5 className="card-title" style={{ display: 'none' }}>Day: {section.id}</h5>
-                                <p className="card-text">Date: {new Date(section.date_time).toLocaleDateString()}</p>
-                                <p className="card-text">Destination: {section.destination}</p>
-                                <p className="card-text"><strong>Rental Rate Amount: {section.rental_rate_amount}</strong></p>
-                                <p className="card-text">Number Of Rental Days: {section.number_of_rental_days}</p>
-                                <p className="card-text"><strong>Car Expense: {section.car_expense}</strong></p>
-                                <p className="card-text">Expense Tag: {section.expense_tag}</p>
-                                <p className="card-text">Driver's Income: {section.driver_income}</p>
-                                <p className="card-text">Management Fee Accruals: {section.management_fee_accruals}</p>
-                                <p className="card-text">Net Income: {section.net_income}</p>
-                                <p className="card-text">Total Expenses: {section.total_expenses}</p>
-                                <p className="card-text">Comments: {section.comments}</p>
-                                <p className="card-text">Driver's salary: {section.driver_salary}</p>
-                                <p className="card-text"><strong>Total Amount Due: {section.total_amount_due}</strong></p>
-                                <p className="card-text"><strong>Paid Amounts: {section.paid_amount}</strong></p>
-                                <p className="card-text"><strong>Balance Amount Due: {section.balance_amount_due}</strong></p>
+                            <td>{section.comments}</td>
+                            <td>
                                 <Link href={`/prado1-elvis/${section.id}`}>
                                     <button className="btn btn-success btn-sm">Edit</button>
                                 </Link>
-                            </div>
-                        </div>
-                    </div>
-                ))}
-            </div>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
+    </div>
+    
     );
 };
 
