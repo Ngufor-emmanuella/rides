@@ -281,12 +281,16 @@ class MonthlyGoalView(APIView):
                     'month_number': month,
                     'month_name': month_names[month - 1],
                     'total_amount_due': result['total_amount_due'],
-                    'percentage_of_goal': result['percentage_of_goal'],
-                    'net_income': result['net_income'],                    
-                    'total_expenses': result['total_expenses'],
                     'management_fee_accruals': result['management_fee_accruals'],
+                    'net_income': result['net_income'],
+                    'total_expenses': result['total_expenses'],
+                    'balance_amount_due': result['balance_amount_due'],
+                    'total_driver_income': result['total_driver_income'],
+                    'total_paid_amount': result['total_paid_amount'],
+
+                    'percentage_of_goal': result['percentage_of_goal'],
                 }
-                
+             
                 elvis_yearly_goal.append(monthly_goal_data)
 
                 total_yearly_rental += result['total_amount_due']

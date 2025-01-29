@@ -214,9 +214,10 @@ class MonthlyGoalSerializer(serializers.Serializer):
     total_amount_due = serializers.DecimalField(max_digits=10, decimal_places=2)
     management_fee_accruals = serializers.DecimalField(max_digits=10, decimal_places=2)
     net_income = serializers.DecimalField(max_digits=10, decimal_places=2)
-    percentage_of_goal = serializers.DecimalField(max_digits=5, decimal_places=2)
-    total_amount_due = serializers.DecimalField(max_digits=10, decimal_places=2)
     total_expenses = serializers.DecimalField(max_digits=10, decimal_places=2)
+    balance_amount_due = serializers.DecimalField(max_digits=10, decimal_places=2)
+    percentage_of_goal = serializers.DecimalField(max_digits=5, decimal_places=2)
 
-
+    total_driver_income = serializers.DecimalField(max_digits=10, decimal_places=2)
+    total_paid_amount = serializers.DecimalField(max_digits=10, decimal_places=2)
 

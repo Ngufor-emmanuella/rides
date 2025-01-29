@@ -47,13 +47,17 @@ const MonthlyGoalTable = () => {
                     <tr>
                         <th>Month Num</th>
                         <th>Month Name</th>
-                        <th>Total Management Fee</th>
                         <th>Total Amount Due</th>
+                        <th>Total Management Fee</th>
+                        <th>Total Driver Income</th>
+                        <th>Total Paid Amount</th>
+                        
                         <th>Total Expenses</th>
                         <th>Net Income</th>
+                      
                         <th>Balance Amount Due</th>
                         <th>Percentage of Goal</th>
-                       
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -61,13 +65,18 @@ const MonthlyGoalTable = () => {
                         <tr key={goal.month_number} style={{ border: '1px solid black' }}>
                             <td>{goal.month_number}</td>
                             <td>{goal.month_name}</td>
-                            <td>{goal.management_fee_accruals}</td>
-                            <td>{goal.total_amount_due}</td>
-                            <td>{goal.total_expenses}</td>
-                            <td>{goal.net_income}</td>
-                            <td>{goal.balance_amount_due}</td>
+                            <td>{goal.total_amount_due} </td>
+                            <td>{goal.management_fee_accruals} </td>
+                            <td>{goal.total_driver_income} </td>
+                            <td>{goal.total_paid_amount} </td>
+                            
+                            <td>{goal.total_expenses} </td>
+                            <td>{goal.net_income} </td>
+                           
+                            <td>{goal.balance_amount_due} </td>
                             <td>{goal.percentage_of_goal}%</td>
                         </tr>
+                
                     ))}
                 </tbody>
             </table>
