@@ -1,17 +1,31 @@
+'use client';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from './components/header';
 import Footer from './components/footer';
 import { AuthProvider } from './authContext';
+import { usePathname } from 'next/navigation';
+
 
 // import { Inter } from 'next/font/google'; 
 // const inter = Inter({ subsets: ['latin'] });
 
-export const metadata = {
-  title: 'BOLO RIDES App', 
-  description: 'This is an application that offers car rental services, and allows drivers to input their daily transaction of car rentals, which is calculated and stored in the database',
-};
-
 export default function RootLayout({ children }) {
+  const pathname = usePathname();
+
+  const hideFooterPaths = [
+    '/prado1-elvis',
+    '/prado2-levinus', 
+    '/rav4-serge', 
+    '/signup', 
+    '/login', 
+    '/addform',
+    '/elvis-history',
+    '/elvis-monthly-goals',
+    
+  ];
+
+  const shouldHideFooter = hideFooterPaths.some(path => pathname.startsWith(path));
+
   return (
     <html lang='en'>
       <head>
@@ -23,10 +37,7 @@ export default function RootLayout({ children }) {
         src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-..." crossOrigin="anonymous" defer >
         </script>
         
-        <title>{metadata.title}</title>
         
-        <meta name="description" content={metadata.description} />
-      
       </head>
       <body className="body">
         <AuthProvider>
@@ -34,7 +45,8 @@ export default function RootLayout({ children }) {
           <div className="container">
             {children}
           </div>
-          <Footer />
+
+          {!shouldHideFooter && <Footer />}
           </AuthProvider>
       </body>
     </html>

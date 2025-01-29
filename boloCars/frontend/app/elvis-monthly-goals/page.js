@@ -45,26 +45,38 @@ const MonthlyGoalTable = () => {
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
                 <thead>
                     <tr>
-                        <th>Month</th>
-                        <th>Total Rental Rate</th>
-                        <th>Management Fee</th>
+                        <th>Month Num</th>
+                        <th>Month Name</th>
+                        <th>Total Amount Due</th>
+                        <th>Total Management Fee</th>
+                        <th>Total Driver Income</th>
+                        <th>Total Paid Amount</th>
+                        
                         <th>Total Expenses</th>
                         <th>Net Income</th>
-                        <th>Total Amount Due</th>
+                      
+                        <th>Balance Amount Due</th>
                         <th>Percentage of Goal</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
                     {monthlyGoals.map((goal) => (
                         <tr key={goal.month_number} style={{ border: '1px solid black' }}>
+                            <td>{goal.month_number}</td>
                             <td>{goal.month_name}</td>
-                            <td>{goal.total_amount_due}</td>
-                            <td>{goal.management_fee_accruals}</td>
-                            <td>{goal.total_expenses}</td>
-                            <td>{goal.net_income}</td>
-                            <td>{goal.total_amount_due}</td>
+                            <td>{goal.total_amount_due} </td>
+                            <td>{goal.management_fee_accruals} </td>
+                            <td>{goal.total_driver_income} </td>
+                            <td>{goal.total_paid_amount} </td>
+                            
+                            <td>{goal.total_expenses} </td>
+                            <td>{goal.net_income} </td>
+                           
+                            <td>{goal.balance_amount_due} </td>
                             <td>{goal.percentage_of_goal}%</td>
                         </tr>
+                
                     ))}
                 </tbody>
             </table>
@@ -72,6 +84,9 @@ const MonthlyGoalTable = () => {
             <br />
             <h5>Total Yearly Rental: {totalYearlyRental}</h5>
             <h5>Yearly Percentage: {yearlyPercentage}%</h5>
+            <br />
+           
+
         </div>
     );
 };

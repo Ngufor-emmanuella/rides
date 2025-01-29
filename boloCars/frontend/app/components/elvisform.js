@@ -111,92 +111,112 @@ const ElvisForm = ({ onFormSubmit }) => {
   };
 
   return (
-    <div className="prado1-box">
-      <h2>Select Form Type</h2>
-      <br />
-      {/* Radio buttons for selecting form type */}
-      <div style={{ marginBottom: '15px' }}>
-        <label style={{ paddingRight: '10px' }}>
-          <input
-            type="radio"
-            value="revenue"
-            checked={formType === 'revenue'}
-            onChange={() => setFormType('revenue')}
-          />
-          Revenue
-        </label>
-        <label>
-          <input
-            type="radio"
-            value="car_expense"
-            checked={formType === 'car_expense'}
-            onChange={() => setFormType('car_expense')}
-          />
-          Car Expense
-        </label>
-      </div>
-
-      <form onSubmit={handleSubmit}>
-        {formDataList.map((formData, index) => (
-          <div key={index} style={{ marginBottom: '20px' }}>
-            {formType === 'revenue' && (
-              <>
-                <label>Destination:
-                  <input type="text" name="destination" value={formData.destination} onChange={(e) => handleChange(index, e)} />
-                </label>
-
-                <label>Rental Rate Amount:
-                  <input type="number" name="rental_rate_amount" value={formData.rental_rate_amount} onChange={(e) => handleChange(index, e)} />
-                </label>
-
-                <label>Number Of Rental Days:
-                  <input type="number" name="number_of_rental_days" value={formData.number_of_rental_days} onChange={(e) => handleChange(index, e)} />
-                </label>
-
-                <label>Paid Amount:
-                  <input type="number" name="paid_amount" value={formData.paid_amount} onChange={(e) => handleChange(index, e)} />
-                </label>
-
-                <label>Driver Income:
-                  <input type="number" name="driver_income" value={formData.driver_income} onChange={(e) => handleChange(index, e)} />
-                </label>
-
-                <div>
-                  <h3>Total Amount Due: {(formData.rental_rate_amount * formData.number_of_rental_days).toFixed(2)}</h3>
-                  <h3>Balance Amount Due: {(formData.rental_rate_amount * formData.number_of_rental_days - formData.paid_amount).toFixed(2)}</h3>
+    <div className="container-fluid vh-100">
+    <div className="row h-100 justify-content-center align-items-center">
+      <div className="col-12 col-md-8 col-lg-6">
+        <div className="card">
+          <div className="card-body">
+            <h2 className="text-center mb-4">Select Form Type</h2>
+            
+            <div className="mb-3">
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  id="revenueRadio"
+                  value="revenue"
+                  checked={formType === 'revenue'}
+                  onChange={() => setFormType('revenue')}
+                />
+                <label className="form-check-label" htmlFor="revenueRadio">Revenue</label>
+              </div>
+              <div className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="radio"
+                  id="carExpenseRadio"
+                  value="car_expense"
+                  checked={formType === 'car_expense'}
+                  onChange={() => setFormType('car_expense')}
+                />
+                <label className="form-check-label" htmlFor="carExpenseRadio">Car Expense</label>
+              </div>
+            </div>
+  
+            <form onSubmit={handleSubmit}>
+              {formDataList.map((formData, index) => (
+                <div key={index} className="mb-4">
+                  {formType === 'revenue' && (
+                    <>
+                      <div className="mb-3">
+                        <label className="form-label">Destination:</label>
+                        <input type="text" className="form-control" name="destination" value={formData.destination} onChange={(e) => handleChange(index, e)} />
+                      </div>
+  
+                      <div className="mb-3">
+                        <label className="form-label">Rental Rate Amount:</label>
+                        <input type="number" className="form-control" name="rental_rate_amount" value={formData.rental_rate_amount} onChange={(e) => handleChange(index, e)} />
+                      </div>
+  
+                      <div className="mb-3">
+                        <label className="form-label">Number Of Rental Days:</label>
+                        <input type="number" className="form-control" name="number_of_rental_days" value={formData.number_of_rental_days} onChange={(e) => handleChange(index, e)} />
+                      </div>
+  
+                      <div className="mb-3">
+                        <label className="form-label">Paid Amount:</label>
+                        <input type="number" className="form-control" name="paid_amount" value={formData.paid_amount} onChange={(e) => handleChange(index, e)} />
+                      </div>
+  
+                      <div className="mb-3">
+                        <label className="form-label">Driver Income:</label>
+                        <input type="number" className="form-control" name="driver_income" value={formData.driver_income} onChange={(e) => handleChange(index, e)} />
+                      </div>
+  
+                      <div className="mb-3">
+                        <h5>Total Amount Due: {(formData.rental_rate_amount * formData.number_of_rental_days).toFixed(2)}</h5>
+                        <h5>Balance Amount Due: {(formData.rental_rate_amount * formData.number_of_rental_days - formData.paid_amount).toFixed(2)}</h5>
+                      </div>
+                    </>
+                  )}
+  
+                  {formType === 'car_expense' && (
+                    <>
+                      <div className="mb-3">
+                        <label className="form-label">Expenses:</label>
+                        <input type="number" className="form-control" name="car_expense" value={formData.car_expense} onChange={(e) => handleChange(index, e)} step="0.01" />
+                      </div>
+  
+                      <div className="mb-3">
+                        <label className="form-label">Expense Tag:</label>
+                        <input type="text" className="form-control" name="expense_tag" value={formData.expense_tag} onChange={(e) => handleChange(index, e)} />
+                      </div>
+  
+                      <div className="mb-3">
+                        <label className="form-label">Comments:</label>
+                        <textarea className="form-control" name="comments" value={formData.comments} onChange={(e) => handleChange(index, e)}></textarea>
+                      </div>
+                    </>
+                  )}
+  
+                  <button type="button" className="btn btn-danger" onClick={() => handleRemoveField(index)}>Remove</button>
                 </div>
-
-                <button type="button" onClick={() => handleRemoveField(index)}>Remove</button>
-              </>
-            )}
-
-            {formType === 'car_expense' && (
-              <>
-                <label>Expenses:
-                  <input type="number" name="car_expense" value={formData.car_expense} onChange={(e) => handleChange(index, e)} step="0.01" />
-                </label>
-
-                <label>Expense Tag:
-                  <input type="text" name="expense_tag" value={formData.expense_tag} onChange={(e) => handleChange(index, e)} />
-                </label>
-
-                <label>Comments:
-                  <textarea name="comments" value={formData.comments} onChange={(e) => handleChange(index, e)}></textarea>
-                </label>
-
-                <button type="button" onClick={() => handleRemoveField(index)}>Remove</button>
-              </>
-            )}
+              ))}
+  
+              <div className="mb-3">
+                <button type="button" className="btn btn-secondary me-2" onClick={handleAddField}>Add Another Entry</button>
+                <button type="submit" className="btn btn-primary">Submit</button>
+              </div>
+            </form>
+  
+            {successMessage && <p className="text-success">{successMessage}</p>}
+            {errorMessage && <p className="text-danger">{errorMessage}</p>}
           </div>
-        ))}
-
-        <button type="button" onClick={handleAddField}>Add Another Entry</button>
-        <button type="submit">Submit</button>
-      </form>
-
-      {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
-      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+        </div>
+      </div>
     </div>
+  </div>
+  
   );
 };
 

@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../styles/prado1.css';
-import ElvisForm from '../components/elvisform';
 
 const Prado1 = () => {
     const [elvisSections, setElvisSections] = useState([]);
@@ -44,12 +43,16 @@ const Prado1 = () => {
         <div className="container-fluid mt-5 prado1-box">
         <h1 className="text-center">Prado 1 Elvis Sections</h1>
         <br />
-    
-        <ElvisForm onFormSubmit={handleFormSubmit} />
-        <div className="d-flex justify-content-between mb-3">
+            <div className="d-flex justify-content-between mb-3">
+            
+            <Link href="/addform">
+                <button className="btn btn-success btn-sm"> Add Rental Details</button>
+            </Link>
+
             <Link href="/elvis-history">
                 <button className="btn btn-success btn-sm">Car History</button>
             </Link>
+
             <Link href="/elvis-monthly-goals">
                 <button className="btn btn-success btn-sm">Car Monthly Details</button>
             </Link>
@@ -62,19 +65,15 @@ const Prado1 = () => {
                         <th>Num</th>
                         <th>Date</th>
                         <th>Destination</th>
-                        <th>Rental Rate</th>
-                        <th>Rental Days</th>
+                        <th>Rental Rate Amount</th>
+                        <th>Num of Rental Days</th>
+                        <th>Total Amount Due</th>
                         <th>Car Expense</th>
                         <th>Expense Tag</th>
                         <th>Driver's Income</th>
-                        {/* <th>Management Fee</th> */}
-                        {/* <th>Net Income</th> */}
-                        {/* <th>Total Expenses</th> */}
-                     
-                        {/* <th>Driver's Salary</th> */}
-                        <th>Total Due</th>
-                        <th>Paid Amount</th>
-                        <th>Balance Due</th>
+                      
+                        <th>Paid Amounts </th>
+                        <th>Balance Amount Due</th>
                         
                         <th>Comments</th>
                     </tr>
@@ -83,19 +82,16 @@ const Prado1 = () => {
                     {elvisSections.map((section) => (
                         <tr key={section.id}>
                             <td>{section.id}</td>
-                            <td>{new Date(section.date_time).toLocaleDateString()}</td>
+                            <td>{new Date(section.date_time).toLocaleString()}</td>
                             <td>{section.destination}</td>
                             <td>{section.rental_rate_amount}</td>
                             <td>{section.number_of_rental_days}</td>
+                            <td>{section.total_amount_due}</td>
+                            
                             <td>{section.car_expense}</td>
                             <td>{section.expense_tag}</td>
                             <td>{section.driver_income}</td>
-                            {/* <td>{section.management_fee_accruals}</td> */}
-                            {/* <td>{section.net_income}</td> */}
-                            {/* <td>{section.total_expenses}</td> */}
-                           
-                            {/* <td>{section.driver_salary}</td> */}
-                            <td>{section.total_amount_due}</td>
+                          
                             <td>{section.paid_amount}</td>
                             <td>{section.balance_amount_due}</td>
 
@@ -109,6 +105,7 @@ const Prado1 = () => {
                     ))}
                 </tbody>
             </table>
+            <br />
         </div>
     </div>
     

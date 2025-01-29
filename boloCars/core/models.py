@@ -1,6 +1,6 @@
 from decimal import Decimal
 from django.db import models
-from django.db.models import Sum
+from django.db.models import Sum, F
 from shortuuid.django_fields import ShortUUIDField 
 from django.utils.html import mark_safe
 from authuser.models import User
@@ -306,26 +306,34 @@ class CarsType(models.Model):
     def monthly_goal_percentage(cls, year, month, goal=1000000):
         rentals = cls.objects.filter(date_time__year=year, date_time__month=month)
 
-        total_amount_due = rentals.aggregate(total=Sum('rental_rate_amount'))['total'] or Decimal('0.00')
+        total_amount_due = rentals.aggregate(total=Sum(F('rental_rate_amount') * F('number_of_rental_days')))['total'] or Decimal('0.00')        
         
-        car_expense = rentals.aggregate(total=Sum('car_expense'))['total'] or Decimal('0.00')
+        total_car_expense = rentals.aggregate(total=Sum('car_expense'))['total'] or Decimal('0.00')
         
-        driver_income = rentals.aggregate(total=Sum('driver_income'))['total'] or Decimal('0.00')
+        total_driver_income = rentals.aggregate(total=Sum('driver_income'))['total'] or Decimal('0.00')
 
         management_fee_accruals = total_amount_due * Decimal('0.10')
+
+        driver_salary = Decimal('50000.00')
         
-        total_expenses = driver_income + management_fee_accruals + car_expense
+        total_expenses = total_driver_income + management_fee_accruals + total_car_expense + driver_salary 
         
         net_income = total_amount_due - total_expenses
+
+        total_paid_amount = rentals.aggregate(total=Sum('paid_amount'))['total'] or Decimal('0.00')
+
+        balance_amount_due = total_amount_due - total_paid_amount
         
         percentage = (total_amount_due / Decimal(goal)) * Decimal('100') if total_amount_due > 0 else Decimal('0.00')
 
         return {
             'total_amount_due': total_amount_due,
             'total_expenses': total_expenses,
-            'total_driver_income': driver_income,
+            'total_driver_income': total_driver_income,
             'management_fee_accruals': management_fee_accruals,
             'net_income': net_income,
+            'total_paid_amount': total_paid_amount,
+            'balance_amount_due': balance_amount_due,
             'percentage_of_goal': percentage
         }
 
