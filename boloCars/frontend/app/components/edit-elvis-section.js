@@ -13,6 +13,10 @@ const EditElvisSection = () => {
         number_of_rental_days: '1',
         paid_amount: '',
         driver_income: '',
+        
+        car_expense: '',
+        expense_tag: '',
+        comments:'',
     });
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
@@ -160,6 +164,46 @@ const EditElvisSection = () => {
                         required 
                     />
                 </div>
+
+                <div className="mb-3">
+                    <label htmlFor="car_expense" className="form-label">Expenses</label>
+                    <input 
+                        type="number" 
+                        className="form-control" 
+                        id="car_expense" 
+                        name="car_expense" 
+                        value={formData.car_expense} 
+                        onChange={handleChange} 
+                        required 
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="expense_tag" className="form-label">Expense Tag</label>
+                    <input 
+                        type="text" 
+                        className="form-control" 
+                        id="expense_tag" 
+                        name="expense_tag" 
+                        value={formData.expense_tag} 
+                        onChange={handleChange} 
+                        required 
+                    />
+                </div>
+
+                <div className="mb-3">
+                    <label htmlFor="comments" className="form-label">Comments</label>
+                    <input 
+                        type="text" 
+                        className="form-control" 
+                        id="comments" 
+                        name="comments" 
+                        value={formData.comments} 
+                        onChange={handleChange} 
+                        required 
+                    />
+                </div>
+
                 <div className="mb-3">
                     <h4>Total Amount Due: {totalAmountDue.toFixed(2)}</h4>
                     <h4>Balance Amount Due: {balanceAmount.toFixed(2)}</h4>
