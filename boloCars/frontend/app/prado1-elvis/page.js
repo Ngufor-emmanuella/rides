@@ -59,8 +59,8 @@ const Prado1 = () => {
         </div>
     
         <div className="table-container">
-            <table className="table table-bordered table-hover">
-                <thead>
+            <table className="table table-bordered table-striped table-hover">
+                <thead className="table-dark">
                     <tr>
                         <th>Num</th>
                         <th>Date</th>
@@ -76,6 +76,7 @@ const Prado1 = () => {
                         <th>Balance Amount Due</th>
                         
                         <th>Comments</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>

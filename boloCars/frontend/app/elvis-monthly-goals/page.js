@@ -42,8 +42,8 @@ const MonthlyGoalTable = () => {
             <h1>Elvis Monthly Goals for {year}</h1>
             <h4>Monthly Target Goal: 1,000,000 CFA</h4>
 
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                <thead>
+            <table className="table table-bordered table-striped table-hover">
+                <thead className="table-dark">
                     <tr>
                         <th>Month Num</th>
                         <th>Month Name</th>
@@ -65,16 +65,16 @@ const MonthlyGoalTable = () => {
                         <tr key={goal.month_number} style={{ border: '1px solid black' }}>
                             <td>{goal.month_number}</td>
                             <td>{goal.month_name}</td>
-                            <td>{goal.total_amount_due} </td>
-                            <td>{goal.management_fee_accruals} </td>
-                            <td>{goal.total_driver_income} </td>
-                            <td>{goal.total_paid_amount} </td>
+                            <td>{goal.total_amount_due } </td>
+                            <td>{goal.management_fee_accruals } </td>
+                            <td>{goal.total_driver_income } </td>
+                            <td>{goal.total_paid_amount } </td>
                             
                             <td>{goal.total_expenses} </td>
                             <td>{goal.net_income} </td>
                            
                             <td>{goal.balance_amount_due} </td>
-                            <td>{goal.percentage_of_goal}%</td>
+                            <td>{goal.percentage_of_goal }%</td>
                         </tr>
                 
                     ))}

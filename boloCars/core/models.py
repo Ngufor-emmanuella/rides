@@ -12,6 +12,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 import json
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
+from datetime import datetime
 
 # Create your models here.
 
@@ -306,6 +307,11 @@ class CarsType(models.Model):
     def monthly_goal_percentage(cls, year, month, goal=1000000):
         rentals = cls.objects.filter(date_time__year=year, date_time__month=month)
 
+        has_rentals = rentals.exists()
+
+        current_month = datetime.now().month
+        is_current_month = (month == current_month)
+
         total_amount_due = rentals.aggregate(total=Sum(F('rental_rate_amount') * F('number_of_rental_days')))['total'] or Decimal('0.00')        
         
         total_car_expense = rentals.aggregate(total=Sum('car_expense'))['total'] or Decimal('0.00')
@@ -314,7 +320,7 @@ class CarsType(models.Model):
 
         management_fee_accruals = total_amount_due * Decimal('0.10')
 
-        driver_salary = Decimal('50000.00')
+        driver_salary = Decimal('50000.00') if is_current_month else Decimal('0.00')
         
         total_expenses = total_driver_income + management_fee_accruals + total_car_expense + driver_salary 
         
@@ -334,7 +340,9 @@ class CarsType(models.Model):
             'net_income': net_income,
             'total_paid_amount': total_paid_amount,
             'balance_amount_due': balance_amount_due,
-            'percentage_of_goal': percentage
+            'percentage_of_goal': percentage,
+            'has_rentals': has_rentals,
+            'is_current_month': is_current_month
         }
 
     class Meta:
