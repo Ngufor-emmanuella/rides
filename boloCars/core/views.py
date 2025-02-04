@@ -135,7 +135,7 @@ class Prado1ElvisView(viewsets.ModelViewSet):
                         'paid_amount', 'balance_amount_due']
 
         # Calculate total sums for each field listed above
-        total_sums={field_name: queryset.aggregate(Sum(field_name))[f'{field_name}__sum'] or Decimal ('0.00') for field_name in field_names}
+        total_sums=ElvisSection.get_total_sums(field_names)
 
         return Response({
             'elvissections': serializer.data,

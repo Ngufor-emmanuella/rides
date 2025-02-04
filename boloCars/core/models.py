@@ -255,9 +255,15 @@ class CarsType(models.Model):
         total_sums['balance_amount_due'] = total_sums['total_amount_due'] - (cls.objects.aggregate(total=Sum('paid_amount'))['total'] or Decimal('0.00'))
         
         for field_name in field_names:
-            total_sum = cls.objects.aggregate(**{f"{field_name}_sum": Sum(field_name)})[f"{field_name}_sum"]
-            total_sums[field_name] = total_sum or Decimal('0.00')
-        return total_sums
+            if field_name in ['rental_rate_amount', 'car_expense,' 'driver_income', 'paid_amount', 'number_of_rental_days', 'total_amount_due', 'balance_amount_due']:
+               
+               total_sum = cls.objects.aggregate(**{f"{field_name}_sum": Sum(field_name)})[f"{field_name}_sum"]
+               total_sums[field_name] = total_sum or Decimal('0.00')
+
+            else:
+               total_sums[field_name] = "N/A"
+            
+            return total_sums
 
     def save(self, *args, **kwargs):
         self.car_expense = self.car_expense or Decimal('0.00')
