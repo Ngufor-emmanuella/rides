@@ -101,6 +101,11 @@ const Prado1 = () => {
                                 <Link href={`/prado1-elvis/${section.id}`}>
                                     <button className="btn btn-success btn-sm">Edit</button>
                                 </Link>
+
+                               
+                                
+
+
                             </td>
                         </tr>
                     ))}

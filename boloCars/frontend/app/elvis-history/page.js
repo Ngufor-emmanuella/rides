@@ -37,8 +37,8 @@ const EditHistoryPage = () => {
         <h1>Edit History</h1>
     
         <h2>Previous Data</h2>
-        <table className="table table-bordered">
-            <thead>
+        <table className="table table-bordered table-striped">
+            <thead className="table-dark">
                 <tr>
                   
                     <th>Content Type</th>
@@ -78,8 +78,8 @@ const EditHistoryPage = () => {
         </table>
     
         <h2>Current Data</h2>
-        <table className="table table-bordered">
-            <thead>
+        <table className="table table-bordered table-striped">
+            <thead className="table-dark">
                 <tr>
                 
                     <th>Content Type</th>

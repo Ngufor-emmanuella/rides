@@ -1,0 +1,26 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8000:8000"
+      
+    volumes:
+     - .:/bolo_rides
+
+    env_file:
+     - .env
+
+  frontend:
+    build:
+      context: ./frontend
+
+      dockerfile: Dockerfile.prod
+
+    ports:
+    - "3000:3000"
+
+  volumes:
+    - ./frontend:/app
+

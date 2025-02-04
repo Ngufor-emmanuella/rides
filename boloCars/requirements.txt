@@ -1,0 +1,14 @@
+asgiref==3.8.1
+distlib==0.3.9
+Django==5.1.4
+django-cors-headers==4.6.0
+django-jazzmin==3.0.1
+django-simple-history==3.7.0
+djangorestframework==3.15.2
+filelock==3.16.1
+pillow==11.0.0
+platformdirs==4.3.6
+shortuuid==1.0.13
+sqlparse==0.5.3
+tzdata==2024.2
+virtualenv==20.29.1
