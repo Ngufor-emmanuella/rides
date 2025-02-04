@@ -47,6 +47,7 @@ const EditHistoryPage = () => {
                     <th>Previous Destination</th>
                     <th>Previous Rental Rate Amount</th>
                     <th>Previous Rental Days </th>
+                    <th>Previous Car Expense </th>
                     <th>Previous Car Expense Tag</th>
                     <th>Previous Driver's Income</th>
                     <th>Previous Total Amount Due</th>                   
@@ -63,7 +64,9 @@ const EditHistoryPage = () => {
                         <td>{item.object_id}</td>
                         <td>{new Date(item.edited_at).toLocaleString()}</td>
                         <td>{item.previous_destination}</td>
+                        <td>{item.current_rental_rate_amount}</td>
                         <td>{item.previous_number_of_rental_days}</td>
+
                         <td>{item.previous_car_expense}</td>
                         <td>{item.previous_expense_tag}</td>
                         <td>{item.previous_driver_income}</td>
@@ -88,6 +91,8 @@ const EditHistoryPage = () => {
                     <th>Current Destination</th>
                     <th>Current Rental Rate Amount</th>
                     <th>Current Rental Days</th>
+                    <th>Previous Car Expense </th>
+
                     <th>Current Car Expense Tag</th>
                     <th>Current Driver's Income</th>
                     <th> Current Total Amount Due</th>
@@ -106,8 +111,10 @@ const EditHistoryPage = () => {
                         <td>{new Date(item.edited_at).toLocaleString()}</td>
                         <td>{item.current_destination}</td>
                         <td>{item.current_rental_rate_amount}</td>
+
                         <td>{item.current_number_of_rental_days}</td>
                         <td>{item.current_car_expense}</td>
+                        <td>{item.current_expense_tag}</td>
                         <td>{item.current_driver_income}</td>
                         <td>{item.current_total_amount_due}</td>
                         <td>{item.current_paid_amount}</td>
