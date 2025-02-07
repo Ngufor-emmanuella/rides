@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from core.models import Category, Vendor, Product, ProductImages, CartOrder, CartOrderItems, ProductReview, Wishlist, Address, Contact, ElvisSection, LevinusSection, SergeSection, EditHistory 
+from core.models import Category, Product, ProductImages, Contact, ElvisSection, LevinusSection, SergeSection, EditHistory 
 from django.contrib.auth.models import User
 import json
 from decimal import Decimal
@@ -28,11 +28,6 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = '__all__'
 
-class VendorSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Vendor
-        fields = '__all__'
-
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
@@ -41,31 +36,6 @@ class ProductSerializer(serializers.ModelSerializer):
 class ProductImagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductImages
-        fields = '__all__'
-
-class CartOrderSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CartOrder
-        fields = '__all__'
-
-class CartOrderItemsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CartOrderItems
-        fields = '__all__'
-
-class ProductReviewSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProductReview
-        fields = '__all__'
-
-class WishlistSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Wishlist
-        fields = '__all__'
-
-class AddressSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Address
         fields = '__all__'
 
 class ContactSerializer(serializers.ModelSerializer):

@@ -1,81 +1,38 @@
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
-from django.utils import timezone
-import uuid 
 
-
-class CustomUserManager(UserManager):
-    def _create_user(self, email, password, **extra_fields):
+class UserManager(BaseUserManager):
+    def create_user(self, email, username, password=None):
         if not email:
-            raise ValueError("You have not provided a valid e-mail address")
-        
-        email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
-        user.set_password(password)
-        user.save(using=self._db)
+            raise ValueError('Users must have an email address')
+        if not username:
+            raise ValueError('Users must have a username')
 
+        email = self.normalize_email(email)
+        user = self.model(email=email, username=username)
+        user.set_password(password)  # Hash the password
+        user.save(using=self._db)
         return user
-    
-    def create_user(self, email=None, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', False)
-        extra_fields.setdefault('is_superuser', False)
-        return self._create_user(email, password, **extra_fields)
-    
-    def create_superuser(self, email=None, password=None, **extra_fields):
-        extra_fields.setdefault('is_staff', True)
-        extra_fields.setdefault('is_superuser', True)
-        return self._create_user(email, password, **extra_fields)
+
+    def create_superuser(self, email, username, password=None):
+        user = self.create_user(email, username, password)
+        user.is_staff = True
+        user.is_superuser = True
+        user.save(using=self._db)
+        return user
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(blank=True, default='', unique=True)
-    name = models.CharField(max_length=255, blank=True, default='')
+    email = models.EmailField(unique=True)
+    username = models.CharField(max_length=150, unique=True, default='bolo_rides_user' )
+    password = models.CharField(max_length=128) 
 
     is_active = models.BooleanField(default=True)
-    is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
 
-    date_joined = models.DateTimeField(default=timezone.now)
-    last_login = models.DateTimeField(blank=True, null=True)
-
-    objects = CustomUserManager()
+    objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
-
-    class Meta:
-        verbose_name = 'User'
-        verbose_name_plural = 'Users'
-
-    def get_full_name(self):
-        return self.name
-    
-    def get_short_name(self):
-        return self.name or self.email.split('@')[0]
-    
-    @classmethod
-    def get_by_name(cls, name):
-        return cls.objects.filter(name=name).first()
-    
-    @classmethod
-    def get_by_email(cls, email):
-        return cls.objects.filter(email=email).first()
-
-
-class CustomGroup(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-    
-    
-    # functionality for reseting password
-class PasswordReset(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    reset_id = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
-    created_when = models.DateTimeField(auto_now_add=True)
+    REQUIRED_FIELDS = ['username']
 
     def __str__(self):
-        return f"Password reset for {self.user.email} at {self.created_when}"
-
-
-    
+        return self.username

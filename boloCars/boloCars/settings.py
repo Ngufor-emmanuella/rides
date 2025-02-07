@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -151,6 +152,7 @@ MEDIA_URL = '/media/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'authuser.User'
+
 JAZZMIN_SETTINGS = { 
   'sit_header': "BOLO Car Rentals Services",
   'site_brand': "BOLO RIDES",
@@ -161,11 +163,14 @@ JAZZMIN_SETTINGS = {
 LOGIN_URL = 'login'
 
 # code down to send email to users
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 465
-EMAIL_USE_SSL = True
+# EMAIL_PORT = 465 or 587 
+# EMAIL_USE_SSL = True
+# EMAIL_USE_TLS = True
+
 EMAIL_HOST_USER="emmanuellangufor@gmail.com"
-EMAIL_HOST_PASSWORD = "pfol wymw jbqk azf"
+EMAIL_HOST_PASSWORD = "bolo-rides1"
 
 
 CORS_ALLOW_ALL_ORIGINS = True 
@@ -178,9 +183,19 @@ CORS_ALLOWED_ORIGINS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',  # Optional
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',  # Optional, if you want to enforce authentication by default
+        'rest_framework.permissions.IsAuthenticated',
+        'authuser.authentication.CustomBearerTokenAuth'
     ],
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': True,
 }

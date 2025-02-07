@@ -14,21 +14,15 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from datetime import datetime
 
+
 # Create your models here.
 
-STATUS_CHOICE = (
+STATUS = (
   ("process", "Processing"),
   ("reserved", "Reserved"),
   ("delivered", "Delivered"),
 )
 
-STATUS = (
-  ("draft", "Draft"),
-  ("disabled", "Disabled"),
-  ("rejected", "Rejected"),
-  ("in_review", "In Review"),
-  ("published", "Published"),
-)
 
 RATING = (
   (1, "⭐☆☆☆☆"),
@@ -56,42 +50,6 @@ class Category(models.Model):
   def __str__(self):
     return self.title
   
-
-class Tags(models.Model):
-  pass
-  
-
-class Vendor(models.Model):
-  vid = ShortUUIDField(unique=True, length=10, max_length=30, prefix="ven", alphabet="abcdefgh12345")
-
-  title = models.CharField(max_length=100, default="Cars Avaliable" )
-  image = models.ImageField(upload_to=user_directory_path, default="cars.jpg")
-  description = models.TextField(null=True, blank=True, default="Beautify cars avaliable")
-
-
-  address = models.CharField(max_length=100, default="1280 Rue de Deido-Bonanjo, after Total Bonateki, before Carrefour Bonabassem, Douala.")
-  contact = models.CharField(max_length=100, default="+237 652921000 / +237 693339340")
-  chat_resp_time = models.CharField(max_length=100, default="100")
-  delivery_on_time = models.CharField(max_length=100, default="100")
-  # where you see delivery_on_time is shipping_on_time
-  authentic_rating= models.CharField(max_length=100, default="100")
-  days_return = models.CharField(max_length=100, default="100")
-  warranty_period = models.CharField(max_length=100, default="100")
-
-
-
-  user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-
-
-  class Meta:
-    verbose_name_plural = "Vendors"
-
-  def vendor_image(self):
-    return mark_safe('<img src="%s" width="50" height="50" />' % (self.image.url))
-  
-  def __str__(self):
-    return self.title
-
 
 class Product(models.Model):
   pid = ShortUUIDField(unique=True, length=10, max_length=20, alphabet="abcdefgh12345")
@@ -143,85 +101,6 @@ class ProductImages(models.Model):
 
   class Meta:
     verbose_name_plural = "Product Images"
-
-
-
-########## cart, order, orderItems and address
- 
-class CartOrder(models.Model):
-  user = models.ForeignKey(User, on_delete=models.CASCADE)
-  price = models.DecimalField(blank=True, null=True, max_digits=10,  decimal_places=2, default=0.00)
-  paid_status = models.BooleanField(default=False)
-  order_date = models.DateTimeField(auto_now_add=True)
-  product_status = models.CharField(choices=STATUS_CHOICE, max_length=30, default="processing")
-
-
-
-  class Meta:
-    verbose_name_plural ="Cart Order"
-
-class CartOrderItems(models.Model):
-  order = models.ForeignKey(CartOrder, on_delete=models.CASCADE)
-  invoice_no = models.CharField(max_length=200)
-  product_status = models.CharField(max_length=200)
-  item = models.CharField(max_length=200)
-  image = models.CharField(max_length=200)
-  qty = models.IntegerField(default= 0)
-  price = models.DecimalField(blank=True, null=True, max_digits=10,  decimal_places=2, default=0.00)
-  total = models.DecimalField(blank=True, null=True, max_digits=10,  decimal_places=2, default=0.00)
-
-
-class Meta:
-  verbose_name_plural = "Cart Order Items"
-
-  def order_img(self):
-    return mark_safe('<img src="/media/%s" width="50" height="50" />' % (self.image))
-  
-
-
-# ######## pproducts, reviews, wishlists, address #######
-# ######## pproducts, reviews, wishlists, address #######
-
-
-class ProductReview(models.Model):
-  user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-  product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
-  review = models.TextField()
-  rating = models.IntegerField(choices=RATING, default=None)
-  date = models.DateTimeField(auto_now_add=True)
-
-
-  class Meta:
-    verbose_name_plural = "Product Review"
-
-  def __str__(self):
-    return self.product.title
-  
-  def get_rating(self):
-    return self.ratting
-
-
-
-class Wishlist(models.Model):
-  user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-  product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
-  date = models.DateTimeField(auto_now_add=True)
-
-
-  class Meta:
-    verbose_name_plural = "Wishlists"
-
-  def __str__(self):
-    return self.product.title
-  
-
-class Address(models.Model):
-  user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-  address = models.CharField(max_length=100, null=True)
-  status = models.BooleanField(default=False)
-
-  class Meta:
-    verbose_name_plural = "Address"
 
 
 class CarsType(models.Model):
@@ -360,6 +239,7 @@ class CarsType(models.Model):
         return f"{self.destination} - {self.date_time}"
 
 class ElvisSection(CarsType):
+    user = models.ForeignKey('authuser.User', on_delete=models.CASCADE, null=True, blank=True)
     
     class Meta:
         verbose_name = "Elvis Section"
@@ -367,12 +247,14 @@ class ElvisSection(CarsType):
 
 
 class LevinusSection(CarsType):
+  user = models.ForeignKey('authuser.User', on_delete=models.CASCADE, null=True, blank=True)
   
   class Meta:
     verbose_name = "Levinus Section"
     verbose_name_plural = "Levinus Sections"
 
 class SergeSection(CarsType):
+  user = models.ForeignKey('authuser.User', on_delete=models.CASCADE, null=True, blank=True)
   
   class Meta:
     verbose_name = "Serge Section"

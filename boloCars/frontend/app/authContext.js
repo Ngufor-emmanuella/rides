@@ -3,32 +3,25 @@ import { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext();
 
-export function AuthProvider({ children }) {
-    const [user, setUser] = useState(null);
+export const AuthProvider = ({ children }) => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
-        const token = localStorage.getItem('user_token');
-        if (token) {
-            // You might want to validate the token with the backend here
-            setUser({ token });
-        }
+        const token = localStorage.getItem('accessToken');
+        setIsLoggedIn(!!token); // Update state based on token presence
     }, []);
 
-    const login = (userData) => {
-        setUser(userData);
-        localStorage.setItem('user_token', userData.token);
-    };
-
+    const login = () => setIsLoggedIn(true);
     const logout = () => {
-        setUser(null);
-        localStorage.removeItem('user_token');
+        localStorage.removeItem('accessToken');
+        setIsLoggedIn(false);
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ isLoggedIn, login, logout }}>
             {children}
         </AuthContext.Provider>
     );
-}
+};
 
 export const useAuth = () => useContext(AuthContext);

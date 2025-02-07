@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken.views import ObtainAuthToken  # Correct import
 from .views import (
     index, LogoutView, ForgotPasswordView, LoginView, LevinusHistoryListView, SergeHistoryListView, 
-    Rav4SergeView, Prado1ElvisView, RegisterView, SergeMonthlyGoalView, LevinusMonthlyGoalView,
+    Rav4SergeView, Prado1ElvisView, SergeMonthlyGoalView, LevinusMonthlyGoalView,
     Prado2LevinusView, CustomAuthToken, ElvisSectionUpdateView, LevinusSectionCreateView, MonthlyGoalView,
     LevinusSectionUpdateView, SergeSectionUpdateView, SergeSectionCreateView, EditHistoryDetailView, EditHistoryListView,
     ElvisSectionCreateView,
@@ -21,7 +21,6 @@ router.register(r'rav4', Rav4SergeView)
 
 urlpatterns = [
     # paths to display all the field in tabble format
-    path('users/', RegisterView.as_view(), name='register'), 
     path('api/', include(router.urls)),
     path("", index, name="index"),
 
@@ -52,7 +51,6 @@ urlpatterns = [
 
     # Add other paths as needed...
     
-    path('api/register/', RegisterView.as_view(), name='register'),
     path('api/token-auth/', CustomAuthToken.as_view(), name='token_auth'),
     
     path('api/login/', LoginView.as_view(), name='login'),

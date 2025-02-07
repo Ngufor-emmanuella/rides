@@ -9,8 +9,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.core.mail import EmailMessage
 from django.urls import reverse
-from authuser.models import PasswordReset
-from .serializers import CategorySerializer, VendorSerializer, ProductSerializer, CartOrderSerializer, ProductReviewSerializer, WishlistSerializer, ContactSerializer, EditHistorySerializer
+from .serializers import CategorySerializer, ProductSerializer, ContactSerializer, EditHistorySerializer
 from rest_framework.decorators import api_view
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -30,9 +29,9 @@ from rest_framework import generics
 from .serializers import ElvisSectionSerializer
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-
-
-
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 User = get_user_model()
 
 # Create your views here.
@@ -50,21 +49,6 @@ def index(request):
 
 #code below to create acccount and user authentication
 
-class RegisterView(ListCreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserRegistrationSerializer
-    permission_classes = [AllowAny]
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-            token, created = Token.objects.get_or_create(user=user)
-            return Response({
-                'user': UserRegistrationSerializer(user).data,
-                'token': token.key
-            }, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class CustomAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
@@ -108,20 +92,17 @@ class ForgotPasswordView(APIView):
         # Implement your forgot password logic here
         return Response({"message": "Reset link sent to your email"}, status=200)
     
-#functionality to calculate total sum of fields
-
-# @login_required
-#
 # functionality to display all added data in tables
 class Prado1ElvisView(viewsets.ModelViewSet):
-    permission_classes = [AllowAny]
-
     queryset = ElvisSection.objects.all()
     serializer_class = ElvisSectionSerializer
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication]
+
 
     def perform_create(self, serializer):
         
-        serializer.save()
+        serializer.save(user=self.request.user)
  
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
@@ -146,7 +127,12 @@ class Prado1ElvisView(viewsets.ModelViewSet):
 class Prado2LevinusView(viewsets.ModelViewSet):
     queryset = LevinusSection.objects.all()
     serializer_class = LevinusSectionSerializer
+    permission_classes = [IsAuthenticated]
 
+    def perform_create(self, serializer):
+        
+        serializer.save(user=self.request.user)
+ 
     
     def list(self, request, *args, **kwargs):
         response = super().list(request, *args, **kwargs)
@@ -169,6 +155,12 @@ class Prado2LevinusView(viewsets.ModelViewSet):
 class Rav4SergeView(viewsets.ModelViewSet):
   queryset = SergeSection.objects.all()
   serializer_class = SergeSectionSerializer
+  permission_classes = [IsAuthenticated]
+  
+  def perform_create(self, serializer):
+      
+      serializer.save(user=self.request.user)
+ 
   
   def list(self, request, *args, **kwargs):
     response = super().list(request, *args, **kwargs)
@@ -220,8 +212,6 @@ class SergeSectionCreateView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-# functionality to calculate balance amount due etc
 # functionality to edit views
 class ElvisSectionUpdateView(generics.RetrieveUpdateAPIView):
     queryset = ElvisSection.objects.all()

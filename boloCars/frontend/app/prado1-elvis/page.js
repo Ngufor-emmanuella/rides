@@ -14,26 +14,36 @@ const Prado1 = () => {
     }, []);
 
     const fetchElvisSections = async () => {
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+        const token = localStorage.getItem('accessToken');
+        console.log('Access Token:', token);
 
-        try {
-            const response = await fetch(`${apiUrl}core/api/prado1/`);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+        if (token) {
+            try {
+                const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/';
+                const response = await fetch(`${apiUrl}core/api/prado1/`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(`Network response was not ok: ${response.statusText} - ${errorData.detail}`);
+                }
+
+                const data = await response.json();
+                setElvisSections(data.elvissections);
+            } catch (error) {
+                setError('Error fetching data: ' + error.message);
+            } finally {
+                setLoading(false);
             }
-            const data = await response.json();
-            setElvisSections(data.elvissections);
-        } catch (error) {
-            setError(error.message);
-        } finally {
+        } else {
+            setError('No token found');
             setLoading(false);
         }
-    };
-
-    // Function to handle form submission
-    const handleFormSubmit = (newEntry) => {
-        console.log('New entry submitted:', newEntry);
-        fetchElvisSections();
     };
 
     if (loading) return <div>Loading... Hold on please</div>;
@@ -41,80 +51,66 @@ const Prado1 = () => {
 
     return (
         <div className="container-fluid mt-5 prado1-box">
-        <h1 className="text-center">Prado 1 Elvis Sections</h1>
-        <br />
-            <div className="d-flex justify-content-between mb-3">
-            
-            <Link href="/addform">
-                <button className="btn btn-success btn-sm"> Add Rental Details</button>
-            </Link>
-
-            <Link href="/elvis-history">
-                <button className="btn btn-success btn-sm">Car History</button>
-            </Link>
-
-            <Link href="/elvis-monthly-goals">
-                <button className="btn btn-success btn-sm">Car Monthly Details</button>
-            </Link>
-        </div>
-    
-        <div className="table-container">
-            <table className="table table-bordered table-striped table-hover">
-                <thead className="table-dark">
-                    <tr>
-                        <th>Num</th>
-                        <th>Date</th>
-                        <th>Destination</th>
-                        <th>Rental Rate Amount</th>
-                        <th>Num of Rental Days</th>
-                        <th>Total Amount Due</th>
-                        <th>Car Expense</th>
-                        <th>Expense Tag</th>
-                        <th>Driver's Income</th>
-                      
-                        <th>Paid Amounts </th>
-                        <th>Balance Amount Due</th>
-                        
-                        <th>Comments</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {elvisSections.map((section) => (
-                        <tr key={section.id}>
-                            <td>{section.id}</td>
-                            <td>{new Date(section.date_time).toLocaleString()}</td>
-                            <td>{section.destination}</td>
-                            <td>{section.rental_rate_amount}</td>
-                            <td>{section.number_of_rental_days}</td>
-                            <td>{section.total_amount_due}</td>
-                            
-                            <td>{section.car_expense}</td>
-                            <td>{section.expense_tag}</td>
-                            <td>{section.driver_income}</td>
-                          
-                            <td>{section.paid_amount}</td>
-                            <td>{section.balance_amount_due}</td>
-
-                            <td>{section.comments}</td>
-                            <td>
-                                <Link href={`/prado1-elvis/${section.id}`}>
-                                    <button className="btn btn-success btn-sm">Edit</button>
-                                </Link>
-
-                               
-                                
-
-
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <h1 className="text-center">Prado 1 Elvis Sections</h1>
             <br />
+            <div className="d-flex justify-content-between mb-3">
+                <Link href="/addform">
+                    <button className="btn btn-success btn-sm"> Add Rental Details</button>
+                </Link>
+                <Link href="/elvis-history">
+                    <button className="btn btn-success btn-sm">Car History</button>
+                </Link>
+                <Link href="/elvis-monthly-goals">
+                    <button className="btn btn-success btn-sm">Car Monthly Details</button>
+                </Link>
+            </div>
+
+            <div className="table-container">
+                <table className="table table-bordered table-striped table-hover">
+                    <thead className="table-dark">
+                        <tr>
+                            <th>Num</th>
+                            <th>Date</th>
+                            <th>Destination</th>
+                            <th>Rental Rate Amount</th>
+                            <th>Num of Rental Days</th>
+                            <th>Total Amount Due</th>
+                            <th>Car Expense</th>
+                            <th>Expense Tag</th>
+                            <th>Driver's Income</th>
+                            <th>Paid Amounts</th>
+                            <th>Balance Amount Due</th>
+                            <th>Comments</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {elvisSections.map((section) => (
+                            <tr key={section.id}>
+                                <td>{section.id}</td>
+                                <td>{new Date(section.date_time).toLocaleString()}</td>
+                                <td>{section.destination}</td>
+                                <td>{section.rental_rate_amount}</td>
+                                <td>{section.number_of_rental_days}</td>
+                                <td>{section.total_amount_due}</td>
+                                <td>{section.car_expense}</td>
+                                <td>{section.expense_tag}</td>
+                                <td>{section.driver_income}</td>
+                                <td>{section.paid_amount}</td>
+                                <td>{section.balance_amount_due}</td>
+                                <td>{section.comments}</td>
+                                <td>
+                                    <Link href={`/prado1-elvis/${section.id}`}>
+                                        <button className="btn btn-success btn-sm">Edit</button>
+                                    </Link>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <br />
+            </div>
         </div>
-    </div>
-    
     );
 };
 
