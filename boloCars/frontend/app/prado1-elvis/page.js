@@ -14,34 +14,25 @@ const Prado1 = () => {
     }, []);
 
     const fetchElvisSections = async () => {
-        const token = localStorage.getItem('accessToken');
-        console.log('Access Token:', token);
+        try {
+            const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/';
+            const response = await fetch(`${apiUrl}core/api/prado1/`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
 
-        if (token) {
-            try {
-                const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/';
-                const response = await fetch(`${apiUrl}core/api/prado1/`, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
-                });
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(`Network response was not ok: ${response.statusText} - ${errorData.detail}`);
-                }
-
-                const data = await response.json();
-                setElvisSections(data.elvissections);
-            } catch (error) {
-                setError('Error fetching data: ' + error.message);
-            } finally {
-                setLoading(false);
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(`Network response was not ok: ${response.statusText} - ${errorData.detail}`);
             }
-        } else {
-            setError('No token found');
+
+            const data = await response.json();
+            setElvisSections(data.elvissections);
+        } catch (error) {
+            setError('Error fetching data: ' + error.message);
+        } finally {
             setLoading(false);
         }
     };

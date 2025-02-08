@@ -53,24 +53,23 @@ export default function Header() {
                         <li className="nav-item">
                             <Link className="nav-link navigation" href="/contact">Contact Us</Link>
                         </li>
-                        {isLoggedIn && (
-                            <li className="nav-item dropdown">
-                                <Link 
-                                    className="nav-link dropdown-toggle navigation" 
-                                    href="#" 
-                                    role="button" 
-                                    data-bs-toggle="dropdown" 
-                                    aria-expanded="false"
-                                >
-                                    Vehicles
-                                </Link>
-                                <ul className="dropdown-menu">
-                                    <li><Link className="dropdown-item navigation" href="/prado1-elvis">Prado1 - Elvis</Link></li>
-                                    <li><Link className="dropdown-item navigation" href="/prado2-levinus">Prado2 - Levinus</Link></li>
-                                    <li><Link className="dropdown-item navigation" href="/rav4-serge">Rav4 - Serge</Link></li>
-                                </ul>
-                            </li>
-                        )}
+                        {/* Always show Vehicles dropdown */}
+                        <li className="nav-item dropdown">
+                            <Link 
+                                className="nav-link dropdown-toggle navigation" 
+                                href="#" 
+                                role="button" 
+                                data-bs-toggle="dropdown" 
+                                aria-expanded="false"
+                            >
+                                Vehicles
+                            </Link>
+                            <ul className="dropdown-menu">
+                                <li><Link className="dropdown-item navigation" href="/prado1-elvis">Prado1 - Elvis</Link></li>
+                                <li><Link className="dropdown-item navigation" href="/prado2-levinus">Prado2 - Levinus</Link></li>
+                                <li><Link className="dropdown-item navigation" href="/rav4-serge">Rav4 - Serge</Link></li>
+                            </ul>
+                        </li>
                         <li className="nav-item dropdown ">
                             <Link 
                                 className="nav-link dropdown-toggle navigation" 
@@ -86,7 +85,7 @@ export default function Header() {
                                     <li><Link className="dropdown-item navigation" href="/logout" onClick={logout}>Logout</Link></li>
                                 ) : (
                                     <>
-                                        <li><Link className="dropdown-item navigation" href="/register">Signup /Register</Link></li>
+                                        <li><Link className="dropdown-item navigation" href="/register">Signup / Register</Link></li>
                                         <li><Link className="dropdown-item navigation" href="/login">Login</Link></li>
                                     </>
                                 )}

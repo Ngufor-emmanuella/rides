@@ -33,6 +33,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
 from rest_framework_simplejwt.authentication import JWTAuthentication 
+from .models import EditHistory
 
 User = get_user_model()
 
@@ -98,8 +99,11 @@ class ForgotPasswordView(APIView):
 class Prado1ElvisView(viewsets.ModelViewSet):
     queryset = ElvisSection.objects.all()
     serializer_class = ElvisSectionSerializer
-    permission_classes = [IsAuthenticated]
-    authentication_classes = [JWTAuthentication]
+    permission_classes = [AllowAny]
+    authentication_classes = [] 
+    
+    # permission_classes = [IsAuthenticated]
+    # authentication_classes = [JWTAuthentication]
 
 
     def perform_create(self, serializer):
@@ -129,7 +133,9 @@ class Prado1ElvisView(viewsets.ModelViewSet):
 class Prado2LevinusView(viewsets.ModelViewSet):
     queryset = LevinusSection.objects.all()
     serializer_class = LevinusSectionSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
+    authentication_classes = [] 
+    
 
     def perform_create(self, serializer):
         
@@ -236,18 +242,22 @@ class SergeSectionUpdateView(generics.RetrieveUpdateAPIView):
 class EditHistoryListView(generics.ListAPIView):
     queryset = EditHistory.objects.all()
     serializer_class = EditHistorySerializer
+    permission_classes = [AllowAny]  
 
 class EditHistoryDetailView(generics.RetrieveAPIView):
     queryset = EditHistory.objects.all()
     serializer_class = EditHistorySerializer
+    permission_classes = [AllowAny]  
 
 class LevinusHistoryListView(generics.ListAPIView):
     queryset = EditHistory.objects.all()
     serializer_class = EditHistorySerializer
+    permission_classes = [AllowAny]
 
 class SergeHistoryListView(generics.ListAPIView):
     queryset = EditHistory.objects.all()
     serializer_class = EditHistorySerializer
+    permission_classes = [AllowAny]
 
 
 # view for monthly and yearly goals percentage
