@@ -57,3 +57,5 @@ urlpatterns = [
     path('api/logout/', LogoutView.as_view(), name='logout'),
     path('api/forgot-password/', ForgotPasswordView.as_view(), name='forgot_password'),
 ]
+
+path('api/', include(router.urls)),

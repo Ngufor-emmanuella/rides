@@ -26,7 +26,9 @@ const Login = () => {
 
             if (data.access) {
                 localStorage.setItem('accessToken', data.access);
-                login(); // Update auth state
+                console.log('Access token set:', data.access);
+                
+                login();
                 alert('Login successful!');
                 // Redirect to homepage
                 setTimeout(() => {

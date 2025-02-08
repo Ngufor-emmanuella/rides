@@ -31,7 +31,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.authentication import SessionAuthentication
+from rest_framework_simplejwt.authentication import JWTAuthentication 
+
 User = get_user_model()
 
 # Create your views here.
@@ -97,7 +99,7 @@ class Prado1ElvisView(viewsets.ModelViewSet):
     queryset = ElvisSection.objects.all()
     serializer_class = ElvisSectionSerializer
     permission_classes = [IsAuthenticated]
-    authentication_classes = [SessionAuthentication]
+    authentication_classes = [JWTAuthentication]
 
 
     def perform_create(self, serializer):
@@ -106,8 +108,8 @@ class Prado1ElvisView(viewsets.ModelViewSet):
  
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
+        print(request.headers)
 
-     
         serializer = self.get_serializer(queryset, many=True)
 
 

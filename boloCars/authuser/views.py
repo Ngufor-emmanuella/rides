@@ -26,8 +26,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return token
 
 class CustomTokenObtainPairView(TokenObtainPairView):
-    # Optionally customize this view if needed
-     serializer_class = CustomTokenObtainPairSerializer
+    serializer_class = CustomTokenObtainPairSerializer
 
 # resting password
 class PasswordResetRequestView(APIView):
