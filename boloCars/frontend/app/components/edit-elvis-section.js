@@ -25,7 +25,7 @@ const EditElvisSection = () => {
 
     // Fetch current data when component mounts
     useEffect(() => {
-        if (id) {
+        if (id && typeof window !== 'undefined') {
             const fetchData = async () => {
                 const apiUrl = process.env.NEXT_PUBLIC_API_URL;
                 try {

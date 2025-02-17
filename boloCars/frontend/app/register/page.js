@@ -1,13 +1,13 @@
 'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation'; // Import useRouter
+import { useRouter } from 'next/navigation';
 import '../styles/register.css';
 
 const Register = () => {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const router = useRouter(); // Initialize useRouter
+    const router = useRouter();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -20,12 +20,10 @@ const Register = () => {
         });
 
         if (response.ok) {
-            // Show success message
             alert('Registration successful!');
-            // Redirect to login page after 2 seconds
             setTimeout(() => {
-                router.push('/login'); // Redirect to login page
-            }, 2000); // 2000 milliseconds = 2 seconds
+                router.push('/login');
+            }, 2000);
         } else {
             alert('Registration failed. Please try again.');
         }

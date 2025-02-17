@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '../authContext';
+import { useAuth } from '../components/authContext';
 import '../styles/register.css';
 
 const Login = () => {

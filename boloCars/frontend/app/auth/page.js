@@ -1,4 +1,5 @@
-import Signup from '../signup/page';
+'use client';
+import Register from '../register/page';
 import Login from '../login/page';
 
 export default function Authentication() {
@@ -12,9 +13,9 @@ export default function Authentication() {
                         <Login />
                     </div>
                     <div className="col-5 offset-2">
-                        <h3>Sign up</h3>
+                        <h3>Sign up /Register </h3>
                         <hr />
-                        <Signup />
+                        <Register />
                     </div>
                 </div>
             </div>

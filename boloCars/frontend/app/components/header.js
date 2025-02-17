@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from 'next/image';
 import '../styles/header.css';
-import { useAuth } from "../authContext";
+import { useAuth } from "./authContext";
 
 export default function Header() {
     const { isLoggedIn, logout } = useAuth();
